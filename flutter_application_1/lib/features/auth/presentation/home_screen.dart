@@ -130,20 +130,20 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => Scaffold(
-          backgroundColor: Color(0xFFF8FAFC),
+          backgroundColor: const Color(0xFFF8FAFC),
           appBar: AppBar(
-            backgroundColor: Color(0xFF2563EB),
+            backgroundColor: const Color(0xFF2563EB),
             foregroundColor: Colors.white,
-            title: Text("About OceanSync",
+            title: const Text("About OceanSync",
                 style: TextStyle(fontWeight: FontWeight.bold)),
             elevation: 0,
             leading: IconButton(
-              icon: Icon(Icons.close),
+              icon: const Icon(Icons.close),
               onPressed: () => Navigator.pop(context),
             ),
           ),
           body: SingleChildScrollView(
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Column(
               children: [
                 // Main Logo
@@ -151,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: 120,
                   height: 120,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
+                    gradient: const LinearGradient(
                         colors: [Color(0xFF2563EB), Color(0xFF1E40AF)]),
                     shape: BoxShape.circle,
                     boxShadow: [
@@ -162,10 +162,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       )
                     ],
                   ),
-                  child: Icon(Icons.business_center,
+                  child: const Icon(Icons.business_center,
                       color: Colors.white, size: 60),
                 ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
 
                 // App Title
                 Text(
@@ -173,20 +173,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: GoogleFonts.montserrat(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1A1A1A),
+                    color: const Color(0xFF1A1A1A),
                     letterSpacing: 1,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   "v1.0.0 | Made in India 🇮🇳",
                   style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                 ),
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
 
                 // Welcome Message
                 Container(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
@@ -194,25 +194,25 @@ class _HomeScreenState extends State<HomeScreen> {
                       BoxShadow(
                         color: Colors.black.withOpacity(0.05),
                         blurRadius: 10,
-                        offset: Offset(0, 4),
+                        offset: const Offset(0, 4),
                       )
                     ],
                   ),
                   child: Column(
                     children: [
-                      Icon(Icons.lightbulb_outline,
+                      const Icon(Icons.lightbulb_outline,
                           size: 48, color: Color(0xFFF59E0B)),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Text(
                         "Why OceanSync?",
                         style: GoogleFonts.montserrat(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF1A1A1A),
+                          color: const Color(0xFF1A1A1A),
                         ),
                       ),
-                      SizedBox(height: 16),
-                      Text(
+                      const SizedBox(height: 16),
+                      const Text(
                         "Save time, reduce mistakes, grow your business.\nSimple app for seafood shops like yours.",
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -223,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
 
                 // Features List
                 Text(
@@ -231,10 +231,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: GoogleFonts.montserrat(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF1A1A1A),
+                    color: const Color(0xFF1A1A1A),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
                 // Feature Cards
                 _featureItem(Icons.shopping_cart, "Easy Purchase",
@@ -248,20 +248,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 _featureItem(Icons.people, "Employees", "Manage your team"),
                 _featureItem(Icons.bar_chart, "Reports", "See your profits"),
 
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
 
                 // CTA Section
                 Container(
-                  padding: EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
+                    gradient: const LinearGradient(
                         colors: [Color(0xFF10B981), Color(0xFF059669)]),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Column(
                     children: [
-                      Icon(Icons.rocket_launch, color: Colors.white, size: 48),
-                      SizedBox(height: 16),
+                      const Icon(Icons.rocket_launch, color: Colors.white, size: 48),
+                      const SizedBox(height: 16),
                       Text(
                         "Start Using Now!",
                         style: GoogleFonts.montserrat(
@@ -270,7 +270,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.white,
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         "Everything works offline too!",
                         style: TextStyle(
@@ -279,11 +279,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
 
                 // Made by Section
                 Container(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
                     color: Colors.amber[50],
                     borderRadius: BorderRadius.circular(16),
@@ -291,11 +291,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   child: Row(
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         backgroundColor: Color(0xFF2563EB),
                         child: Icon(Icons.favorite, color: Colors.white),
                       ),
-                      SizedBox(width: 16),
+                      const SizedBox(width: 16),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -311,7 +311,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -323,8 +323,8 @@ class _HomeScreenState extends State<HomeScreen> {
 // Simple feature item widget
   Widget _featureItem(IconData icon, String title, String subtitle) {
     return Container(
-      margin: EdgeInsets.only(bottom: 12),
-      padding: EdgeInsets.all(20),
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -332,21 +332,21 @@ class _HomeScreenState extends State<HomeScreen> {
           BoxShadow(
             color: Colors.black.withOpacity(0.04),
             blurRadius: 8,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           )
         ],
       ),
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Color(0xFF2563EB).withOpacity(0.1),
+              color: const Color(0xFF2563EB).withOpacity(0.1),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Icon(icon, color: Color(0xFF2563EB), size: 28),
+            child: Icon(icon, color: const Color(0xFF2563EB), size: 28),
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -354,7 +354,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(title,
                     style: GoogleFonts.montserrat(
                         fontSize: 18, fontWeight: FontWeight.bold)),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(subtitle,
                     style: TextStyle(fontSize: 15, color: Colors.grey[600])),
               ],
@@ -370,20 +370,20 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => Scaffold(
-          backgroundColor: Color(0xFFF8FAFC),
+          backgroundColor: const Color(0xFFF8FAFC),
           appBar: AppBar(
-            backgroundColor: Color(0xFF2563EB),
+            backgroundColor: const Color(0xFF2563EB),
             foregroundColor: Colors.white,
-            title: Text("Charan kumar Kanna",
+            title: const Text("Charan kumar Kanna",
                 style: TextStyle(fontWeight: FontWeight.bold)),
             elevation: 0,
             leading: IconButton(
-              icon: Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back),
               onPressed: () => Navigator.pop(context),
             ),
           ),
           body: SingleChildScrollView(
-            padding: EdgeInsets.all(24),
+            padding: const EdgeInsets.all(24),
             child: Column(
               children: [
                 // Profile Header
@@ -391,7 +391,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: 160,
                   height: 160,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
+                    gradient: const LinearGradient(
                         colors: [Color(0xFF2563EB), Color(0xFF1E40AF)]),
                     shape: BoxShape.circle,
                     boxShadow: [
@@ -405,21 +405,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.person, color: Colors.white, size: 90),
-                      SizedBox(height: 8),
+                      const Icon(Icons.person, color: Colors.white, size: 90),
+                      const SizedBox(height: 8),
                       Container(
-                        padding: EdgeInsets.all(4),
-                        decoration: BoxDecoration(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
                           color: Colors.green,
                           shape: BoxShape.circle,
                         ),
                         child:
-                            Icon(Icons.verified, color: Colors.white, size: 16),
+                            const Icon(Icons.verified, color: Colors.white, size: 16),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
 
                 // Name & Title
                 Text(
@@ -427,14 +427,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: GoogleFonts.montserrat(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1A1A1A),
+                    color: const Color(0xFF1A1A1A),
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   decoration: BoxDecoration(
-                    color: Color(0xFF2563EB).withOpacity(0.1),
+                    color: const Color(0xFF2563EB).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(25),
                   ),
                   child: Text(
@@ -442,20 +442,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: GoogleFonts.montserrat(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF2563EB),
+                      color: const Color(0xFF2563EB),
                     ),
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   "kothapalem, Andhra Pradesh",
                   style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                 ),
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
 
                 // About Me
                 Container(
-                  padding: EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20),
@@ -463,25 +463,25 @@ class _HomeScreenState extends State<HomeScreen> {
                       BoxShadow(
                         color: Colors.black.withOpacity(0.05),
                         blurRadius: 15,
-                        offset: Offset(0, 5),
+                        offset: const Offset(0, 5),
                       )
                     ],
                   ),
                   child: Column(
                     children: [
-                      Icon(Icons.lightbulb_outline,
+                      const Icon(Icons.lightbulb_outline,
                           size: 48, color: Color(0xFFF59E0B)),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Text(
                         "Hi! 👋",
                         style: GoogleFonts.montserrat(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
-                          color: Color(0xFF1A1A1A),
+                          color: const Color(0xFF1A1A1A),
                         ),
                       ),
-                      SizedBox(height: 16),
-                      Text(
+                      const SizedBox(height: 16),
+                      const Text(
                         "I create simple apps for small businesses.\n"
                         "Seafood ERP helps you track purchases, stock, "
                         "customers and vendors easily.\n\n"
@@ -495,7 +495,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
 
                 // Stats
                 Row(
@@ -506,7 +506,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     _statCard("50+", "Happy Shops", Icons.store),
                   ],
                 ),
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
 
                 // Contact Buttons
                 Column(
@@ -516,20 +516,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: double.infinity,
                       child: ElevatedButton.icon(
                         onPressed: () => _launchWhatsApp(),
-                        icon: Icon(Icons.message, color: Colors.white),
-                        label: Text("WhatsApp Chat",
+                        icon: const Icon(Icons.message, color: Colors.white),
+                        label: const Text("WhatsApp Chat",
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold)),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF25D366),
-                          padding: EdgeInsets.symmetric(vertical: 18),
+                          backgroundColor: const Color(0xFF25D366),
+                          padding: const EdgeInsets.symmetric(vertical: 18),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16)),
                           elevation: 3,
                         ),
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
                     // Phone
                     SizedBox(
@@ -537,19 +537,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: OutlinedButton.icon(
                         onPressed: () =>
                             launchUrl(Uri.parse('tel:+919391561154')),
-                        icon: Icon(Icons.phone, color: Colors.green),
-                        label: Text("Call +91 93915 61154",
+                        icon: const Icon(Icons.phone, color: Colors.green),
+                        label: const Text("Call +91 93915 61154",
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.w600)),
                         style: OutlinedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(vertical: 16),
-                          side: BorderSide(color: Colors.green, width: 2),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          side: const BorderSide(color: Colors.green, width: 2),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16)),
                         ),
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
                     // Email
                     SizedBox(
@@ -557,13 +557,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: OutlinedButton.icon(
                         onPressed: () => launchUrl(
                             Uri.parse('mailto:kanna.charan2006@gmail.com')),
-                        icon: Icon(Icons.email, color: Colors.red),
-                        label: Text("Email",
+                        icon: const Icon(Icons.email, color: Colors.red),
+                        label: const Text("Email",
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.w600)),
                         style: OutlinedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(vertical: 16),
-                          side: BorderSide(color: Colors.red, width: 2),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          side: const BorderSide(color: Colors.red, width: 2),
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16)),
                         ),
@@ -572,7 +572,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
                 // Add this AFTER Email button, before SizedBox(height: 32)
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -580,13 +580,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     IconButton(
                       onPressed: () => launchUrl(
                           Uri.parse('https://instagram.com/yourusername')),
-                      icon: Icon(Icons.ondemand_video,
+                      icon: const Icon(Icons.ondemand_video,
                           color: Color(0xFFE4405F), size: 32),
                       tooltip: "Instagram",
                       style: IconButton.styleFrom(
                         backgroundColor: Colors.white.withOpacity(0.9),
-                        padding: EdgeInsets.all(12),
-                        shape: CircleBorder(),
+                        padding: const EdgeInsets.all(12),
+                        shape: const CircleBorder(),
                         elevation: 2,
                       ),
                     ),
@@ -594,13 +594,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     IconButton(
                       onPressed: () => launchUrl(
                           Uri.parse('https://facebook.com/yourusername')),
-                      icon: Icon(Icons.facebook,
+                      icon: const Icon(Icons.facebook,
                           color: Color(0xFF1877F2), size: 32),
                       tooltip: "Facebook",
                       style: IconButton.styleFrom(
                         backgroundColor: Colors.white.withOpacity(0.9),
-                        padding: EdgeInsets.all(12),
-                        shape: CircleBorder(),
+                        padding: const EdgeInsets.all(12),
+                        shape: const CircleBorder(),
                         elevation: 2,
                       ),
                     ),
@@ -608,20 +608,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     IconButton(
                       onPressed: () => launchUrl(
                           Uri.parse('https://linkedin.com/in/charankumar')),
-                      icon: Icon(Icons.business_center,
+                      icon: const Icon(Icons.business_center,
                           color: Color(0xFF0077B5), size: 32),
                       tooltip: "LinkedIn",
                       style: IconButton.styleFrom(
                         backgroundColor: Colors.white.withOpacity(0.9),
-                        padding: EdgeInsets.all(12),
-                        shape: CircleBorder(),
+                        padding: const EdgeInsets.all(12),
+                        shape: const CircleBorder(),
                         elevation: 2,
                       ),
                     ),
                   ],
                 ),
 
-                SizedBox(height: 32),
+                const SizedBox(height: 32),
               ],
             ),
           ),
@@ -650,10 +650,10 @@ class _HomeScreenState extends State<HomeScreen> {
             style: GoogleFonts.montserrat(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF1A1A1A))),
-        SizedBox(height: 4),
+                color: const Color(0xFF1A1A1A))),
+        const SizedBox(height: 4),
         Icon(icon, color: Colors.grey[600], size: 20),
-        SizedBox(height: 4),
+        const SizedBox(height: 4),
         Text(label,
             style: GoogleFonts.montserrat(
                 fontSize: 12,
@@ -701,9 +701,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.business_center, color: Colors.white, size: 32),
-                  SizedBox(width: 12),
-                  Text(
+                  const Icon(Icons.business_center, color: Colors.white, size: 32),
+                  const SizedBox(width: 12),
+                  const Text(
                     "OceanSync",
                     style: TextStyle(
                       color: Colors.white,

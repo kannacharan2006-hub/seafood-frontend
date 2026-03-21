@@ -124,7 +124,7 @@ final groupedData = _groupByCategory(stock);
                   ],
                 ),
               ),
-              ...items.map((item) => _buildStockItemCard(item)).toList(),
+              ...items.map((item) => _buildStockItemCard(item)),
               const SizedBox(height: 8),
             ],
           );

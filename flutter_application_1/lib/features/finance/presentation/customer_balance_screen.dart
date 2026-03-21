@@ -141,7 +141,7 @@ if (mounted) {
             padding: const EdgeInsets.all(16),
             color: Colors.white,
             child: DropdownButtonFormField<String>(
-              value: customers.isEmpty ? null : selectedCustomerId,
+              initialValue: customers.isEmpty ? null : selectedCustomerId,
               decoration: InputDecoration(
                 labelText: "Select Customer Name",
                 prefixIcon: const Icon(Icons.person),

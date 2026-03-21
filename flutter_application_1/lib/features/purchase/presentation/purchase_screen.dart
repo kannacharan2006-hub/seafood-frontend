@@ -204,7 +204,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
 
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text("Error saving purchase")));
+      ).showSnackBar(const SnackBar(content: Text("Error saving purchase")));
     }
 
     setState(() => isSaving = false);
@@ -332,7 +332,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
                 return vendor['name'];
               },
 
-              popupProps: PopupProps.menu(showSearchBox: true),
+              popupProps: const PopupProps.menu(showSearchBox: true),
 
               dropdownDecoratorProps: const DropDownDecoratorProps(
                 dropdownSearchDecoration: InputDecoration(

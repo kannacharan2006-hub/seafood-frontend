@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'features/auth/presentation/home_screen.dart';
-import 'features/auth/presentation/login_screen.dart';
+import 'features/auth/presentation/splash_screen.dart';
 import 'services/secure_storage.dart';
 
 
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
             return const HomeScreen(userName: "User");
           }
 
-          return const LoginScreen();
+          return const SplashScreen();
         },
       ),
     );

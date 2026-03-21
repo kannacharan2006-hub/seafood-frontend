@@ -203,7 +203,7 @@ return Scaffold(
 
                     child: DropdownButtonHideUnderline(
                       child: DropdownButtonFormField<String>(
-                        value: selectedVendorId,
+                        initialValue: selectedVendorId,
                         hint:
                             const Text("Select vendor"),
 

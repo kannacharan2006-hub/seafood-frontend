@@ -94,7 +94,7 @@ class _CustomerPaymentScreenState extends State<CustomerPaymentScreen> {
           children: [
             /// CUSTOMER DROPDOWN
             DropdownButtonFormField<String>(
-              value: customers.isEmpty ? null : selectedCustomerId,
+              initialValue: customers.isEmpty ? null : selectedCustomerId,
 
               decoration: const InputDecoration(
                 labelText: "Select Customer",

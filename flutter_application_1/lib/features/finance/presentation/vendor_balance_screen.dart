@@ -77,7 +77,7 @@ setState(() {
       setState(() => isLoading = false);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text("Error loading vendors"),
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.redAccent,

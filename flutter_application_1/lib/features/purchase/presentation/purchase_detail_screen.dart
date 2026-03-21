@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
-import 'dart:ui';
 
 import '/features/purchase/data/purchase_detail_service.dart';
 
 class PurchaseDetailScreen extends StatefulWidget {
   final int purchaseId;
 
-  const PurchaseDetailScreen({Key? key, required this.purchaseId})
-    : super(key: key);
+  const PurchaseDetailScreen({super.key, required this.purchaseId});
 
   @override
   State<PurchaseDetailScreen> createState() => _PurchaseDetailScreenState();
@@ -256,7 +254,7 @@ class _PurchaseDetailScreenState extends State<PurchaseDetailScreen> {
               ),
             ),
           ),
-          ...items.map((item) => _buildItemRow(item)).toList(),
+          ...items.map((item) => _buildItemRow(item)),
         ],
       ),
     );

@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../data/dashboard_service.dart';
-import 'dart:ui';
 
 class DashboardScreen extends StatefulWidget {
   final String? userName;
@@ -55,7 +54,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text("Failed to load dashboard")));
+      ).showSnackBar(const SnackBar(content: Text("Failed to load dashboard")));
     }
   }
 
@@ -135,7 +134,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               colors: [kIndigo, Color(0xFF4F46E5), Color(0xFF818CF8)],
             ),
           ),
-          child: Opacity(
+          child: const Opacity(
             opacity: 0.1,
             child: Icon(
               Icons.analytics_outlined,

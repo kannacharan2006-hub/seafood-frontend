@@ -6,7 +6,7 @@ import '/features/purchase/presentation/purchase_detail_screen.dart';
 
 
 class PurchaseHistoryScreen extends StatefulWidget {
-  const PurchaseHistoryScreen({Key? key}) : super(key: key);
+  const PurchaseHistoryScreen({super.key});
 
   @override
   State<PurchaseHistoryScreen> createState() => _PurchaseHistoryScreenState();
