@@ -76,6 +76,8 @@ setState(() {
 
       setState(() => isLoading = false);
 
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Error loading vendors"),

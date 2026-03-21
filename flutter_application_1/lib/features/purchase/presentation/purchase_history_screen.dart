@@ -82,6 +82,7 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
         isFetchingMore = false;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         isLoading = false;
         isFetchingMore = false;

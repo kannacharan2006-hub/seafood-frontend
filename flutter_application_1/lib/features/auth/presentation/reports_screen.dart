@@ -44,6 +44,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
       });
 
     } catch (e) {
+      if (!mounted) return;
 
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("Error loading reports")));

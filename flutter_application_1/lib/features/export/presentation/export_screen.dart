@@ -72,6 +72,8 @@ class _ExportScreenState extends State<ExportScreen>
     try {
       final data = await _exportService.getCustomers();
 
+      if (!mounted) return;
+
       setState(() {
         customers = data;
 
@@ -123,6 +125,7 @@ class _ExportScreenState extends State<ExportScreen>
                   address: addressController.text,
                 );
 
+                if (!mounted) return;
                 Navigator.pop(context);
 
                 nameController.clear();

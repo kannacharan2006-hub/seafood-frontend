@@ -34,12 +34,15 @@ class _StockScreenState extends State<StockScreen>
         _service.getFinalStock(),
       ]);
 
+      if (!mounted) return;
+
       setState(() {
         rawStock = results[0];
         finalStock = results[1];
         isLoading = false;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() => isLoading = false);
 
       ScaffoldMessenger.of(context).showSnackBar(

@@ -116,14 +116,17 @@ class _PurchaseScreenState extends State<PurchaseScreen>
                 try {
                   await purchaseService.addVendor(body);
 
+                  if (!mounted) return;
                   Navigator.pop(context);
 
                   await fetchVendors();
 
+                  if (!mounted) return;
                   ScaffoldMessenger.of(
                     context,
                   ).showSnackBar(const SnackBar(content: Text("Vendor Added")));
                 } catch (e) {
+                  if (!mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("Failed to add vendor")),
                   );
@@ -196,11 +199,16 @@ class _PurchaseScreenState extends State<PurchaseScreen>
 
       print("PURCHASE RESPONSE:");
       print(response);
+
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Purchase Saved Successfully")),
       );
     } catch (e) {
       print("ERROR: $e");
+
+      if (!mounted) return;
 
       ScaffoldMessenger.of(
         context,

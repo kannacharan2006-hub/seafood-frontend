@@ -79,6 +79,8 @@ class _RegisterScreenState extends State<RegisterScreen>
         phone: phoneController.text,
       );
 
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(result['message']),
@@ -89,6 +91,8 @@ class _RegisterScreenState extends State<RegisterScreen>
       Navigator.pop(context);
 
     } catch (e) {
+
+      if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

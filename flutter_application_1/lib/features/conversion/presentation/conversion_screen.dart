@@ -37,11 +37,13 @@ class _ConversionScreenState extends State<ConversionScreen> {
   Future<void> loadVariants() async {
     try {
       final data = await _purchaseService.fetchAllVariants();
+      if (!mounted) return;
       setState(() {
         variants = data;
         isLoadingVariants = false;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() => isLoadingVariants = false);
     }
   }
@@ -294,6 +296,8 @@ class _ConversionScreenState extends State<ConversionScreen> {
         notesController.text,
       );
 
+      if (!mounted) return;
+
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text("✅ Saved Successfully!")));
@@ -303,6 +307,7 @@ class _ConversionScreenState extends State<ConversionScreen> {
         notesController.clear();
       });
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text("❌ Error: $e")));

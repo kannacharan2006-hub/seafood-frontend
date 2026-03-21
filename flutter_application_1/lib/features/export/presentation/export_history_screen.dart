@@ -25,17 +25,16 @@ class _ExportHistoryScreenState extends State<ExportHistoryScreen> {
     try {
       final data = await _historyService.getExports();
 
-      if (mounted) {
-        setState(() {
-          exports = data;
-          isLoading = false;
-        });
-      }
+      if (!mounted) return;
+
+      setState(() {
+        exports = data;
+        isLoading = false;
+      });
     } catch (e) {
-      if (mounted) {
-        setState(() => isLoading = false);
-        _showSnackBar("Error fetching history", isError: true);
-      }
+      if (!mounted) return;
+      setState(() => isLoading = false);
+      _showSnackBar("Error fetching history", isError: true);
     }
   }
 

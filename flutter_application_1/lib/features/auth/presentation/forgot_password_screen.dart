@@ -65,6 +65,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
         );
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(e.toString().replaceAll("Exception: ", "")),

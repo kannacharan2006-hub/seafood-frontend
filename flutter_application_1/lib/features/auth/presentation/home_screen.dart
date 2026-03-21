@@ -100,13 +100,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 // Your existing logout logic
                 await SecureStorage.deleteToken();
 
-                if (mounted) {
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (_) => const LoginScreen()),
-                    (route) => false,
-                  );
-                }
+                if (!mounted) return;
+
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  (route) => false,
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red[500],

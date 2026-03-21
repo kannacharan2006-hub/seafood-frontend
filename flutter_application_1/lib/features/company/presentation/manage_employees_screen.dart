@@ -53,6 +53,7 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
           ElevatedButton(
             onPressed: () async {
               await ManageEmployeesService.deleteEmployee(id);
+              if (!mounted) return;
               Navigator.pop(context);
               loadEmployees();
             },
@@ -357,10 +358,9 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
                 phone: phoneController.text,
               );
 
-              if (context.mounted) {
-                Navigator.pop(context);
-                loadEmployees();
-              }
+              if (!mounted) return;
+              Navigator.pop(context);
+              loadEmployees();
             },
             child: const Text("Update"),
           ),

@@ -110,6 +110,7 @@ if (mounted) {
   Future<void> fetchCustomers() async {
     try {
         final data = await CustomerService().fetchCustomers();
+      if (!mounted) return;
       if (data.isNotEmpty) {
         setState(() {
           customers = data;

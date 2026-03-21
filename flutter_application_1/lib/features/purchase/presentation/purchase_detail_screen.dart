@@ -37,11 +37,14 @@ class _PurchaseDetailScreenState extends State<PurchaseDetailScreen> {
           widget.purchaseId,
           );
 
+      if (!mounted) return;
+
       setState(() {
         purchaseData = data;
         isLoading = false;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() => isLoading = false);
     }
   }

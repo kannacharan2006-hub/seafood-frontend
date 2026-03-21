@@ -24,11 +24,13 @@ class _ConversionHistoryScreenState extends State<ConversionHistoryScreen> {
   Future<void> loadData() async {
     try {
       final data = await _service.getConversions();
+      if (!mounted) return;
       setState(() {
         conversions = data;
         isLoading = false;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() => isLoading = false);
     }
   }

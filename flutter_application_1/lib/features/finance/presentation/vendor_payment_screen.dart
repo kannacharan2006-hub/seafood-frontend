@@ -43,6 +43,7 @@ class _VendorPaymentScreenState extends State<VendorPaymentScreen> {
         isLoadingVendors = false;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() => isLoadingVendors = false);
 
       _showFeedback("Failed to load vendors", isError: true);
