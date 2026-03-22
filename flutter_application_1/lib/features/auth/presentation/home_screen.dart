@@ -130,188 +130,176 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => Scaffold(
-          backgroundColor: const Color(0xFFF8FAFC),
+          backgroundColor: Colors.white,
           appBar: AppBar(
-            backgroundColor: const Color(0xFF2563EB),
-            foregroundColor: Colors.white,
-            title: const Text("About OceanSync",
-                style: TextStyle(fontWeight: FontWeight.bold)),
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
             elevation: 0,
             leading: IconButton(
-              icon: const Icon(Icons.close),
+              icon: const Icon(Icons.arrow_back_ios_new, size: 20),
               onPressed: () => Navigator.pop(context),
             ),
+            title: const Text("About", style: TextStyle(fontWeight: FontWeight.w600)),
+            centerTitle: true,
           ),
           body: SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
             child: Column(
               children: [
-                // Main Logo
+                const SizedBox(height: 32),
+                
+                // App Logo
                 Container(
-                  width: 120,
-                  height: 120,
+                  width: 100,
+                  height: 100,
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                        colors: [Color(0xFF2563EB), Color(0xFF1E40AF)]),
-                    shape: BoxShape.circle,
+                    borderRadius: BorderRadius.circular(22),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: const Color(0xFF2563EB).withOpacity(0.3),
                         blurRadius: 20,
-                        spreadRadius: 5,
-                      )
+                        offset: const Offset(0, 10),
+                      ),
                     ],
                   ),
-                  child: const Icon(Icons.business_center,
-                      color: Colors.white, size: 60),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(22),
+                    child: Image.asset(
+                      'assets/images/logo.png',
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-                const SizedBox(height: 24),
-
-                // App Title
-                Text(
+                const SizedBox(height: 20),
+                
+                // App Name
+                const Text(
                   "OceanSync",
-                  style: GoogleFonts.montserrat(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF1A1A1A),
-                    letterSpacing: 1,
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF1A1A1A),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  "Version 1.0.0",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Color(0xFF8E8E93),
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  "v1.0.0 | Made in India 🇮🇳",
-                  style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                ),
-                const SizedBox(height: 32),
-
-                // Welcome Message
+                
+                // Made in India Badge
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: const Color(0xFFFF9500).withOpacity(0.15),
                     borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      )
-                    ],
                   ),
+                  child: const Text(
+                    "🇮🇳 Made in India",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFFFF9500),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                
+                const SizedBox(height: 32),
+                const Divider(height: 1),
+                
+                // App Info Section
+                _aboutSection("App Info", [
+                  _aboutItem(Icons.info_outline, "Version", "1.0.0"),
+                  _aboutItem(Icons.phone_android, "Platform", "Android"),
+                  _aboutItem(Icons.cloud_outlined, "Backend", "Cloud API"),
+                ]),
+                
+                const Divider(height: 1),
+                
+                // Features Section
+                _aboutSection("Features", [
+                  _aboutItem(Icons.shopping_cart_outlined, "Purchase", "Manage vendor purchases"),
+                  _aboutItem(Icons.inventory_2_outlined, "Inventory", "Track stock levels"),
+                  _aboutItem(Icons.trending_up, "Sales", "Handle export orders"),
+                  _aboutItem(Icons.sync_alt, "Re-grading", "Stock conversion"),
+                  _aboutItem(Icons.people_outline, "Employees", "Team management"),
+                  _aboutItem(Icons.bar_chart_outlined, "Reports", "Business analytics"),
+                ]),
+                
+                const Divider(height: 1),
+                
+                // Description
+                Padding(
+                  padding: const EdgeInsets.all(20),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.lightbulb_outline,
-                          size: 48, color: Color(0xFFF59E0B)),
-                      const SizedBox(height: 16),
-                      Text(
-                        "Why OceanSync?",
-                        style: GoogleFonts.montserrat(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF1A1A1A),
+                      const Text(
+                        "About",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF8E8E93),
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      const Text(
+                        "OceanSync is a comprehensive business management solution designed for seafood trading businesses. It helps you manage purchases, sales, inventory, and finances all in one place.",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Color(0xFF3C3C43),
+                          height: 1.5,
                         ),
                       ),
                       const SizedBox(height: 16),
                       const Text(
-                        "Save time, reduce mistakes, grow your business.\nSimple app for seafood shops like yours.",
-                        textAlign: TextAlign.center,
+                        "Built with modern technology to provide fast, reliable, and secure experience for your business operations.",
                         style: TextStyle(
-                            fontSize: 18,
-                            height: 1.6,
-                            color: Color(0xFF4B5563)),
+                          fontSize: 15,
+                          color: Color(0xFF3C3C43),
+                          height: 1.5,
+                        ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 24),
-
-                // Features List
-                Text(
-                  "What you get:",
-                  style: GoogleFonts.montserrat(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: const Color(0xFF1A1A1A),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Feature Cards
-                _featureItem(Icons.shopping_cart, "Easy Purchase",
-                    "Track what you buy from vendors"),
-                _featureItem(Icons.inventory_2, "Stock Control",
-                    "Never run out of stock"),
-                _featureItem(Icons.account_balance_wallet, "Customer Money",
-                    "Know who owes you"),
-                _featureItem(
-                    Icons.payment, "Vendor Money", "Pay vendors on time"),
-                _featureItem(Icons.people, "Employees", "Manage your team"),
-                _featureItem(Icons.bar_chart, "Reports", "See your profits"),
-
+                
+                const Divider(height: 1),
+                
+                // Developer Section
+                _aboutSection("Developer", [
+                  _aboutItem(Icons.person_outline, "Name", "Charan Kumar Kanna"),
+                  _aboutItem(Icons.location_on_outlined, "Location", "Repalle, Andhra Pradesh"),
+                  _aboutItem(Icons.email_outlined, "Email", "kanna.charan2006@gmail.com"),
+                ]),
+                
                 const SizedBox(height: 32),
-
-                // CTA Section
-                Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                        colors: [Color(0xFF10B981), Color(0xFF059669)]),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Column(
-                    children: [
-                      const Icon(Icons.rocket_launch, color: Colors.white, size: 48),
-                      const SizedBox(height: 16),
-                      Text(
-                        "Start Using Now!",
-                        style: GoogleFonts.montserrat(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        "Everything works offline too!",
-                        style: TextStyle(
-                            fontSize: 16, color: Colors.white.withOpacity(0.9)),
-                      ),
-                    ],
+                
+                // Footer
+                const Text(
+                  "© 2024 Seafood ERP",
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Color(0xFF8E8E93),
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 24),
-
-                // Made by Section
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.amber[50],
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.amber[200]!),
-                  ),
-                  child: Row(
-                    children: [
-                      const CircleAvatar(
-                        backgroundColor: Color(0xFF2563EB),
-                        child: Icon(Icons.favorite, color: Colors.white),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Made by Charan kumar Kanna",
-                                style: GoogleFonts.montserrat(
-                                    fontWeight: FontWeight.bold)),
-                            Text("Repalle, Andhra Pradesh",
-                                style: TextStyle(color: Colors.grey[600])),
-                          ],
-                        ),
-                      ),
-                    ],
+                const SizedBox(height: 4),
+                const Text(
+                  "Made with ❤️ in India",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Color(0xFFC7C7CC),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 40),
               ],
             ),
           ),
@@ -320,44 +308,47 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-// Simple feature item widget
-  Widget _featureItem(IconData icon, String title, String subtitle) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          )
-        ],
-      ),
+  Widget _aboutSection(String title, List<Widget> items) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+          child: Text(
+            title.toUpperCase(),
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF8E8E93),
+              letterSpacing: 0.5,
+            ),
+          ),
+        ),
+        ...items,
+      ],
+    );
+  }
+
+  Widget _aboutItem(IconData icon, String title, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: Row(
         children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: const Color(0xFF2563EB).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(icon, color: const Color(0xFF2563EB), size: 28),
-          ),
+          Icon(icon, size: 22, color: const Color(0xFF8E8E93)),
           const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title,
-                    style: GoogleFonts.montserrat(
-                        fontSize: 18, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 4),
-                Text(subtitle,
-                    style: TextStyle(fontSize: 15, color: Colors.grey[600])),
-              ],
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              color: Color(0xFF1A1A1A),
+            ),
+          ),
+          const Spacer(),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 15,
+              color: Color(0xFF8E8E93),
             ),
           ),
         ],
@@ -370,258 +361,179 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       MaterialPageRoute(
         builder: (context) => Scaffold(
-          backgroundColor: const Color(0xFFF8FAFC),
+          backgroundColor: Colors.white,
           appBar: AppBar(
-            backgroundColor: const Color(0xFF2563EB),
-            foregroundColor: Colors.white,
-            title: const Text("Charan kumar Kanna",
-                style: TextStyle(fontWeight: FontWeight.bold)),
+            backgroundColor: Colors.white,
+            foregroundColor: Colors.black,
             elevation: 0,
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back_ios_new, size: 20),
               onPressed: () => Navigator.pop(context),
             ),
+            title: const Text("Developer", style: TextStyle(fontWeight: FontWeight.w600)),
+            centerTitle: true,
           ),
           body: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
             child: Column(
               children: [
-                // Profile Header
+                const SizedBox(height: 24),
+                
+                // Profile Avatar
                 Container(
-                  width: 160,
-                  height: 160,
+                  width: 88,
+                  height: 88,
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                        colors: [Color(0xFF2563EB), Color(0xFF1E40AF)]),
-                    shape: BoxShape.circle,
+                    color: const Color(0xFF2563EB),
+                    borderRadius: BorderRadius.circular(22),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 25,
-                        spreadRadius: 5,
-                      )
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.person, color: Colors.white, size: 90),
-                      const SizedBox(height: 8),
-                      Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: const BoxDecoration(
-                          color: Colors.green,
-                          shape: BoxShape.circle,
-                        ),
-                        child:
-                            const Icon(Icons.verified, color: Colors.white, size: 16),
+                        color: const Color(0xFF2563EB).withOpacity(0.3),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
                       ),
                     ],
                   ),
+                  child: const Icon(Icons.person, color: Colors.white, size: 44),
                 ),
-                const SizedBox(height: 24),
-
-                // Name & Title
-                Text(
-                  "Charan kumar Kanna",
-                  style: GoogleFonts.montserrat(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFF1A1A1A),
+                const SizedBox(height: 16),
+                
+                // Name
+                const Text(
+                  "Charan Kumar Kanna",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF1A1A1A),
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 4),
+                
+                // Role Badge
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF2563EB).withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: Text(
-                    "Flutter Full Stack Developer",
-                    style: GoogleFonts.montserrat(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: const Color(0xFF2563EB),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  "kothapalem, Andhra Pradesh",
-                  style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                ),
-                const SizedBox(height: 32),
-
-                // About Me
-                Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: const Color(0xFF007AFF).withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 15,
-                        offset: const Offset(0, 5),
-                      )
-                    ],
                   ),
-                  child: Column(
-                    children: [
-                      const Icon(Icons.lightbulb_outline,
-                          size: 48, color: Color(0xFFF59E0B)),
-                      const SizedBox(height: 20),
-                      Text(
-                        "Hi! 👋",
-                        style: GoogleFonts.montserrat(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF1A1A1A),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        "I create simple apps for small businesses.\n"
-                        "Seafood ERP helps you track purchases, stock, "
-                        "customers and vendors easily.\n\n"
-                        "Made with ❤️ in India for Indian shops.",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 18,
-                            height: 1.6,
-                            color: Color(0xFF4B5563)),
-                      ),
-                    ],
+                  child: const Text(
+                    "Full Stack Developer",
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Color(0xFF007AFF),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 32),
-
-                // Stats
+                
+                const SizedBox(height: 8),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _statCard("5+", "Apps", Icons.apps),
-                    _statCard("3+", "Years", Icons.calendar_today),
-                    _statCard("50+", "Happy Shops", Icons.store),
-                  ],
-                ),
-                const SizedBox(height: 32),
-
-                // Contact Buttons
-                Column(
-                  children: [
-                    // WhatsApp ⭐ NEW
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: () => _launchWhatsApp(),
-                        icon: const Icon(Icons.message, color: Colors.white),
-                        label: const Text("WhatsApp Chat",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold)),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF25D366),
-                          padding: const EdgeInsets.symmetric(vertical: 18),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16)),
-                          elevation: 3,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Phone
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton.icon(
-                        onPressed: () =>
-                            launchUrl(Uri.parse('tel:+919391561154')),
-                        icon: const Icon(Icons.phone, color: Colors.green),
-                        label: const Text("Call +91 93915 61154",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600)),
-                        style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          side: const BorderSide(color: Colors.green, width: 2),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16)),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Email
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton.icon(
-                        onPressed: () => launchUrl(
-                            Uri.parse('mailto:kanna.charan2006@gmail.com')),
-                        icon: const Icon(Icons.email, color: Colors.red),
-                        label: const Text("Email",
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600)),
-                        style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          side: const BorderSide(color: Colors.red, width: 2),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16)),
-                        ),
+                    Icon(Icons.location_on_outlined, size: 16, color: Colors.grey[500]),
+                    const SizedBox(width: 4),
+                    Text(
+                      "Repalle, Andhra Pradesh, India",
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.grey[600],
                       ),
                     ),
                   ],
                 ),
-                // Add this AFTER Email button, before SizedBox(height: 32)
+                
                 const SizedBox(height: 24),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    // Instagram
-                    IconButton(
-                      onPressed: () => launchUrl(
-                          Uri.parse('https://instagram.com/yourusername')),
-                      icon: const Icon(Icons.ondemand_video,
-                          color: Color(0xFFE4405F), size: 32),
-                      tooltip: "Instagram",
-                      style: IconButton.styleFrom(
-                        backgroundColor: Colors.white.withOpacity(0.9),
-                        padding: const EdgeInsets.all(12),
-                        shape: const CircleBorder(),
-                        elevation: 2,
+                const Divider(height: 1),
+                
+                // About Section
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "About",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF8E8E93),
+                          letterSpacing: 0.5,
+                        ),
                       ),
-                    ),
-                    // Facebook
-                    IconButton(
-                      onPressed: () => launchUrl(
-                          Uri.parse('https://facebook.com/yourusername')),
-                      icon: const Icon(Icons.facebook,
-                          color: Color(0xFF1877F2), size: 32),
-                      tooltip: "Facebook",
-                      style: IconButton.styleFrom(
-                        backgroundColor: Colors.white.withOpacity(0.9),
-                        padding: const EdgeInsets.all(12),
-                        shape: const CircleBorder(),
-                        elevation: 2,
+                      const SizedBox(height: 12),
+                      const Text(
+                        "Passionate developer focused on building practical solutions for small businesses. Specializing in mobile app development with Flutter for Android platforms.",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Color(0xFF3C3C43),
+                          height: 1.5,
+                        ),
                       ),
-                    ),
-                    // LinkedIn (bonus)
-                    IconButton(
-                      onPressed: () => launchUrl(
-                          Uri.parse('https://linkedin.com/in/charankumar')),
-                      icon: const Icon(Icons.business_center,
-                          color: Color(0xFF0077B5), size: 32),
-                      tooltip: "LinkedIn",
-                      style: IconButton.styleFrom(
-                        backgroundColor: Colors.white.withOpacity(0.9),
-                        padding: const EdgeInsets.all(12),
-                        shape: const CircleBorder(),
-                        elevation: 2,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-
+                
+                const Divider(height: 1),
+                
+                // Portfolio Stats
+                _aboutSection("Portfolio", [
+                  _aboutItem(Icons.apps_outlined, "Apps Built", "5+"),
+                  _aboutItem(Icons.work_outline, "Experience", "3+ Years"),
+                  _aboutItem(Icons.sentiment_satisfied_alt_outlined, "Happy Clients", "50+"),
+                ]),
+                
+                const Divider(height: 1),
+                
+                // Skills Section
+                _aboutSection("Skills", [
+                  _aboutItem(Icons.code, "Framework", "Flutter / Dart"),
+                  _aboutItem(Icons.phone_android, "Platform", "Android"),
+                  _aboutItem(Icons.cloud_outlined, "Backend", "REST API"),
+                ]),
+                
+                const Divider(height: 1),
+                
+                // Contact Section
+                _aboutSection("Contact", [
+                  _aboutItemTappable(Icons.message, "WhatsApp", "+91 93915 61154", 
+                      () => _launchWhatsApp()),
+                  _aboutItemTappable(Icons.phone, "Phone", "+91 93915 61154",
+                      () => launchUrl(Uri.parse('tel:+919391561154'))),
+                  _aboutItemTappable(Icons.email, "Email", "kanna.charan2006@gmail.com",
+                      () => launchUrl(Uri.parse('mailto:kanna.charan2006@gmail.com'))),
+                ]),
+                
+                const Divider(height: 1),
+                
+                // Social Section
+                _aboutSection("Social Profiles", [
+                  _aboutItemTappable(Icons.link, "LinkedIn", "linkedin.com/in/charankumar",
+                      () => launchUrl(Uri.parse('https://linkedin.com/in/charankumar'))),
+                  _aboutItemTappable(Icons.camera_alt, "Instagram", "@charann.kumar__",
+                      () => launchUrl(Uri.parse('https://www.instagram.com/charann.kumar__/'))),
+                  _aboutItemTappable(Icons.facebook, "Facebook", "Charan Kumar",
+                      () => launchUrl(Uri.parse('https://www.facebook.com/charan2006/'))),
+                ]),
+                
                 const SizedBox(height: 32),
+                
+                // Footer
+                const Text(
+                  "© 2024 Charan Kumar Kanna",
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Color(0xFF8E8E93),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  "Made with ❤️ in India",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Color(0xFFC7C7CC),
+                  ),
+                ),
+                const SizedBox(height: 40),
               ],
             ),
           ),
@@ -630,37 +542,45 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-// 🔥 WHATSAPP FUNCTION ⭐
+  Widget _aboutItemTappable(IconData icon, String title, String value, VoidCallback onTap) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        child: Row(
+          children: [
+            Icon(icon, size: 22, color: const Color(0xFF8E8E93)),
+            const SizedBox(width: 16),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Color(0xFF1A1A1A),
+              ),
+            ),
+            const Spacer(),
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Color(0xFF8E8E93),
+              ),
+            ),
+            const SizedBox(width: 4),
+            const Icon(Icons.chevron_right, size: 18, color: Color(0xFFC7C7CC)),
+          ],
+        ),
+      ),
+    );
+  }
+
   void _launchWhatsApp() async {
-    const message =
-        "Hi Charankumar! I found your OceanSync app. Can you help me?";
+    const message = "Hi Charankumar! I found your app. Can you help me?";
     final whatsappUrl = Uri.parse(
         "https://wa.me/919391561154?text=${Uri.encodeComponent(message)}");
     if (await canLaunchUrl(whatsappUrl)) {
       await launchUrl(whatsappUrl);
     }
-  }
-
-// Keep your existing _statCard and _contactButton functions
-
-  Widget _statCard(String value, String label, IconData icon) {
-    return Column(
-      children: [
-        Text(value,
-            style: GoogleFonts.montserrat(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xFF1A1A1A))),
-        const SizedBox(height: 4),
-        Icon(icon, color: Colors.grey[600], size: 20),
-        const SizedBox(height: 4),
-        Text(label,
-            style: GoogleFonts.montserrat(
-                fontSize: 12,
-                color: Colors.grey[600],
-                fontWeight: FontWeight.w500)),
-      ],
-    );
   }
 
   @override
