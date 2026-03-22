@@ -75,8 +75,8 @@ class _RegisterScreenState extends State<RegisterScreen>
         companyName: companyController.text,
         ownerName: ownerController.text,
         email: emailController.text,
-        password: passwordController.text,
         phone: phoneController.text,
+        password: passwordController.text,
       );
 
       if (!mounted) return;

@@ -28,15 +28,15 @@ class AuthService {
     required String companyName,
     required String ownerName,
     required String email,
-    required String password,
     required String phone,
+    required String password,
   }) async {
     final data = await Api.post("/api/auth/register-company", {
       "company_name": companyName,
       "owner_name": ownerName,
       "email": email,
-      "password": password,
       "phone": phone,
+      "password": password,
     });
 
     if (data["token"] != null) {

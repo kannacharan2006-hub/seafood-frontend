@@ -235,12 +235,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 const Divider(height: 1),
                 
                 // Description
-                Padding(
-                  padding: const EdgeInsets.all(20),
+                const Padding(
+                  padding: EdgeInsets.all(20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         "About",
                         style: TextStyle(
                           fontSize: 12,
@@ -249,8 +249,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           letterSpacing: 0.5,
                         ),
                       ),
-                      const SizedBox(height: 12),
-                      const Text(
+                      SizedBox(height: 12),
+                      Text(
                         "OceanSync is a comprehensive business management solution designed for seafood trading businesses. It helps you manage purchases, sales, inventory, and finances all in one place.",
                         style: TextStyle(
                           fontSize: 15,
@@ -258,8 +258,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 1.5,
                         ),
                       ),
-                      const SizedBox(height: 16),
-                      const Text(
+                      SizedBox(height: 16),
+                      Text(
                         "Built with modern technology to provide fast, reliable, and secure experience for your business operations.",
                         style: TextStyle(
                           fontSize: 15,
@@ -445,12 +445,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 const Divider(height: 1),
                 
                 // About Section
-                Padding(
-                  padding: const EdgeInsets.all(20),
+                const Padding(
+                  padding: EdgeInsets.all(20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         "About",
                         style: TextStyle(
                           fontSize: 12,
@@ -459,8 +459,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           letterSpacing: 0.5,
                         ),
                       ),
-                      const SizedBox(height: 12),
-                      const Text(
+                      SizedBox(height: 12),
+                      Text(
                         "Passionate developer focused on building practical solutions for small businesses. Specializing in mobile app development with Flutter for Android platforms.",
                         style: TextStyle(
                           fontSize: 15,

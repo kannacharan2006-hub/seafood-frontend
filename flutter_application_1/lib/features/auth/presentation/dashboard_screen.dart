@@ -50,11 +50,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
       setState(() {
         loading = false;
+        dashboardData = {};
       });
 
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Failed to load dashboard")));
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Error: ${e.toString()}")));
+      }
     }
   }
 
@@ -218,7 +221,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         _statCard(
           "Monthly Sales",
-          dashboardData!['month_sales_revenue'],
+          dashboardData?['month_sales_revenue'] ?? 0,
           Icons.show_chart_rounded,
           Colors.blue,
         ),
@@ -230,7 +233,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         _statCard(
           "Month Profit",
-          dashboardData!['month_profit'],
+          dashboardData?['month_profit'] ?? 0,
           Icons.savings_outlined,
           Colors.purple,
         ),
@@ -323,7 +326,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           const SizedBox(height: 12),
           Text(
             currencyFormat.format(
-              num.tryParse(dashboardData!['month_profit'].toString()) ?? 0,
+              num.tryParse(dashboardData?['month_profit']?.toString() ?? '0') ?? 0,
             ),
             style: GoogleFonts.plusJakartaSans(
               color: Colors.white,
@@ -378,14 +381,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             _healthBarCard(
               "Vendor Payable",
-              dashboardData!['vendor_payable'],
+              dashboardData?['vendor_payable'] ?? 0,
               Colors.redAccent,
               true,
             ),
             const SizedBox(width: 12),
             _healthBarCard(
               "Customer Receivable",
-              dashboardData!['customer_receivable'],
+              dashboardData?['customer_receivable'] ?? 0,
               kEmerald,
               true,
             ),
@@ -396,14 +399,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             _healthBarCard(
               "Raw Stock",
-              "${dashboardData!['total_raw_stock'] ?? 0} kg",
+              "${dashboardData?['total_raw_stock'] ?? 0} kg",
               Colors.teal,
               false,
             ),
             const SizedBox(width: 12),
             _healthBarCard(
               "Final Stock",
-              "${dashboardData!['total_final_stock'] ?? 0} kg",
+              "${dashboardData?['total_final_stock'] ?? 0} kg",
               Colors.indigo,
               false,
             ),
@@ -471,7 +474,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildRecentActivity() {
-    final activities = (dashboardData!['recent_activity'] as List? ?? []);
+    final activities = (dashboardData?['recent_activity'] as List? ?? []);
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -525,7 +528,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildTopSuppliers() {
-    final suppliers = (dashboardData!['top_5_suppliers'] as List? ?? [])
+    final suppliers = (dashboardData?['top_5_suppliers'] as List? ?? [])
         .take(3)
         .toList();
     return Row(
