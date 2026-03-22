@@ -686,8 +686,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
 
       /// DRAWER
-      drawer: Drawer(
-        backgroundColor: Colors.white,
+      drawer: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.75,
+        child: Drawer(
+          backgroundColor: Colors.white,
         child: Column(
           children: [
             /// HEADER
@@ -809,8 +811,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
+      ),
 
-      /// BODY
       /// BODY
       body: IndexedStack(
         index: _selectedIndex,
@@ -862,14 +864,14 @@ class _HomeScreenState extends State<HomeScreen> {
   /// DRAWER SECTION
   Widget _drawerSection(String title) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 6),
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
       child: Text(
         title.toUpperCase(),
         style: const TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-          color: Colors.grey,
-          letterSpacing: 1.2,
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+          color: Color(0xFF8E8E93),
+          letterSpacing: 0.8,
         ),
       ),
     );
@@ -877,11 +879,26 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// DRAWER ITEM
   Widget _drawerItem(IconData icon, String title, VoidCallback onTap) {
-    return ListTile(
-      leading: Icon(icon),
-      title: Text(title),
-      trailing: const Icon(Icons.chevron_right),
-      onTap: onTap,
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+      decoration: BoxDecoration(
+        color: Colors.grey.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+        leading: Icon(icon, size: 22, color: const Color(0xFF3C3C43)),
+        title: Text(
+          title,
+          style: const TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+            color: Color(0xFF1A1A1A),
+          ),
+        ),
+        trailing: const Icon(Icons.chevron_right, size: 20, color: Color(0xFFC7C7CC)),
+        onTap: onTap,
+      ),
     );
   }
 }

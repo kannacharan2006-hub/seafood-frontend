@@ -1,9 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Gradient Background -->
     <item>
-        <bitmap android:gravity="fill" android:src="@drawable/background"/>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="270"
+                android:startColor="#0A192F"
+                android:centerColor="#0F2C50"
+                android:endColor="#1A8FFF"/>
+        </shape>
     </item>
-    <item>
-        <bitmap android:gravity="center" android:src="@drawable/splash"/>
+    
+    <!-- Logo with glow circle -->
+    <item
+        android:gravity="center"
+        android:width="130dp"
+        android:height="130dp"
+        android:top="-40dp">
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="65dp"
+                android:centerX="0.5"
+                android:centerY="0.5"
+                android:startColor="#331A8FFF"
+                android:endColor="#001A8FFF"/>
+        </shape>
+    </item>
+    
+    <!-- Logo image centered -->
+    <item
+        android:gravity="center"
+        android:width="100dp"
+        android:height="100dp"
+        android:drawable="@drawable/splash"/>
+        
+    <!-- App Name Text -->
+    <item
+        android:gravity="center_horizontal|bottom"
+        android:layout_marginBottom="120dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent"/>
+        </shape>
     </item>
 </layer-list>

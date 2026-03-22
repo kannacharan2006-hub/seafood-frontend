@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Gradient Background -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="270"
+                android:startColor="#0A192F"
+                android:centerColor="#0F2C50"
+                android:endColor="#1A8FFF"/>
+        </shape>
+    </item>
+    
+    <!-- Center Container -->
+    <item
+        android:gravity="center"
+        android:top="0dp">
+        <layer-list>
+            <!-- Logo with glow effect -->
+            <item
+                android:width="120dp"
+                android:height="120dp"
+                android:gravity="center">
+                <shape android:shape="oval">
+                    <gradient
+                        android:type="radial"
+                        android:gradientRadius="60dp"
+                        android:startColor="#1A8FFF"
+                        android:endColor="#0F2C50"/>
+                    <stroke android:width="2dp" android:color="#33FFFFFF"/>
+                </shape>
+            </item>
+            <!-- Logo image -->
+            <item
+                android:width="75dp"
+                android:height="75dp"
+                android:gravity="center"
+                android:drawable="@drawable/splash"/>
+        </layer-list>
+    </item>
+</layer-list>
