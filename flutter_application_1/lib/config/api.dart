@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../services/secure_storage.dart';
 
 class Api {
-  static const String baseUrl = "http://172.22.42.235:5000";
+  static const String baseUrl = "http://172.22.43.107:5000";
   
   static const Duration timeout = Duration(seconds: 30);
 
