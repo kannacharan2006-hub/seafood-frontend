@@ -8,7 +8,6 @@ class ExportDetailsScreen extends StatelessWidget {
 
   const ExportDetailsScreen({super.key, required this.exportData});
 
-  // Calm & Modern Design Tokens
   static const Color kPrimary = Color(0xFF4F46E5); // Soft Indigo
   static const Color kHeaderBg = Colors.white;
   static const Color kPageBg = Color(0xFFF1F5F9); // Very light slate
@@ -69,9 +68,9 @@ class ExportDetailsScreen extends StatelessWidget {
         child: Column(
           children: [
             _buildHeroSummary(formattedDate, grandTotal),
-            _buildItemsList(items),
+            _buildItemsList(items, grandTotal),
             _buildSecurityNotice(),
-            const SizedBox(height: 100), // Space for bottom of screen
+            const SizedBox(height: 100),
           ],
         ),
       ),
@@ -160,7 +159,7 @@ class ExportDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildItemsList(List items) {
+  Widget _buildItemsList(List items, double grandTotal) {
     return Container(
       margin: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -225,9 +224,7 @@ class ExportDetailsScreen extends StatelessWidget {
                               fontWeight: FontWeight.w700,
                             ),
                           ),
-
                           const SizedBox(height: 4),
-
                           Text(
                             "${item['quantity']} kg × ₹${item['price_per_kg']}",
                             style: GoogleFonts.plusJakartaSans(
@@ -239,7 +236,6 @@ class ExportDetailsScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-
                     Text(
                       "₹${item['total']}",
                       style: GoogleFonts.plusJakartaSans(
@@ -274,7 +270,7 @@ class ExportDetailsScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "₹${NumberFormat("#,##,###.##").format(double.tryParse(exportData['total_amount']?.toString() ?? '0') ?? 0)}",
+                  "₹${NumberFormat("#,##,###.##").format(grandTotal)}",
                   style: GoogleFonts.plusJakartaSans(
                     color: kPrimary,
                     fontSize: 18,
