@@ -62,21 +62,18 @@ class AuthService {
 
   /* ================= RESET PASSWORD ================= */
   static Future<Map<String, dynamic>> resetPassword({
-    required String token,
+    required String email,
+    required String otp,
     required String newPassword,
   }) async {
     final data = await Api.post("/api/auth/reset-password", {
-      "token": token,
-      "password": newPassword,
+      "email": email,
+      "otp": otp,
+      "newPassword": newPassword,
     });
 
     if (data["success"] == false || data["error"] != null) {
       throw Exception(data["message"] ?? "Password reset failed");
-    }
-
-    // Optionally save new token if provided after reset
-    if (data["token"] != null) {
-      await SecureStorage.saveToken(data["token"]);
     }
 
     return data;
