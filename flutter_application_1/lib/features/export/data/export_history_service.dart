@@ -1,10 +1,13 @@
 import '/config/api.dart';
 
 class ExportHistoryService {
-  // GET EXPORTS
-  Future<List> getExports() async {
-    final data = await Api.get("/api/exports");
-    return List.from(data);
+  // GET EXPORTS with pagination
+  Future<Map<String, dynamic>> getExports({int page = 1, int limit = 20}) async {
+    final data = await Api.get("/api/exports?page=$page&limit=$limit");
+    return {
+      'data': List.from(data['data'] ?? []),
+      'pagination': data['pagination'] ?? {},
+    };
   }
 
   // DELETE EXPORT

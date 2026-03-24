@@ -1,11 +1,14 @@
 import '/config/api.dart';
 
 class PurchaseHistoryService {
-  /* ================= FETCH HISTORY ================= */
+  /* ================= FETCH HISTORY (Paginated) ================= */
 
-  static Future<List<dynamic>> fetchHistory() async {
-    final data = await Api.get("/api/purchase-history");
-    return List<dynamic>.from(data);
+  static Future<Map<String, dynamic>> fetchHistory({int page = 1, int limit = 20}) async {
+    final data = await Api.get("/api/purchase-history?page=$page&limit=$limit");
+    return {
+      'data': List.from(data['data'] ?? []),
+      'pagination': data['pagination'] ?? {},
+    };
   }
 
   /* ================= DELETE PURCHASE ================= */

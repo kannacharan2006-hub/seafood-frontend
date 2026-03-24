@@ -14,6 +14,9 @@ class _ConversionHistoryScreenState extends State<ConversionHistoryScreen> {
   final ConversionService _service = ConversionService();
   List conversions = [];
   bool isLoading = true;
+  bool isLoadingMore = false;
+  bool hasMoreData = true;
+  int currentPage = 1;
 
   @override
   void initState() {
@@ -23,15 +26,38 @@ class _ConversionHistoryScreenState extends State<ConversionHistoryScreen> {
 
   Future<void> loadData() async {
     try {
-      final data = await _service.getConversions();
+      final result = await _service.getConversions(page: 1);
       if (!mounted) return;
+      final pagination = result['pagination'] as Map<String, dynamic>;
       setState(() {
-        conversions = data;
+        conversions = List.from(result['data']);
+        currentPage = 1;
+        hasMoreData = pagination['hasNextPage'] ?? false;
         isLoading = false;
       });
     } catch (e) {
       if (!mounted) return;
       setState(() => isLoading = false);
+    }
+  }
+
+  Future<void> loadMoreData() async {
+    if (isLoadingMore || !hasMoreData) return;
+    setState(() => isLoadingMore = true);
+    try {
+      final result = await _service.getConversions(page: currentPage + 1);
+      if (!mounted) return;
+      final pagination = result['pagination'] as Map<String, dynamic>;
+      final newData = List.from(result['data']);
+      setState(() {
+        conversions.addAll(newData);
+        currentPage++;
+        hasMoreData = pagination['hasNextPage'] ?? false;
+        isLoadingMore = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => isLoadingMore = false);
     }
   }
 
@@ -71,10 +97,25 @@ class _ConversionHistoryScreenState extends State<ConversionHistoryScreen> {
           ? const Center(child: CircularProgressIndicator())
           : conversions.isEmpty
               ? _buildEmptyState()
-              : ListView.builder(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  itemCount: conversions.length,
-                  itemBuilder: (context, index) {
+              : NotificationListener<ScrollNotification>(
+                  onNotification: (scrollInfo) {
+                    if (scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent - 200) {
+                      loadMoreData();
+                    }
+                    return false;
+                  },
+                  child: ListView.builder(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    itemCount: conversions.length + (hasMoreData ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index == conversions.length) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(16),
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      }
                     final conv = conversions[index];
                     String formattedDate = "Unknown Date";
                     if (conv['date'] != null) {
@@ -134,6 +175,7 @@ class _ConversionHistoryScreenState extends State<ConversionHistoryScreen> {
                     );
                   },
                 ),
+              ),
     );
   }
 

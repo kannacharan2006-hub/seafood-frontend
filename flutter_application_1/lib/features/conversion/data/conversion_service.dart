@@ -17,11 +17,14 @@ class ConversionService {
     });
   }
 
-  /* ================= GET HISTORY ================= */
+  /* ================= GET HISTORY (Paginated) ================= */
 
-  Future<List<dynamic>> getConversions() async {
-    final data = await Api.get("/api/conversions/convert");
-    return data;
+  Future<Map<String, dynamic>> getConversions({int page = 1, int limit = 20}) async {
+    final data = await Api.get("/api/conversions/convert?page=$page&limit=$limit");
+    return {
+      'data': List.from(data['data'] ?? []),
+      'pagination': data['pagination'] ?? {},
+    };
   }
 
   /* ================= DELETE ================= */

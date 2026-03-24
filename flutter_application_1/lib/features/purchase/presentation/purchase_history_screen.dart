@@ -56,28 +56,22 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
     }
 
     try {
-      // Fetching from service
-      final List data = await PurchaseHistoryService.fetchHistory();
+      final result = await PurchaseHistoryService.fetchHistory(
+        page: currentPage,
+        limit: 20,
+      );
+
+      final List data = List.from(result['data']);
+      final pagination = result['pagination'] as Map<String, dynamic>;
 
       setState(() {
-        // Explicit Sort: Highest purchase_id first (Latest Record at top)
-        List sortedData = List.from(data);
-        sortedData.sort((a, b) {
-          int idA = a['purchase_id'] ?? 0;
-          int idB = b['purchase_id'] ?? 0;
-          return idB.compareTo(idA); // Descending order
-        });
-
         if (isRefresh) {
-          purchases = sortedData;
+          purchases = data;
         } else {
-          purchases.addAll(sortedData);
+          purchases.addAll(data);
         }
 
-        // Mock Pagination Logic
-        if (data.length < 10) {
-          hasMoreData = false;
-        }
+        hasMoreData = pagination['hasNextPage'] ?? false;
         isLoading = false;
         isFetchingMore = false;
       });
