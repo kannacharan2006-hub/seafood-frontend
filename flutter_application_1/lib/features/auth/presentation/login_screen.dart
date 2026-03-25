@@ -58,6 +58,7 @@ class _LoginScreenState extends State<LoginScreen>
       );
 
       final userName = result["user"]?["name"] ?? "User";
+      final companyId = result["user"]?["company_id"];
 
       if (!mounted) return;
 
@@ -70,7 +71,10 @@ class _LoginScreenState extends State<LoginScreen>
 
       Navigator.pushReplacement(
         context,
-        PageTransition.slide(HomeScreen(userName: userName)),
+        PageTransition.slide(HomeScreen(
+          userName: userName,
+          companyId: companyId,
+        )),
       );
     } catch (e) {
       if (!mounted) return;

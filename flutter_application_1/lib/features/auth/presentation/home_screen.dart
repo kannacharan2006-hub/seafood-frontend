@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutter_application_1/services/secure_storage.dart';
+import 'package:flutter_application_1/services/websocket_service.dart';
 
 import 'package:flutter_application_1/features/auth/presentation/login_screen.dart';
 import 'package:flutter_application_1/features/auth/presentation/dashboard_screen.dart';
@@ -271,8 +273,13 @@ class AboutAppScreen extends StatelessWidget {
 
 class HomeScreen extends StatefulWidget {
   final String userName;
+  final int? companyId;
 
-  const HomeScreen({super.key, required this.userName});
+  const HomeScreen({
+    super.key,
+    required this.userName,
+    this.companyId,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -280,6 +287,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  final WebSocketService _wsService = WebSocketService();
+  StreamSubscription<WebSocketMessage>? _wsSubscription;
 
   final List<String> _titles = [
     "Dashboard",
@@ -288,6 +297,82 @@ class _HomeScreenState extends State<HomeScreen> {
     "Sales",
     "Reports",
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _initWebSocket();
+  }
+
+  void _initWebSocket() {
+    if (widget.companyId != null) {
+      _wsService.connectWithCompany(widget.companyId!);
+      _wsSubscription = _wsService.messages?.listen(_handleWebSocketMessage);
+    }
+  }
+
+  void _handleWebSocketMessage(WebSocketMessage message) {
+    if (!mounted) return;
+
+    String? notificationTitle;
+    String? notificationBody;
+
+    switch (message.event) {
+      case WebSocketEvent.stockUpdate:
+        notificationTitle = 'Stock Updated';
+        notificationBody = 'Inventory has been updated';
+        break;
+      case WebSocketEvent.purchaseCreated:
+        notificationTitle = 'New Purchase';
+        notificationBody = 'A new purchase has been recorded';
+        break;
+      case WebSocketEvent.exportCreated:
+        notificationTitle = 'New Sale';
+        notificationBody = 'A new export has been recorded';
+        break;
+      case WebSocketEvent.conversionCreated:
+        notificationTitle = 'Conversion Complete';
+        notificationBody = 'Items have been converted';
+        break;
+      case WebSocketEvent.authSuccess:
+        notificationTitle = 'Connected';
+        notificationBody = 'Real-time updates enabled';
+        break;
+      default:
+        return;
+    }
+
+    if (notificationTitle != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                notificationTitle,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              if (notificationBody != null)
+                Text(
+                  notificationBody,
+                  style: const TextStyle(fontSize: 12),
+                ),
+            ],
+          ),
+          backgroundColor: const Color(0xFF10B981),
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _wsSubscription?.cancel();
+    _wsService.disconnectAndClear();
+    super.dispose();
+  }
 
   Future<void> _showLogoutDialog() async {
     return showDialog<void>(
