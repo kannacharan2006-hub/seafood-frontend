@@ -52,9 +52,10 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
           ),
           ElevatedButton(
             onPressed: () async {
+              final navigator = Navigator.of(context);
               await ManageEmployeesService.deleteEmployee(id);
               if (!mounted) return;
-              Navigator.pop(context);
+              navigator.pop();
               loadEmployees();
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),

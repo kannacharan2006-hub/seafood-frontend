@@ -1,11 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SecureStorage {
-  static const FlutterSecureStorage _storage = FlutterSecureStorage(
-    aOptions: AndroidOptions(
-      encryptedSharedPreferences: true,
-    ),
-  );
+  static const FlutterSecureStorage _storage = FlutterSecureStorage();
 
   static const String _tokenKey = "auth_token";
   static const String _sessionKey = "session_time";

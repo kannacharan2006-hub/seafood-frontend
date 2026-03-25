@@ -119,6 +119,7 @@ class _ExportScreenState extends State<ExportScreen>
 
             ElevatedButton(
               onPressed: () async {
+                final navigator = Navigator.of(context);
                 await _exportService.addCustomer(
                   name: nameController.text,
                   phone: phoneController.text,
@@ -126,7 +127,7 @@ class _ExportScreenState extends State<ExportScreen>
                 );
 
                 if (!mounted) return;
-                Navigator.pop(context);
+                navigator.pop();
 
                 nameController.clear();
                 phoneController.clear();

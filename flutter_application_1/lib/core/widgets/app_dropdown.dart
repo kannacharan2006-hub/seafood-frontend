@@ -185,7 +185,7 @@ class AppDropdownWithSearch<T> extends StatelessWidget {
             ],
           ),
           child: DropdownButtonFormField<T>(
-            value: selectedItem,
+            initialValue: selectedItem,
             isExpanded: true,
             isDense: false,
             decoration: InputDecoration(

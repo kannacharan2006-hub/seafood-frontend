@@ -112,21 +112,22 @@ class _PurchaseScreenState extends State<PurchaseScreen>
                   "address": vendorAddressController.text,
                 };
 
+                final navigator = Navigator.of(context);
+                final scaffoldMessenger = ScaffoldMessenger.of(context);
+                
                 try {
                   await purchaseService.addVendor(body);
 
                   if (!mounted) return;
-                  Navigator.pop(context);
+                  navigator.pop();
 
                   await fetchVendors();
 
                   if (!mounted) return;
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(const SnackBar(content: Text("Vendor Added")));
+                  scaffoldMessenger.showSnackBar(const SnackBar(content: Text("Vendor Added")));
                 } catch (e) {
                   if (!mounted) return;
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  scaffoldMessenger.showSnackBar(
                     const SnackBar(content: Text("Failed to add vendor")),
                   );
                 }

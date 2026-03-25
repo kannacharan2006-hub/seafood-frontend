@@ -150,7 +150,7 @@ extension OptimizedWidget on Widget {
 class _CachedWidget extends StatefulWidget {
   final Widget child;
 
-  _CachedWidget({required this.child});
+  const _CachedWidget({required this.child});
 
   @override
   State<_CachedWidget> createState() => _CachedWidgetState();

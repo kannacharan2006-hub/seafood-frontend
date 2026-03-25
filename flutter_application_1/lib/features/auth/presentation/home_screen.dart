@@ -314,57 +314,47 @@ class _HomeScreenState extends State<HomeScreen> {
   void _handleWebSocketMessage(WebSocketMessage message) {
     if (!mounted) return;
 
-    String? notificationTitle;
-    String? notificationBody;
+    final notificationTitle = switch (message.event) {
+      WebSocketEvent.stockUpdate => 'Stock Updated',
+      WebSocketEvent.purchaseCreated => 'New Purchase',
+      WebSocketEvent.exportCreated => 'New Sale',
+      WebSocketEvent.conversionCreated => 'Conversion Complete',
+      WebSocketEvent.authSuccess => 'Connected',
+      _ => null,
+    };
 
-    switch (message.event) {
-      case WebSocketEvent.stockUpdate:
-        notificationTitle = 'Stock Updated';
-        notificationBody = 'Inventory has been updated';
-        break;
-      case WebSocketEvent.purchaseCreated:
-        notificationTitle = 'New Purchase';
-        notificationBody = 'A new purchase has been recorded';
-        break;
-      case WebSocketEvent.exportCreated:
-        notificationTitle = 'New Sale';
-        notificationBody = 'A new export has been recorded';
-        break;
-      case WebSocketEvent.conversionCreated:
-        notificationTitle = 'Conversion Complete';
-        notificationBody = 'Items have been converted';
-        break;
-      case WebSocketEvent.authSuccess:
-        notificationTitle = 'Connected';
-        notificationBody = 'Real-time updates enabled';
-        break;
-      default:
-        return;
-    }
+    if (notificationTitle == null) return;
 
-    if (notificationTitle != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+    final notificationBody = switch (message.event) {
+      WebSocketEvent.stockUpdate => 'Inventory has been updated',
+      WebSocketEvent.purchaseCreated => 'A new purchase has been recorded',
+      WebSocketEvent.exportCreated => 'A new export has been recorded',
+      WebSocketEvent.conversionCreated => 'Items have been converted',
+      WebSocketEvent.authSuccess => 'Real-time updates enabled',
+      _ => null,
+    };
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              notificationTitle,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            if (notificationBody != null)
               Text(
-                notificationTitle,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                notificationBody,
+                style: const TextStyle(fontSize: 12),
               ),
-              if (notificationBody != null)
-                Text(
-                  notificationBody,
-                  style: const TextStyle(fontSize: 12),
-                ),
-            ],
-          ),
-          backgroundColor: const Color(0xFF10B981),
-          duration: const Duration(seconds: 3),
+          ],
         ),
-      );
-    }
+        backgroundColor: const Color(0xFF10B981),
+        duration: const Duration(seconds: 3),
+      ),
+    );
   }
 
   @override
@@ -422,20 +412,20 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ElevatedButton(
               onPressed: () async {
-                Navigator.of(context).pop(); // Close dialog
+                final navigator = Navigator.of(context);
+                final scaffoldMessenger = ScaffoldMessenger.of(context);
+                
+                navigator.pop(); // Close dialog
 
                 // Show loading
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(const SnackBar(content: Text("Logging out...")));
+                scaffoldMessenger.showSnackBar(const SnackBar(content: Text("Logging out...")));
 
                 // Your existing logout logic
                 await SecureStorage.deleteToken();
 
                 if (!mounted) return;
 
-                Navigator.pushAndRemoveUntil(
-                  context,
+                navigator.pushAndRemoveUntil(
                   MaterialPageRoute(builder: (_) => const LoginScreen()),
                   (route) => false,
                 );
