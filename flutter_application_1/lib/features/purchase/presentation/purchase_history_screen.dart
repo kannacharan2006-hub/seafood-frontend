@@ -138,7 +138,7 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
             Icon(
               Icons.history_toggle_off_rounded,
               size: 48,
-              color: kTextSecondary.withOpacity(0.2),
+              color: kTextSecondary.withValues(alpha: 0.2),
             ),
             const SizedBox(height: 16),
             Text(
@@ -325,7 +325,7 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
                   const SizedBox(width: 16),
                   Icon(
                     Icons.chevron_right_rounded,
-                    color: kTextSecondary.withOpacity(0.2),
+                    color: kTextSecondary.withValues(alpha: 0.2),
                     size: 20,
                   ),
                 ],

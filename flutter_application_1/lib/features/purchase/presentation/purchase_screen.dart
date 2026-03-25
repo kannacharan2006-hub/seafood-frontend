@@ -315,7 +315,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.grey.withOpacity(0.1)),
+              border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
             ),
 
             child: DropdownSearch<String>(
@@ -528,7 +528,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
       dropdownDecoratorProps: DropDownDecoratorProps(
         dropdownSearchDecoration: InputDecoration(
           hintText: hint,
-          hintStyle: TextStyle(color: kSubtle.withOpacity(0.6), fontSize: 14),
+          hintStyle: TextStyle(color: kSubtle.withValues(alpha: 0.6), fontSize: 14),
           filled: true,
           fillColor: Colors.white,
           contentPadding: const EdgeInsets.symmetric(
@@ -537,7 +537,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.grey.withOpacity(0.2)),
+            borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.2)),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
@@ -565,7 +565,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
         isDense: true,
         contentPadding: const EdgeInsets.symmetric(vertical: 8),
         enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+          borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
         ),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: kPrimary, width: 2),
@@ -585,11 +585,11 @@ class _PurchaseScreenState extends State<PurchaseScreen>
           topRight: Radius.circular(32),
         ),
         border: Border(
-          top: BorderSide(color: Colors.white.withOpacity(0.1), width: 1),
+          top: BorderSide(color: Colors.white.withValues(alpha: 0.1), width: 1),
         ),
         boxShadow: [
           BoxShadow(
-            color: kPrimary.withOpacity(0.4),
+            color: kPrimary.withValues(alpha: 0.4),
             blurRadius: 40,
             offset: const Offset(0, -10),
           ),
@@ -606,7 +606,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
                 Text(
                   "GRAND TOTAL",
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.6),
+                    color: Colors.white.withValues(alpha: 0.6),
                     fontSize: 10,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 1.2,
@@ -632,7 +632,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
                   backgroundColor: kAccent,
                   foregroundColor: Colors.white,
                   elevation: 8,
-                  shadowColor: kAccent.withOpacity(0.4),
+                  shadowColor: kAccent.withValues(alpha: 0.4),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18),
                   ),

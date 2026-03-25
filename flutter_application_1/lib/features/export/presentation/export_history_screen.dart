@@ -206,7 +206,7 @@ class _ExportHistoryScreenState extends State<ExportHistoryScreen> {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.04),
+                    color: Colors.black.withValues(alpha: 0.04),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
@@ -223,7 +223,7 @@ class _ExportHistoryScreenState extends State<ExportHistoryScreen> {
                         width: 50,
                         height: 50,
                         decoration: BoxDecoration(
-                          color: theme.primaryColor.withOpacity(0.1),
+                          color: theme.primaryColor.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(14),
                         ),
                         child: Icon(

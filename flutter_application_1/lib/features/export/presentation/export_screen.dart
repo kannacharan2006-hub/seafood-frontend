@@ -308,7 +308,7 @@ class _ExportScreenState extends State<ExportScreen>
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.03),
+                  color: Colors.black.withValues(alpha: 0.03),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -380,7 +380,7 @@ class _ExportScreenState extends State<ExportScreen>
                       vertical: 16,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.blueGrey.shade50.withOpacity(0.5),
+                      color: Colors.blueGrey.shade50.withValues(alpha: 0.5),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(color: Colors.blueGrey.shade100),
                     ),
@@ -451,7 +451,7 @@ class _ExportScreenState extends State<ExportScreen>
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
-                  color: theme.primaryColor.withOpacity(0.3),
+                  color: theme.primaryColor.withValues(alpha: 0.3),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -543,7 +543,7 @@ class _ExportScreenState extends State<ExportScreen>
         border: Border.all(color: Colors.white),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.03),
+            color: Colors.black.withValues(alpha: 0.03),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -555,7 +555,7 @@ class _ExportScreenState extends State<ExportScreen>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: Colors.blueGrey.shade50.withOpacity(0.4),
+              color: Colors.blueGrey.shade50.withValues(alpha: 0.4),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(24),
                 topRight: Radius.circular(24),
@@ -566,7 +566,7 @@ class _ExportScreenState extends State<ExportScreen>
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: theme.primaryColor.withOpacity(0.1),
+                    color: theme.primaryColor.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Text(
@@ -728,7 +728,7 @@ class _ExportScreenState extends State<ExportScreen>
                     vertical: 12,
                   ),
                   decoration: BoxDecoration(
-                    color: theme.primaryColor.withOpacity(0.06),
+                    color: theme.primaryColor.withValues(alpha: 0.06),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Row(
@@ -766,7 +766,7 @@ class _ExportScreenState extends State<ExportScreen>
       prefixIcon: Icon(icon, size: 20, color: Colors.blueGrey.shade400),
       labelStyle: TextStyle(fontSize: 14, color: Colors.blueGrey.shade600),
       filled: true,
-      fillColor: Colors.blueGrey.shade50.withOpacity(0.3),
+      fillColor: Colors.blueGrey.shade50.withValues(alpha: 0.3),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),

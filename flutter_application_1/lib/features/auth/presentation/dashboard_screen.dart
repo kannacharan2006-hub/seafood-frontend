@@ -198,7 +198,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         Icon(
           Icons.arrow_forward_ios_rounded,
           size: 14,
-          color: kSlate.withOpacity(0.5),
+          color: kSlate.withValues(alpha: 0.5),
         ),
       ],
     );
@@ -249,7 +249,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
-            color: kSlateDark.withOpacity(0.04),
+            color: kSlateDark.withValues(alpha: 0.04),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -264,7 +264,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(icon, color: color, size: 18),
@@ -361,7 +361,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [kEmerald.withOpacity(0.3), Colors.transparent],
+                        colors: [kEmerald.withValues(alpha: 0.3), Colors.transparent],
                       ),
                     ),
                   ),
@@ -453,7 +453,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               height: 4,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: col.withOpacity(0.1),
+                color: col.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(2),
               ),
               child: FractionallySizedBox(
@@ -539,9 +539,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             margin: EdgeInsets.only(right: index == 2 ? 0 : 8),
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
             decoration: BoxDecoration(
-              color: kIndigo.withOpacity(0.04),
+              color: kIndigo.withValues(alpha: 0.04),
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: kIndigo.withOpacity(0.08)),
+              border: Border.all(color: kIndigo.withValues(alpha: 0.08)),
             ),
             child: Column(
               children: [

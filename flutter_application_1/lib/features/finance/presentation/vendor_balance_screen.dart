@@ -177,7 +177,7 @@ Widget _buildSummaryHeader() {
         ),
 
         decoration: BoxDecoration(
-          color: color.withOpacity(0.08),
+          color: color.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(12),
         ),
 
@@ -261,7 +261,7 @@ Widget _buildList(List<dynamic> list, bool isPending) {
 
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.03),
+                  color: Colors.black.withValues(alpha: 0.03),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 )

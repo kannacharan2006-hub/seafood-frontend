@@ -198,7 +198,7 @@ class _PurchaseDetailScreenState extends State<PurchaseDetailScreen> {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundColor: kAccent.withOpacity(0.1),
+            backgroundColor: kAccent.withValues(alpha: 0.1),
             child: Icon(Icons.business_rounded, color: kAccent, size: 20),
           ),
           const SizedBox(width: 16),

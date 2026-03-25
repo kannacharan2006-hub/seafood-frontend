@@ -128,12 +128,12 @@ class _ConversionHistoryScreenState extends State<ConversionHistoryScreen> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(15),
-                        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 5)],
+                        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 5)],
                       ),
                       child: ListTile(
                         contentPadding: const EdgeInsets.all(15),
                         leading: CircleAvatar(
-                          backgroundColor: Colors.teal.withOpacity(0.1),
+                          backgroundColor: Colors.teal.withValues(alpha: 0.1),
                           child: const Icon(Icons.sync_alt, color: Colors.teal),
                         ),
                         title: Text(

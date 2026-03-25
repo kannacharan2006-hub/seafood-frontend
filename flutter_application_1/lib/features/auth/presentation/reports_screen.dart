@@ -80,7 +80,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
 
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [color.withOpacity(0.85), color],
+          colors: [color.withValues(alpha: 0.85), color],
         ),
         borderRadius: BorderRadius.circular(16),
       ),
@@ -197,7 +197,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                     boxShadow: [
                       BoxShadow(
                         blurRadius: 20,
-                        color: Colors.black.withOpacity(0.08),
+                        color: Colors.black.withValues(alpha: 0.08),
                       ),
                     ],
                   ),
@@ -233,7 +233,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                                       barWidth: 4,
                                       belowBarData: BarAreaData(
                                         show: true,
-                                        color: Colors.indigo.withOpacity(0.15),
+                                        color: Colors.indigo.withValues(alpha: 0.15),
                                       ),
                                     )
                                   ],
@@ -263,7 +263,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                     boxShadow: [
                       BoxShadow(
                         blurRadius: 10,
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withValues(alpha: 0.05),
                       ),
                     ],
                   ),
@@ -281,7 +281,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                       return ListTile(
 
                         leading: CircleAvatar(
-                          backgroundColor: Colors.indigo.withOpacity(0.1),
+                          backgroundColor: Colors.indigo.withValues(alpha: 0.1),
                           child: Text(
                             "${index + 1}",
                             style: const TextStyle(
@@ -326,7 +326,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                     boxShadow: [
                       BoxShadow(
                         blurRadius: 10,
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withValues(alpha: 0.05),
                       ),
                     ],
                   ),
@@ -346,7 +346,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                         leading: Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: Colors.orange.withOpacity(0.1),
+                            color: Colors.orange.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: const Icon(

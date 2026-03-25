@@ -64,7 +64,7 @@ class AboutAppScreen extends StatelessWidget {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withValues(alpha: 0.2),
                             blurRadius: 20,
                           ),
                         ],
@@ -77,7 +77,7 @@ class AboutAppScreen extends StatelessWidget {
                     const SizedBox(height: 16),
                     const Text("OceanSync", style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: Colors.white)),
                     const SizedBox(height: 6),
-                    Text("Seafood Trading ERP", style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.9))),
+                    Text("Seafood Trading ERP", style: TextStyle(fontSize: 14, color: Colors.white.withValues(alpha: 0.9))),
                     const SizedBox(height: 14),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -121,7 +121,7 @@ class AboutAppScreen extends StatelessWidget {
                     children: [
                       Container(
                         width: 50, height: 50,
-                        decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
+                        decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(12)),
                         child: const Icon(Icons.person, color: Colors.white, size: 28),
                       ),
                       const SizedBox(width: 12),
@@ -132,7 +132,7 @@ class AboutAppScreen extends StatelessWidget {
                           const Text("Charan Kumar Kanna", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Colors.white)),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                            decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(10)),
+                            decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(10)),
                             child: const Text("Full Stack Developer", style: TextStyle(fontSize: 10, color: Colors.white)),
                           ),
                         ],
@@ -176,7 +176,7 @@ class AboutAppScreen extends StatelessWidget {
   static Widget _buildBadge(String text) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
+      decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(12)),
       child: Text(text, style: const TextStyle(fontSize: 11, color: Colors.white, fontWeight: FontWeight.w600)),
     );
   }
@@ -186,7 +186,7 @@ class AboutAppScreen extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [
-        BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, 4)),
+        BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10, offset: const Offset(0, 4)),
       ]),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,7 +210,7 @@ class AboutAppScreen extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(color: const Color(0xFF667EEA).withOpacity(0.1), borderRadius: BorderRadius.circular(8)),
+            decoration: BoxDecoration(color: const Color(0xFF667EEA).withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
             child: Icon(icon, size: 18, color: const Color(0xFF667EEA)),
           ),
           const SizedBox(width: 12),
@@ -233,7 +233,7 @@ class AboutAppScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(10)),
+          decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(10)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [Icon(icon, size: 14, color: Colors.white), const SizedBox(width: 4), Text(label, style: const TextStyle(fontSize: 11, color: Colors.white, fontWeight: FontWeight.w600))],
@@ -596,7 +596,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
       decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.05),
+        color: Colors.grey.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(10),
       ),
       child: ListTile(
