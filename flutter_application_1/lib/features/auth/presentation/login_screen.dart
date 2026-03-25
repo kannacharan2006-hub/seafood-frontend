@@ -16,7 +16,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen>
     with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
+  final _emailOrPhoneController = TextEditingController();
   final _passwordController = TextEditingController();
 
   bool _isLoading = false;
@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _emailOrPhoneController.dispose();
     _passwordController.dispose();
     _animationController.dispose();
     super.dispose();
@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen>
 
     try {
       final result = await AuthService.login(
-        _emailController.text.trim(),
+        _emailOrPhoneController.text.trim(),
         _passwordController.text.trim(),
       );
 
@@ -159,20 +159,26 @@ class _LoginScreenState extends State<LoginScreen>
 
                       const SizedBox(height: 36),
 
-                      /// EMAIL
+                      /// EMAIL / PHONE
                       _buildTextField(
-                        label: "Email",
-                        hint: "Enter your email",
-                        icon: Icons.email_outlined,
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
+                        label: "Email or Phone",
+                        hint: "Enter email or phone number",
+                        icon: Icons.person_outline,
+                        controller: _emailOrPhoneController,
+                        keyboardType: TextInputType.text,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Email required";
+                            return "Email or phone required";
                           }
 
-                          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                              .hasMatch(value)) {
+                          final isEmail = value.contains('@');
+                          final isPhone = RegExp(r'^[\d\s\-\+\(\)]+$').hasMatch(value);
+
+                          if (!isEmail && !isPhone) {
+                            return "Enter valid email or phone";
+                          }
+
+                          if (isEmail && !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
                             return "Enter valid email";
                           }
 

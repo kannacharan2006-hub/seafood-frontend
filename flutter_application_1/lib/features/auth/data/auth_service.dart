@@ -4,11 +4,11 @@ import '/services/secure_storage.dart';
 class AuthService {
   /* ================= LOGIN ================= */
   static Future<Map<String, dynamic>> login(
-    String email,
+    String emailOrPhone,
     String password,
   ) async {
     final data = await Api.post("/api/auth/login", {
-      "email": email,
+      "email_or_phone": emailOrPhone,
       "password": password,
     });
 
