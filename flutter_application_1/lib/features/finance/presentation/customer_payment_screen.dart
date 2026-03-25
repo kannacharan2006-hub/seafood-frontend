@@ -92,7 +92,6 @@ class _CustomerPaymentScreenState extends State<CustomerPaymentScreen> {
 
         child: Column(
           children: [
-            /// CUSTOMER DROPDOWN
             DropdownButtonFormField<String>(
               initialValue: customers.isEmpty ? null : selectedCustomerId,
 

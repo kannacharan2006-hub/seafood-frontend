@@ -137,7 +137,6 @@ if (mounted) {
       body: Column(
         children: [
 
-          /// CUSTOMER SELECT
           Container(
             padding: const EdgeInsets.all(16),
             color: Colors.white,

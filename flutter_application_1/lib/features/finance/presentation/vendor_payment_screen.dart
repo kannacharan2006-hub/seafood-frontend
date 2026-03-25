@@ -234,7 +234,7 @@ return Scaffold(
                         onChanged: (value) {
 
                           setState(() {
-selectedVendorId = value;
+                            selectedVendorId = value;
 
                             selectedVendorName =
                                 vendors.firstWhere(
