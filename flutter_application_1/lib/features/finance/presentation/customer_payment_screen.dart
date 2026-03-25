@@ -26,9 +26,6 @@ class _CustomerPaymentScreenState extends State<CustomerPaymentScreen> {
     try {
       final data = await CustomerService().fetchCustomers();
 
-      print("CUSTOMERS DATA:");
-      print(data);
-
       setState(() {
         customers = data;
 
@@ -37,7 +34,7 @@ class _CustomerPaymentScreenState extends State<CustomerPaymentScreen> {
         }
       });
     } catch (e) {
-      print("CUSTOMER ERROR: $e");
+      // Handle error silently
     }
   }
 

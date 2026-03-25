@@ -2,7 +2,6 @@ import '/config/api.dart';
 
 class ReportsService {
   static Future getDailySales(String from, String to) async {
-    print("Calling daily sales...");
     return await Api.get("/api/reports/daily-sales?from=$from&to=$to");
   }
 

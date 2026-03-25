@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'package:dropdown_search/dropdown_search.dart';
@@ -192,13 +191,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
         "items": purchaseItems,
       };
 
-      print("PURCHASE BODY:");
-      print(jsonEncode(body));
-
-      final response = await purchaseService.savePurchase(body);
-
-      print("PURCHASE RESPONSE:");
-      print(response);
+      await purchaseService.savePurchase(body);
 
       if (!mounted) return;
 
@@ -206,8 +199,6 @@ class _PurchaseScreenState extends State<PurchaseScreen>
         const SnackBar(content: Text("Purchase Saved Successfully")),
       );
     } catch (e) {
-      print("ERROR: $e");
-
       if (!mounted) return;
 
       ScaffoldMessenger.of(
