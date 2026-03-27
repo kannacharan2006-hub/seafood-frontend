@@ -5,7 +5,7 @@ import 'websocket_service.dart';
 class WebSocketProvider extends ChangeNotifier {
   final WebSocketService _wsService = WebSocketService();
   StreamSubscription<WebSocketMessage>? _subscription;
-  
+
   bool _isConnected = false;
   String? _lastMessage;
   Map<String, dynamic>? _lastData;
@@ -33,9 +33,12 @@ class WebSocketProvider extends ChangeNotifier {
         _isConnected = false;
         break;
       case WebSocketEvent.stockUpdate:
+      case WebSocketEvent.stockChanged:
       case WebSocketEvent.purchaseCreated:
       case WebSocketEvent.exportCreated:
       case WebSocketEvent.conversionCreated:
+      case WebSocketEvent.paymentCreated:
+      case WebSocketEvent.dashboardRefresh:
         _lastData = message.data;
         break;
       case WebSocketEvent.error:

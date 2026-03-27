@@ -119,8 +119,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     String greeting = hour < 12
         ? "Good Morning"
         : hour < 17
-        ? "Good Afternoon"
-        : "Good Evening";
+            ? "Good Afternoon"
+            : "Good Evening";
 
     return SliverAppBar(
       expandedHeight: 140,
@@ -326,7 +326,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           const SizedBox(height: 12),
           Text(
             currencyFormat.format(
-              num.tryParse(dashboardData?['month_profit']?.toString() ?? '0') ?? 0,
+              num.tryParse(dashboardData?['month_profit']?.toString() ?? '0') ??
+                  0,
             ),
             style: GoogleFonts.plusJakartaSans(
               color: Colors.white,
@@ -361,7 +362,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [kEmerald.withValues(alpha: 0.3), Colors.transparent],
+                        colors: [
+                          kEmerald.withValues(alpha: 0.3),
+                          Colors.transparent
+                        ],
                       ),
                     ),
                   ),
@@ -399,14 +403,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             _healthBarCard(
               "Raw Stock",
-              "${dashboardData?['total_raw_stock'] ?? 0} kg",
+              "${dashboardData?['raw_stock'] ?? 0} kg",
               Colors.teal,
               false,
             ),
             const SizedBox(width: 12),
             _healthBarCard(
               "Final Stock",
-              "${dashboardData?['total_final_stock'] ?? 0} kg",
+              "${dashboardData?['final_stock'] ?? 0} kg",
               Colors.indigo,
               false,
             ),
@@ -528,9 +532,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildTopSuppliers() {
-    final suppliers = (dashboardData?['top_5_suppliers'] as List? ?? [])
-        .take(3)
-        .toList();
+    final suppliers =
+        (dashboardData?['top_5_suppliers'] as List? ?? []).take(3).toList();
     return Row(
       children: List.generate(suppliers.length, (index) {
         final s = suppliers[index];

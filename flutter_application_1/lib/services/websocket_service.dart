@@ -10,9 +10,12 @@ enum WebSocketEvent {
   authSuccess,
   authFailed,
   stockUpdate,
+  stockChanged,
   purchaseCreated,
   exportCreated,
   conversionCreated,
+  paymentCreated,
+  dashboardRefresh,
   error,
 }
 
@@ -37,7 +40,7 @@ class WebSocketService {
   Timer? _reconnectTimer;
   Timer? _heartbeatTimer;
   StreamController<WebSocketMessage>? _messageController;
-  
+
   bool _isConnecting = false;
   bool _isConnected = false;
   String? _currentToken;
@@ -95,7 +98,6 @@ class WebSocketService {
       );
 
       _startHeartbeat();
-
     } catch (e) {
       _isConnecting = false;
       _scheduleReconnect();
@@ -125,7 +127,8 @@ class WebSocketService {
           event = WebSocketEvent.authSuccess;
           _isConnected = true;
           _isConnecting = false;
-          _messageController?.add(WebSocketMessage(event: event, message: 'Connected successfully'));
+          _messageController?.add(WebSocketMessage(
+              event: event, message: 'Connected successfully'));
           break;
 
         case 'error':
@@ -139,25 +142,50 @@ class WebSocketService {
         case 'stock_update':
           event = WebSocketEvent.stockUpdate;
           eventData = message['data'] as Map<String, dynamic>?;
-          _messageController?.add(WebSocketMessage(event: event, data: eventData));
+          _messageController
+              ?.add(WebSocketMessage(event: event, data: eventData));
           break;
 
         case 'purchase_created':
           event = WebSocketEvent.purchaseCreated;
           eventData = message['data'] as Map<String, dynamic>?;
-          _messageController?.add(WebSocketMessage(event: event, data: eventData));
+          _messageController
+              ?.add(WebSocketMessage(event: event, data: eventData));
           break;
 
         case 'export_created':
           event = WebSocketEvent.exportCreated;
           eventData = message['data'] as Map<String, dynamic>?;
-          _messageController?.add(WebSocketMessage(event: event, data: eventData));
+          _messageController
+              ?.add(WebSocketMessage(event: event, data: eventData));
           break;
 
         case 'conversion_created':
           event = WebSocketEvent.conversionCreated;
           eventData = message['data'] as Map<String, dynamic>?;
-          _messageController?.add(WebSocketMessage(event: event, data: eventData));
+          _messageController
+              ?.add(WebSocketMessage(event: event, data: eventData));
+          break;
+
+        case 'payment_created':
+          event = WebSocketEvent.paymentCreated;
+          eventData = message['data'] as Map<String, dynamic>?;
+          _messageController
+              ?.add(WebSocketMessage(event: event, data: eventData));
+          break;
+
+        case 'stock_changed':
+          event = WebSocketEvent.stockChanged;
+          eventData = message['data'] as Map<String, dynamic>?;
+          _messageController
+              ?.add(WebSocketMessage(event: event, data: eventData));
+          break;
+
+        case 'dashboard_refresh':
+          event = WebSocketEvent.dashboardRefresh;
+          eventData = message['data'] as Map<String, dynamic>?;
+          _messageController
+              ?.add(WebSocketMessage(event: event, data: eventData));
           break;
 
         default:
@@ -181,7 +209,8 @@ class WebSocketService {
   void _onDone() {
     _isConnected = false;
     _isConnecting = false;
-    _messageController?.add(WebSocketMessage(event: WebSocketEvent.disconnected));
+    _messageController
+        ?.add(WebSocketMessage(event: WebSocketEvent.disconnected));
     _scheduleReconnect();
   }
 
@@ -215,11 +244,12 @@ class WebSocketService {
     _heartbeatTimer?.cancel();
     _isConnected = false;
     _isConnecting = false;
-    
+
     _channel?.sink.close();
     _channel = null;
-    
-    _messageController?.add(WebSocketMessage(event: WebSocketEvent.disconnected));
+
+    _messageController
+        ?.add(WebSocketMessage(event: WebSocketEvent.disconnected));
   }
 
   void disconnectAndClear() {
