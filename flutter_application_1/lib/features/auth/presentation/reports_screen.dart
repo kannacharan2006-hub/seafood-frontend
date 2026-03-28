@@ -1,6 +1,5 @@
 import 'package:flutter_application_1/features/auth/data/reports_service.dart';
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
 
 class ReportsDashboard extends StatefulWidget {
   const ReportsDashboard({super.key});
@@ -11,11 +10,9 @@ class ReportsDashboard extends StatefulWidget {
 
 class _ReportsDashboardState extends State<ReportsDashboard> {
   Map summary = {};
-  List trends = [];
   List topCustomers = [];
   List topProducts = [];
-  List customerLTV = [];
-  List productPerformance = [];
+  Map profitAnalysis = {};
   bool loading = true;
 
   @override
@@ -28,22 +25,33 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
     try {
       setState(() => loading = true);
 
-      final daily =
-          await ReportsService.getDailySales("2024-01-01", "2030-01-01");
+      // Load data with individual try-catch for each API call
+      Map<String, dynamic> daily = {};
+      Map<String, dynamic> customers = {};
+      Map<String, dynamic> products = {};
+      Map<String, dynamic> profit = {};
 
-      final customers = await ReportsService.getTopCustomers();
-      final products = await ReportsService.getTopProducts();
-      final monthly = await ReportsService.getMonthlyTrends();
-      final ltv = await ReportsService.getCustomerLTV();
-      final performance = await ReportsService.getRevenuePerformance();
+      try {
+        daily = await ReportsService.getDailySales("2024-01-01", "2030-01-01");
+      } catch (_) {}
+
+      try {
+        customers = await ReportsService.getTopCustomers();
+      } catch (_) {}
+
+      try {
+        products = await ReportsService.getTopProducts();
+      } catch (_) {}
+
+      try {
+        profit = await ReportsService.getPurchaseVsSales();
+      } catch (_) {}
 
       setState(() {
         summary = daily["summary"] ?? {};
-        trends = monthly["trends"] ?? [];
         topCustomers = customers["top_customers"] ?? [];
         topProducts = products["best_sellers"] ?? [];
-        customerLTV = ltv["high_value_customers"] ?? [];
-        productPerformance = performance["performance"] ?? [];
+        profitAnalysis = profit["profit_analysis"] ?? {};
       });
     } catch (e) {
       if (!mounted) return;
@@ -55,19 +63,173 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
     }
   }
 
-  List<FlSpot> buildRevenueChart() {
-    List<FlSpot> spots = [];
+  Widget _buildHealthScore() {
+    // Calculate health score based on profit margin and business metrics
+    final profitMargin =
+        double.tryParse(profitAnalysis['profit_margin']?.toString() ?? '0') ??
+            0;
+    final totalRevenue =
+        double.tryParse(summary['total_revenue']?.toString() ?? '0') ?? 0;
+    final totalInvoices =
+        int.tryParse(summary['total_invoices']?.toString() ?? '0') ?? 0;
 
-    for (int i = 0; i < trends.length; i++) {
-      spots.add(
-        FlSpot(
-          i.toDouble(),
-          double.tryParse(trends[i]['revenue'].toString()) ?? 0.0,
-        ),
-      );
+    // Calculate score (0-100)
+    int score = 0;
+
+    // Profit margin contributes 50 points (ideal: 20%+)
+    if (profitMargin >= 20) {
+      score += 50;
+    } else if (profitMargin >= 15) {
+      score += 40;
+    } else if (profitMargin >= 10) {
+      score += 30;
+    } else if (profitMargin >= 5) {
+      score += 20;
+    } else {
+      score += 10;
     }
 
-    return spots;
+    // Revenue volume contributes 30 points
+    if (totalRevenue >= 1000000) {
+      score += 30;
+    } else if (totalRevenue >= 500000) {
+      score += 25;
+    } else if (totalRevenue >= 100000) {
+      score += 20;
+    } else if (totalRevenue >= 50000) {
+      score += 15;
+    } else {
+      score += 10;
+    }
+
+    // Order volume contributes 20 points
+    if (totalInvoices >= 100) {
+      score += 20;
+    } else if (totalInvoices >= 50) {
+      score += 15;
+    } else if (totalInvoices >= 20) {
+      score += 10;
+    } else {
+      score += 5;
+    }
+
+    // Determine status and color
+    String status;
+    Color statusColor;
+    IconData statusIcon;
+
+    if (score >= 80) {
+      status = "Excellent";
+      statusColor = const Color(0xFF10B981);
+      statusIcon = Icons.emoji_events;
+    } else if (score >= 60) {
+      status = "Good";
+      statusColor = const Color(0xFF3B82F6);
+      statusIcon = Icons.thumb_up;
+    } else if (score >= 40) {
+      status = "Fair";
+      statusColor = const Color(0xFFFF9800);
+      statusIcon = Icons.trending_up;
+    } else {
+      status = "Needs Attention";
+      statusColor = const Color(0xFFEF4444);
+      statusIcon = Icons.warning;
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [statusColor, statusColor.withValues(alpha: 0.7)],
+        ),
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 20,
+            color: statusColor.withValues(alpha: 0.3),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          // Score circle
+          Container(
+            width: 90,
+            height: 90,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white.withValues(alpha: 0.2),
+              border: Border.all(
+                color: Colors.white.withValues(alpha: 0.5),
+                width: 3,
+              ),
+            ),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "$score",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    "/ 100",
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.8),
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: 20),
+          // Status info
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Business Health Score",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Icon(statusIcon, color: Colors.white, size: 20),
+                    const SizedBox(width: 6),
+                    Text(
+                      status,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  "Profit: ${profitMargin.toStringAsFixed(1)}% • Orders: $totalInvoices",
+                  style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.8),
+                    fontSize: 12,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget dashboardCard(String title, String value, IconData icon, Color color) {
@@ -161,55 +323,198 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
 
                 const SizedBox(height: 30),
 
-                /// REVENUE TREND
+                /// PROFIT ANALYSIS
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF6366F1), Color(0xFF8B5CF6)],
+                    ),
                     borderRadius: BorderRadius.circular(18),
                     boxShadow: [
                       BoxShadow(
                         blurRadius: 20,
-                        color: Colors.black.withValues(alpha: 0.08),
+                        color: Colors.indigo.withValues(alpha: 0.3),
                       ),
                     ],
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        "Revenue Trend",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                      const Row(
+                        children: [
+                          Icon(Icons.account_balance,
+                              color: Colors.white, size: 24),
+                          SizedBox(width: 10),
+                          Text(
+                            "Profit Analysis",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 20),
-                      SizedBox(
-                        height: 200,
-                        child: trends.isEmpty
-                            ? const Center(child: Text("No trend data"))
-                            : LineChart(
-                                LineChartData(
-                                  gridData: const FlGridData(show: true),
-                                  borderData: FlBorderData(show: false),
-                                  lineBarsData: [
-                                    LineChartBarData(
-                                      spots: buildRevenueChart(),
-                                      isCurved: true,
-                                      color: Colors.indigo,
-                                      barWidth: 4,
-                                      belowBarData: BarAreaData(
-                                        show: true,
-                                        color: Colors.indigo
-                                            .withValues(alpha: 0.15),
-                                      ),
-                                    )
-                                  ],
+
+                      // Main profit display
+                      Center(
+                        child: Column(
+                          children: [
+                            Text(
+                              "Gross Profit",
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.8),
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              "₹ ${double.tryParse(profitAnalysis['gross_profit']?.toString() ?? '0')?.toStringAsFixed(0) ?? '0'}",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 36,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.2),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                "${profitAnalysis['profit_margin'] ?? 0}% Margin",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      // Sales vs Purchases comparison
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Row(
+                                    children: [
+                                      Icon(Icons.trending_up,
+                                          color: Colors.white, size: 16),
+                                      SizedBox(width: 4),
+                                      Text(
+                                        "Sales",
+                                        style: TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    "₹ ${double.tryParse(profitAnalysis['total_sales']?.toString() ?? '0')?.toStringAsFixed(0) ?? '0'}",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    "${double.tryParse(profitAnalysis['kg_sold']?.toString() ?? '0')?.toStringAsFixed(0) ?? '0'} kg",
+                                    style: TextStyle(
+                                      color:
+                                          Colors.white.withValues(alpha: 0.7),
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: const Icon(Icons.compare_arrows,
+                                color: Colors.white, size: 20),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Row(
+                                    children: [
+                                      Icon(Icons.shopping_cart,
+                                          color: Colors.white, size: 16),
+                                      SizedBox(width: 4),
+                                      Text(
+                                        "Purchases",
+                                        style: TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    "₹ ${double.tryParse(profitAnalysis['total_purchases']?.toString() ?? '0')?.toStringAsFixed(0) ?? '0'}",
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    "${double.tryParse(profitAnalysis['kg_purchased']?.toString() ?? '0')?.toStringAsFixed(0) ?? '0'} kg",
+                                    style: TextStyle(
+                                      color:
+                                          Colors.white.withValues(alpha: 0.7),
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
+
+                const SizedBox(height: 30),
+
+                /// BUSINESS HEALTH SCORE
+                _buildHealthScore(),
 
                 const SizedBox(height: 30),
 
@@ -322,182 +627,6 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-
-                const SizedBox(height: 30),
-
-                /// CUSTOMER LIFETIME VALUE
-                const Text(
-                  "Customer Lifetime Value",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  "High-value repeat customers",
-                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                ),
-                const SizedBox(height: 10),
-
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 10,
-                        color: Colors.black.withValues(alpha: 0.05),
-                      ),
-                    ],
-                  ),
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: customerLTV.length > 5 ? 5 : customerLTV.length,
-                    separatorBuilder: (_, __) =>
-                        Divider(height: 1, color: Colors.grey.shade200),
-                    itemBuilder: (context, index) {
-                      final c = customerLTV[index];
-                      final lifetimeValue = double.tryParse(
-                              c['lifetime_value']?.toString() ?? '0') ??
-                          0;
-                      final orders = c['total_orders'] ?? 0;
-                      final avgOrder = double.tryParse(
-                              c['avg_order_value']?.toString() ?? '0') ??
-                          0;
-
-                      return ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: Colors.green.withValues(alpha: 0.1),
-                          child: const Icon(Icons.star,
-                              color: Colors.green, size: 20),
-                        ),
-                        title: Text(
-                          c['name'] ?? "Unknown",
-                          style: const TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        subtitle: Text(
-                          "$orders orders • ${c['customer_age_days'] ?? 0} days active",
-                          style:
-                              TextStyle(color: Colors.grey[600], fontSize: 12),
-                        ),
-                        trailing: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              "₹ ${lifetimeValue.toStringAsFixed(0)}",
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                                color: Colors.green,
-                              ),
-                            ),
-                            Text(
-                              "₹${avgOrder.toStringAsFixed(0)}/order",
-                              style: TextStyle(
-                                  fontSize: 11, color: Colors.grey[500]),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-
-                const SizedBox(height: 30),
-
-                /// PRODUCT REVENUE PERFORMANCE
-                const Text(
-                  "Product Revenue Performance",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  "Most profitable products by revenue",
-                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
-                ),
-                const SizedBox(height: 10),
-
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        blurRadius: 10,
-                        color: Colors.black.withValues(alpha: 0.05),
-                      ),
-                    ],
-                  ),
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: productPerformance.length > 5
-                        ? 5
-                        : productPerformance.length,
-                    separatorBuilder: (_, __) =>
-                        Divider(height: 1, color: Colors.grey.shade200),
-                    itemBuilder: (context, index) {
-                      final p = productPerformance[index];
-                      final revenue = double.tryParse(
-                              p['total_revenue']?.toString() ?? '0') ??
-                          0;
-                      final kgSold = double.tryParse(
-                              p['total_kg_sold']?.toString() ?? '0') ??
-                          0;
-                      final avgPrice = double.tryParse(
-                              p['avg_selling_price']?.toString() ?? '0') ??
-                          0;
-                      final lowestPrice = double.tryParse(
-                              p['lowest_price']?.toString() ?? '0') ??
-                          0;
-                      final highestPrice = double.tryParse(
-                              p['highest_price']?.toString() ?? '0') ??
-                          0;
-
-                      return ListTile(
-                        leading: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.blue.withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Icon(
-                            Icons.trending_up,
-                            color: Colors.blue,
-                          ),
-                        ),
-                        title: Text(
-                          "${p['product_name'] ?? "Unknown"}${p['variant_name'] != null ? " (${p['variant_name']})" : ""}",
-                          style: const TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        subtitle: Text(
-                          "${kgSold.toStringAsFixed(0)} kg sold • Avg ₹${avgPrice.toStringAsFixed(0)}/kg",
-                          style:
-                              TextStyle(color: Colors.grey[600], fontSize: 12),
-                        ),
-                        trailing: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              "₹ ${revenue.toStringAsFixed(0)}",
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15,
-                                color: Colors.blue,
-                              ),
-                            ),
-                            Text(
-                              "₹${lowestPrice.toStringAsFixed(0)} - ₹${highestPrice.toStringAsFixed(0)}",
-                              style: TextStyle(
-                                  fontSize: 11, color: Colors.grey[500]),
-                            ),
-                          ],
                         ),
                       );
                     },

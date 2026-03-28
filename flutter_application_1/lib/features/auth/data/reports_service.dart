@@ -25,10 +25,6 @@ class ReportsService {
     return await Api.get("/api/reports/customer-ltv");
   }
 
-  static Future getPriceTrends() async {
-    return await Api.get("/api/reports/price-trends");
-  }
-
   static Future getRevenuePerformance({String? from, String? to}) async {
     final queryParams = <String>[];
     if (from != null && to != null) {
@@ -37,5 +33,13 @@ class ReportsService {
     }
     final query = queryParams.isNotEmpty ? '?${queryParams.join('&')}' : '';
     return await Api.get("/api/reports/revenue-performance$query");
+  }
+
+  static Future getPriceTrends() async {
+    return await Api.get("/api/reports/price-trends");
+  }
+
+  static Future getPurchaseVsSales() async {
+    return await Api.get("/api/reports/purchase-vs-sales");
   }
 }
