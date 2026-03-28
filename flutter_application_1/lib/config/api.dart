@@ -3,8 +3,8 @@ import 'package:http/http.dart' as http;
 import '../services/secure_storage.dart';
 
 class Api {
-  static const String baseUrl = "https://seafood-backend-3.onrender.com";
-//static const baseUrl = "http://172.22.42.97:5000";
+  //static const String baseUrl = "https://seafood-backend-3.onrender.com";
+static const baseUrl = "http://172.22.42.97:5000";
   
   static const Duration timeout = Duration(seconds: 30);
 

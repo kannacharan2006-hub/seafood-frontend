@@ -28,4 +28,14 @@ class ReportsService {
   static Future getPriceTrends() async {
     return await Api.get("/api/reports/price-trends");
   }
+
+  static Future getRevenuePerformance({String? from, String? to}) async {
+    final queryParams = <String>[];
+    if (from != null && to != null) {
+      queryParams.add('from=$from');
+      queryParams.add('to=$to');
+    }
+    final query = queryParams.isNotEmpty ? '?${queryParams.join('&')}' : '';
+    return await Api.get("/api/reports/revenue-performance$query");
+  }
 }

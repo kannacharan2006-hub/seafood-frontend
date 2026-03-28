@@ -221,7 +221,7 @@ class AboutAppScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             Center(
-                child: Text("© 2024 OceanSync | Made with ❤️ in India 🇮🇳",
+                child: Text("© 2026 OceanSync | Made with ❤️ in India 🇮🇳",
                     style: TextStyle(fontSize: 12, color: Colors.grey[500]))),
             const SizedBox(height: 40),
           ],
@@ -346,16 +346,18 @@ class AboutAppScreen extends StatelessWidget {
   }
 
   static Future<void> _launchUrl(String url) async {
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
   }
 
   static Future<void> _launchWhatsApp() async {
     final url =
         "https://wa.me/919391561154?text=${Uri.encodeComponent("Hi Charankumar!")}";
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
   }
 }
@@ -601,6 +603,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    const SizedBox(width: 4),
                     Text(
                       widget.userName,
                       style:
