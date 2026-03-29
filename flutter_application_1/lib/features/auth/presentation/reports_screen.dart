@@ -601,6 +601,13 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                     itemBuilder: (context, index) {
                       final p = topProducts[index];
 
+                      final margin =
+                          double.tryParse(p['margin']?.toString() ?? '0') ?? 0;
+                      final profit =
+                          double.tryParse(p['profit']?.toString() ?? '0') ?? 0;
+                      final profitColor =
+                          profit >= 0 ? Colors.green : Colors.red;
+
                       return ListTile(
                         leading: Container(
                           padding: const EdgeInsets.all(8),
@@ -617,16 +624,51 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                           "${p['name']} (${p['variant_name']})",
                           style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
-                        subtitle: Text(
-                          "Sold ${p['kg_sold']} kg",
-                          style: TextStyle(color: Colors.grey[600]),
+                        subtitle: Row(
+                          children: [
+                            Text(
+                              "${p['kg_sold']} kg",
+                              style: TextStyle(
+                                  color: Colors.grey[600], fontSize: 12),
+                            ),
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: profitColor.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                "$margin%",
+                                style: TextStyle(
+                                  color: profitColor,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        trailing: Text(
-                          "₹ ${p['revenue']}",
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),
+                        trailing: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              "₹ ${p['revenue']}",
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
+                            ),
+                            Text(
+                              "Profit ₹ ${profit.toStringAsFixed(0)}",
+                              style: TextStyle(
+                                color: profitColor,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },
