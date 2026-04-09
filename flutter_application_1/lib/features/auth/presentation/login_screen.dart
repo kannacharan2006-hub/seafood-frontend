@@ -59,6 +59,7 @@ class _LoginScreenState extends State<LoginScreen>
 
       final userName = result["user"]?["name"] ?? "User";
       final companyId = result["user"]?["company_id"];
+      final userRole = result["user"]?["role"] ?? "EMPLOYEE";
 
       if (!mounted) return;
 
@@ -74,6 +75,7 @@ class _LoginScreenState extends State<LoginScreen>
         PageTransition.slide(HomeScreen(
           userName: userName,
           companyId: companyId,
+          userRole: userRole,
         )),
       );
     } catch (e) {
@@ -120,7 +122,8 @@ class _LoginScreenState extends State<LoginScreen>
                           borderRadius: BorderRadius.circular(24),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFF2563EB).withValues(alpha: 0.15),
+                              color: const Color(0xFF2563EB)
+                                  .withValues(alpha: 0.15),
                               blurRadius: 24,
                               offset: const Offset(0, 8),
                             ),
@@ -176,13 +179,16 @@ class _LoginScreenState extends State<LoginScreen>
                           }
 
                           final isEmail = value.contains('@');
-                          final isPhone = RegExp(r'^[\d\s\-\+\(\)]+$').hasMatch(value);
+                          final isPhone =
+                              RegExp(r'^[\d\s\-\+\(\)]+$').hasMatch(value);
 
                           if (!isEmail && !isPhone) {
                             return "Enter valid email or phone";
                           }
 
-                          if (isEmail && !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                          if (isEmail &&
+                              !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                                  .hasMatch(value)) {
                             return "Enter valid email";
                           }
 
@@ -261,7 +267,8 @@ class _LoginScreenState extends State<LoginScreen>
                           borderRadius: BorderRadius.circular(14),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFF2563EB).withValues(alpha: 0.3),
+                              color: const Color(0xFF2563EB)
+                                  .withValues(alpha: 0.3),
                               blurRadius: 12,
                               offset: const Offset(0, 4),
                             ),
@@ -382,7 +389,8 @@ class _LoginScreenState extends State<LoginScreen>
               hintText: hint,
               hintStyle: TextStyle(color: Colors.grey[400], fontSize: 15),
               filled: false,
-              contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,

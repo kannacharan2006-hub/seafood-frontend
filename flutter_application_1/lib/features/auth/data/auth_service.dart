@@ -20,6 +20,12 @@ class AuthService {
 
     await SecureStorage.saveToken(token);
 
+    // Save user role for permission-based UI
+    if (data["user"] != null) {
+      await SecureStorage.saveData(
+          "user_role", data["user"]["role"] ?? "EMPLOYEE");
+    }
+
     return data;
   }
 

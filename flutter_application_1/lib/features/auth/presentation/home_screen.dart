@@ -365,11 +365,13 @@ class AboutAppScreen extends StatelessWidget {
 class HomeScreen extends StatefulWidget {
   final String userName;
   final int? companyId;
+  final String? userRole;
 
   const HomeScreen({
     super.key,
     required this.userName,
     this.companyId,
+    this.userRole,
   });
 
   @override
@@ -615,55 +617,58 @@ class _HomeScreenState extends State<HomeScreen> {
               Expanded(
                 child: ListView(
                   children: [
-                    _drawerSection("Customers"),
-                    _drawerItem(
-                      Icons.account_balance_wallet,
-                      "Customer Balance",
-                      () {
+                    // Only show Finance section for OWNER
+                    if (widget.userRole == 'OWNER') ...[
+                      _drawerSection("Customers"),
+                      _drawerItem(
+                        Icons.account_balance_wallet,
+                        "Customer Balance",
+                        () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const CustomerBalanceScreen(),
+                            ),
+                          );
+                        },
+                      ),
+                      _drawerItem(Icons.payments, "Customer Payment", () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const CustomerBalanceScreen(),
+                            builder: (_) => const CustomerPaymentScreen(),
                           ),
                         );
-                      },
-                    ),
-                    _drawerItem(Icons.payments, "Customer Payment", () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const CustomerPaymentScreen(),
-                        ),
-                      );
-                    }),
-                    const SizedBox(height: 10),
-                    _drawerSection("Vendors"),
-                    _drawerItem(Icons.store, "Vendor Balance", () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const VendorBalanceScreen(),
-                        ),
-                      );
-                    }),
-                    _drawerItem(Icons.payment, "Vendor Payment", () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const VendorPaymentScreen(),
-                        ),
-                      );
-                    }),
-                    const SizedBox(height: 10),
-                    _drawerSection("Company"),
-                    _drawerItem(Icons.people, "Manage Employees", () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const ManageEmployeesScreen(),
-                        ),
-                      );
-                    }),
+                      }),
+                      const SizedBox(height: 10),
+                      _drawerSection("Vendors"),
+                      _drawerItem(Icons.store, "Vendor Balance", () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const VendorBalanceScreen(),
+                          ),
+                        );
+                      }),
+                      _drawerItem(Icons.payment, "Vendor Payment", () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const VendorPaymentScreen(),
+                          ),
+                        );
+                      }),
+                      const SizedBox(height: 10),
+                      _drawerSection("Company"),
+                      _drawerItem(Icons.people, "Manage Employees", () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const ManageEmployeesScreen(),
+                          ),
+                        );
+                      }),
+                    ],
                     const SizedBox(height: 10),
                     _drawerSection("Stock"),
                     _drawerItem(Icons.inventory_2, "Stock Overview", () {

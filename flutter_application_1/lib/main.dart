@@ -30,6 +30,11 @@ class MyApp extends StatelessWidget {
     return token != null;
   }
 
+  Future<String> getUserRole() async {
+    final role = await SecureStorage.getData("user_role");
+    return role ?? "EMPLOYEE";
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -50,7 +55,15 @@ class MyApp extends StatelessWidget {
           }
 
           if (snapshot.data == true) {
-            return const HomeScreen(userName: "User");
+            return FutureBuilder<String>(
+              future: getUserRole(),
+              builder: (context, roleSnapshot) {
+                return HomeScreen(
+                  userName: "User",
+                  userRole: roleSnapshot.data ?? "EMPLOYEE",
+                );
+              },
+            );
           }
 
           return const SplashScreen();
