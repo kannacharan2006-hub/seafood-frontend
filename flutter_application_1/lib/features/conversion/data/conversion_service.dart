@@ -1,8 +1,6 @@
 import '/config/api.dart';
 
 class ConversionService {
-  /* ================= CREATE CONVERSION ================= */
-
   Future<void> createConversion(
     List rawItems,
     List finalItems,
@@ -17,17 +15,16 @@ class ConversionService {
     });
   }
 
-  /* ================= GET HISTORY (Paginated) ================= */
-
-  Future<Map<String, dynamic>> getConversions({int page = 1, int limit = 20}) async {
-    final data = await Api.get("/api/conversions/convert?page=$page&limit=$limit");
+  Future<Map<String, dynamic>> getConversions(
+      {int page = 1, int limit = 20}) async {
+    final data =
+        await Api.get("/api/conversions/convert?page=$page&limit=$limit");
+    final responseData = data["data"] ?? {};
     return {
-      'data': List.from(data['data'] ?? []),
-      'pagination': data['pagination'] ?? {},
+      'data': List.from(responseData["data"] ?? []),
+      'pagination': responseData["pagination"] ?? {},
     };
   }
-
-  /* ================= DELETE ================= */
 
   Future<void> deleteConversion(int id) async {
     await Api.delete("/api/conversions/convert/$id");

@@ -12,7 +12,6 @@ class PaymentService {
     final data = await Api.get(
       "/api/payments/customer-payment-history/$customerId",
     );
-
-    return List<dynamic>.from(data);
+    return List<dynamic>.from(data["data"] ?? []);
   }
 }

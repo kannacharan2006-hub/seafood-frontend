@@ -2,7 +2,6 @@ import '/config/api.dart';
 import '/services/secure_storage.dart';
 
 class AuthService {
-  /* ================= LOGIN ================= */
   static Future<Map<String, dynamic>> login(
     String emailOrPhone,
     String password,
@@ -13,6 +12,7 @@ class AuthService {
     });
 
     final token = data["token"];
+    final refreshToken = data["refreshToken"];
 
     if (token == null || token.isEmpty) {
       throw Exception("Token not received from server");
@@ -20,7 +20,10 @@ class AuthService {
 
     await SecureStorage.saveToken(token);
 
-    // Save user role for permission-based UI
+    if (refreshToken != null) {
+      await SecureStorage.saveRefreshToken(refreshToken);
+    }
+
     if (data["user"] != null) {
       await SecureStorage.saveData(
           "user_role", data["user"]["role"] ?? "EMPLOYEE");
@@ -29,7 +32,6 @@ class AuthService {
     return data;
   }
 
-  /* ================= REGISTER ================= */
   static Future<Map<String, dynamic>> registerCompany({
     required String companyName,
     required String ownerName,
@@ -49,16 +51,18 @@ class AuthService {
       await SecureStorage.saveToken(data["token"]);
     }
 
+    if (data["refreshToken"] != null) {
+      await SecureStorage.saveRefreshToken(data["refreshToken"]);
+    }
+
     return data;
   }
 
-  /* ================= FORGOT PASSWORD ================= */
   static Future<Map<String, dynamic>> forgotPassword(String email) async {
     final data = await Api.post("/api/auth/forgot-password", {
       "email": email,
     });
 
-    // Check if server responded successfully (no token needed for forgot password)
     if (data["success"] == false || data["error"] != null) {
       throw Exception(data["message"] ?? "Failed to send reset email");
     }
@@ -66,7 +70,6 @@ class AuthService {
     return data;
   }
 
-  /* ================= RESET PASSWORD ================= */
   static Future<Map<String, dynamic>> resetPassword({
     required String email,
     required String otp,
@@ -85,18 +88,15 @@ class AuthService {
     return data;
   }
 
-  /* ================= GET TOKEN ================= */
   static Future<String?> getToken() async {
     return await SecureStorage.getToken();
   }
 
-  /* ================= LOGIN STATUS ================= */
   static Future<bool> isLoggedIn() async {
     return await SecureStorage.isLoggedIn();
   }
 
-  /* ================= LOGOUT ================= */
   static Future<void> logout() async {
-    await SecureStorage.clearAll();
+    await Api.logout();
   }
 }

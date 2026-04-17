@@ -1,8 +1,6 @@
 import '/config/api.dart';
 
 class ManageEmployeesService {
-  /* ================= CREATE EMPLOYEE ================= */
-
   static Future<void> createEmployee({
     required String name,
     required String email,
@@ -18,21 +16,14 @@ class ManageEmployeesService {
     });
   }
 
-  /* ================= GET EMPLOYEES ================= */
-
   static Future<List<dynamic>> getEmployees() async {
     final response = await Api.get("/api/users");
-
-    return response;
+    return List<dynamic>.from(response["data"]);
   }
-
-  /* ================= DELETE EMPLOYEE ================= */
 
   static Future deleteEmployee(int id) async {
     await Api.delete("/api/users/$id");
   }
-
-  /* ================= UPDATE EMPLOYEE ================= */
 
   static Future updateEmployee({
     required int id,
