@@ -40,6 +40,13 @@ flutter:
     - assets/images/logo.png
     - assets/icon/logo.png
 
+  fonts:
+    - family: TeluguFont
+      fonts:
+        - asset: assets/fonts/noto_sans_telugu_regular.ttf
+        - asset: assets/fonts/noto_sans_telugu_bold.ttf
+          weight: 700
+
 flutter_launcher_icons:
   android: true
   ios: false
