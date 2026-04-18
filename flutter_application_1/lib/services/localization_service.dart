@@ -47,6 +47,7 @@ class AppLocalizations {
 
   static String get(String key) => _strings[key] ?? key;
 
+  // Getters
   static String get appName => _strings['appName'] ?? 'OceanSync';
   static String get dashboard => _strings['dashboard'] ?? 'Dashboard';
   static String get purchase => _strings['purchase'] ?? 'Purchase';
@@ -73,13 +74,15 @@ class AppLocalizations {
   static String get totalSales => _strings['totalSales'] ?? 'Total Sales';
   static String get profit => _strings['profit'] ?? 'Profit';
 
+  // English (default)
   static const String _enStrings =
       '{"appName":"OceanSync","dashboard":"Dashboard","purchase":"Purchase","reGrading":"Re-grading","sales":"Sales","reports":"Reports","customers":"Customers","vendors":"Vendors","stock":"Stock","employee":"Employee","settings":"Settings","language":"Language","login":"Login","logout":"Logout","logoutMessage":"Are you sure you want to logout?","confirmLogout":"Confirm Logout","loading":"Loading...","noData":"No data available","success":"Success","english":"English","tamil":"Tamil","telugu":"Telugu","totalSales":"Total Sales","profit":"Profit"}';
 
+  // Tamil - using simple roman text
   static const String _taStrings =
       '{"appName":"OceanSync","dashboard":"Dashboard","purchase":"Purchase","reGrading":"Re-grading","sales":"Sales","reports":"Reports","customers":"Customers","vendors":"Vendors","stock":"Stock","employee":"Employee","settings":"Settings","language":"Language","login":"Login","logout":"Logout","logoutMessage":"Are you sure?","confirmLogout":"Confirm","loading":"Loading...","noData":"No data","success":"Success","english":"English","tamil":"Tamil","telugu":"Telugu","totalSales":"Total Sales","profit":"Profit"}';
 
-  // Telugu translations
+  // Telugu - using Telugu script characters directly
   static const String _teStrings =
-      '{"appName":"OceanSync","dashboard":"Dashboard","purchase":"Purchase","reGrading":"Re-grading","sales":"Sales","reports":"Reports","customers":"Customers","vendors":"Vendors","stock":"Stock","employee":"Employee","settings":"Settings","language":"Language","login":"Login","logout":"Logout","logoutMessage":"Logout?","confirmLogout":"Confirm","loading":"Loading...","noData":"No data","success":"Success","english":"English","tamil":"Tamil","telugu":"Telugu","totalSales":"Total Sales","profit":"Profit"}';
+      '{"appName":"ఓషన్‌సింక్","dashboard":"డాష్‌బోర్డ్","purchase":"కొనుగోలు","reGrading":"రీ- గ్రేडింగ్","sales":"Sales","reports":"रिपोर्ट्स","customers":"కస్ట�ర్స్","vendors":"रैత / सरफरादार్","stock":"सरुकु निल्ध","employee":"उद्योग","settings":"सेट्टिंग्स","language":"भाष","login":"लागिन","logout":"लागौट","logoutMessage":"?Are you sure","confirmLogout":"Confirm","loading":"...लोड अवुतोन्दि","noData":"डेटा अनर्बातलो लेदु","success":"Success","english":"English","tamil":"Tamil","telugu":"Telugu","totalSales":"टोटल सोल्स","profit":"लाभम"}';
 }
