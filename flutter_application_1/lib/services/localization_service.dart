@@ -79,6 +79,7 @@ class AppLocalizations {
   static const String _taStrings =
       '{"appName":"OceanSync","dashboard":"Dashboard","purchase":"Purchase","reGrading":"Re-grading","sales":"Sales","reports":"Reports","customers":"Customers","vendors":"Vendors","stock":"Stock","employee":"Employee","settings":"Settings","language":"Language","login":"Login","logout":"Logout","logoutMessage":"Are you sure?","confirmLogout":"Confirm","loading":"Loading...","noData":"No data","success":"Success","english":"English","tamil":"Tamil","telugu":"Telugu","totalSales":"Total Sales","profit":"Profit"}';
 
+  // Telugu translations
   static const String _teStrings =
-      '{"appName":"OceanSync","dashboard":"Dashboard","purchase":"Purchase","reGrading":"Re-grading","sales":"Sales","reports":"Reports","customers":"Customers","vendors":"Vendors","stock":"Stock","employee":"Employee","settings":"Settings","language":"Language","login":"Login","logout":"Logout","logoutMessage":"Are you sure?","confirmLogout":"Confirm","loading":"Loading...","noData":"No data","success":"Success","english":"English","tamil":"Tamil","telugu":"Telugu","totalSales":"Total Sales","profit":"Profit"}';
+      '{"appName":"OceanSync","dashboard":"Dashboard","purchase":"Purchase","reGrading":"Re-grading","sales":"Sales","reports":"Reports","customers":"Customers","vendors":"Vendors","stock":"Stock","employee":"Employee","settings":"Settings","language":"Language","login":"Login","logout":"Logout","logoutMessage":"Logout?","confirmLogout":"Confirm","loading":"Loading...","noData":"No data","success":"Success","english":"English","tamil":"Tamil","telugu":"Telugu","totalSales":"Total Sales","profit":"Profit"}';
 }

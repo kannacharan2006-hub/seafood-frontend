@@ -40,6 +40,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isTelugu = AppLocalizations.currentLocale.languageCode == 'te';
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: AppLocalizations.appName,
@@ -47,7 +49,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         useMaterial3: true,
-        fontFamily: 'Roboto',
+        fontFamily: isTelugu ? 'TeluguFont' : 'Roboto',
       ),
       home: FutureBuilder<bool>(
         future: checkLoginStatus(),
