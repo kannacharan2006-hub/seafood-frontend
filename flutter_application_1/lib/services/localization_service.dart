@@ -135,30 +135,30 @@ class AppLocalizations {
 
   static const String _teStrings = '''
 {
-  "appName": "OceanSync",
-  "dashboard": "Dashboard",
-  "purchase": "Purchase",
-  "reGrading": "Re-grading",
+  "appName": "ఓషన్‌సింక్",
+  "dashboard": "డాష్‌బోర్డ్",
+  "purchase": "కొనుగోలు",
+  "reGrading": "రీ-ग्रेडिंग్",
   "sales": "Sales",
-  "reports": "Reports",
-  "customers": "Customers",
-  "vendors": "Vendors",
-  "stock": "Stock",
-  "employee": "Employee",
-  "settings": "Settings",
-  "language": "Language",
-  "login": "Login",
-  "logout": "Logout",
+  "reports": "रिपोर्ट్స్",
+  "customers": "कस्टमर्तlు",
+  "vendors": "रैతు/सरफरादारులు",
+  "stock": "सरुकు निल्ध",
+  "employee": "उद्योgि",
+  "settings": "सет्टिंग्स्",
+  "language": "भाष",
+  "login": "लॉगिन्",
+  "logout": "लॉगॆट्",
   "logoutMessage": "Logout?",
   "confirmLogout": "Confirm",
-  "loading": "Loading...",
-  "noData": "No Data",
+  "loading": "लोड् अवुतोन्दि...",
+  "noData": "डेटा अन्दर्बातलो लेदु",
   "success": "Success",
   "english": "English",
   "tamil": "Tamil",
   "telugu": "Telugu",
-  "totalSales": "Total",
-  "profit": "Profit"
+  "totalSales": "टोटल् सोल्स्",
+  "profit": "लाभम"
 }
 ''';
 }
