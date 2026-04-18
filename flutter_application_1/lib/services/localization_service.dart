@@ -72,6 +72,8 @@ class AppLocalizations {
   static String get vendors => _strings['vendors'] ?? 'Vendors';
   static String get stock => _strings['stock'] ?? 'Stock';
   static String get employee => _strings['employee'] ?? 'Employee';
+  static String get totalSales => _strings['totalSales'] ?? 'Total Sales';
+  static String get profit => _strings['profit'] ?? 'Profit';
 
   static const String _enStrings = '''
 {
@@ -93,44 +95,50 @@ class AppLocalizations {
   "confirmLogout": "Confirm Logout",
   "loading": "Loading...",
   "noData": "No data available",
+  "success": "Success",
   "english": "English",
   "tamil": "Tamil",
-  "telugu": "Telugu"
+  "telugu": "Telugu",
+  "totalSales": "Total Sales",
+  "profit": "Profit"
 }
 ''';
 
   static const String _taStrings = '''
 {
-  "appName": "OceanSync",
-  "dashboard": "Dashboar d",
-  "purchase": "CÝt",
-  "reGrading": "Co-vert",
-  "sales": "Sales",
-  "reports": "Reports",
-  "customers": "Customers",
-  "vendors": "Vendors",
-  "stock": "Stock",
-  "employee": "Employee",
-  "settings": "Settings",
-  "language": "Language",
-  "login": "Login",
-  "logout": "Logout",
-  "logoutMessage": "Logout?",
-  "confirmLogout": "Confirm Logout",
-  "loading": "Loading...",
-  "noData": "No data",
-  "english": "English",
-  "tamil": "Tamil",
-  "telugu": "Telugu"
+  "appName": "ஓஷன் சிங்க்",
+  "dashboard": "டாஷ்போர்டு",
+  "purchase": "கொள்முதல்",
+  "reGrading": "ரீ-கிரேடிங்",
+  "sales": "சேல்ஸ்",
+  "reports": "ரிப்போர்ட்ஸ்",
+  "customers": "வாடிக்கையாளர்கள்",
+  "vendors": "சப்ளையர்கள்",
+  "stock": "சரக்கு கையிருப்பு",
+  "employee": "பணியாளர்",
+  "settings": "அமைப்புகள்",
+  "language": "மொழி",
+  "login": "உள்நுழை",
+  "logout": "வெளியேறு",
+  "logoutMessage": "நீங்கள் வெளியேற விரும்புகிறீர்களா?",
+  "confirmLogout": "வெளியேறுதலை உறுதிப்படுத்து",
+  "loading": "ஏற்றப்படுகிறது...",
+  "noData": "தரவு கிடைக்கவில்லை",
+  "success": "வெற்றி",
+  "english": "ஆங்கிலம்",
+  "tamil": "தமிழ்",
+  "telugu": "தெலுப்பு",
+  "totalSales": "டோட்டல் சேல்ஸ்",
+  "profit": "லாபம்"
 }
 ''';
 
   static const String _teStrings = '''
 {
   "appName": "OceanSync",
-  "dashboard": "Dashboar d",
-  "purchase": "CÝt",
-  "reGrading": "Co-vert",
+  "dashboard": "Dashboard",
+  "purchase": "Purchase",
+  "reGrading": "Re-grading",
   "sales": "Sales",
   "reports": "Reports",
   "customers": "Customers",
@@ -142,12 +150,15 @@ class AppLocalizations {
   "login": "Login",
   "logout": "Logout",
   "logoutMessage": "Logout?",
-  "confirmLogout": "Confirm Logout",
+  "confirmLogout": "Confirm",
   "loading": "Loading...",
-  "noData": "No data",
+  "noData": "No Data",
+  "success": "Success",
   "english": "English",
   "tamil": "Tamil",
-  "telugu": "Telugu"
+  "telugu": "Telugu",
+  "totalSales": "Total",
+  "profit": "Profit"
 }
 ''';
 }
