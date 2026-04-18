@@ -23,9 +23,6 @@ class AppLocalizations {
     try {
       String jsonString;
       switch (langCode) {
-        case 'ta':
-          jsonString = _taStrings;
-          break;
         case 'te':
           jsonString = _teStrings;
           break;
@@ -58,7 +55,6 @@ class AppLocalizations {
   static String get settings => _strings['settings'] ?? 'Settings';
   static String get language => _strings['language'] ?? 'Language';
   static String get english => _strings['english'] ?? 'English';
-  static String get tamil => _strings['tamil'] ?? 'Tamil';
   static String get telugu => _strings['telugu'] ?? 'Telugu';
   static String get login => _strings['login'] ?? 'Login';
   static String get logout => _strings['logout'] ?? 'Logout';
@@ -97,39 +93,9 @@ class AppLocalizations {
   "noData": "No data available",
   "success": "Success",
   "english": "English",
-  "tamil": "Tamil",
   "telugu": "Telugu",
   "totalSales": "Total Sales",
   "profit": "Profit"
-}
-''';
-
-  static const String _taStrings = '''
-{
-  "appName": "ஓஷன் சிங்க்",
-  "dashboard": "டாஷ்போர்டு",
-  "purchase": "கொள்முதல்",
-  "reGrading": "ரீ-கிரேடிங்",
-  "sales": "சேல்ஸ்",
-  "reports": "ரிப்போர்ட்ஸ்",
-  "customers": "வாடிக்கையாளர்கள்",
-  "vendors": "சப்ளையர்கள்",
-  "stock": "சரக்கு கையிருப்பு",
-  "employee": "பணியாளர்",
-  "settings": "அமைப்புகள்",
-  "language": "மொழி",
-  "login": "உள்நுழை",
-  "logout": "வெளியேறு",
-  "logoutMessage": "நீங்கள் வெளியேற விரும்புகிறீர்களா?",
-  "confirmLogout": "வெளியேறுதலை உறுதிப்படுத்து",
-  "loading": "ஏற்றப்படுகிறது...",
-  "noData": "தரவு கிடைக்கவில்லை",
-  "success": "வெற்றி",
-  "english": "ஆங்கிலம்",
-  "tamil": "தமிழ்",
-  "telugu": "தெலுப்பு",
-  "totalSales": "டோட்டல் சேல்ஸ்",
-  "profit": "லாபம்"
 }
 ''';
 
@@ -149,13 +115,12 @@ class AppLocalizations {
   "language": "Language",
   "login": "Login",
   "logout": "Logout",
-  "logoutMessage": "Logout?",
+  "logoutMessage": "Are you sure?",
   "confirmLogout": "Confirm",
   "loading": "Loading...",
   "noData": "No Data",
   "success": "Success",
   "english": "English",
-  "tamil": "Tamil",
   "telugu": "Telugu",
   "totalSales": "Total",
   "profit": "Profit"

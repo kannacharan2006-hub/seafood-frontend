@@ -54,7 +54,6 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
           const SizedBox(height: 16),
           _buildLanguageTile('en', 'English', '🇬🇧'),
           _buildLanguageTile('ta', 'தமிழ்', '🇮🇳'),
-          _buildLanguageTile('te', 'తెలుగు', '🇮🇳'),
         ],
       ),
     );
