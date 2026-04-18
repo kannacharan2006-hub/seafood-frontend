@@ -22,6 +22,8 @@ import 'package:flutter_application_1/features/finance/presentation/vendor_payme
 
 import 'package:flutter_application_1/features/stock/presentation/stock_screen.dart';
 import 'package:flutter_application_1/features/company/presentation/manage_employees_screen.dart';
+import 'package:flutter_application_1/features/settings/presentation/language_settings_screen.dart';
+import 'package:flutter_application_1/services/localization_service.dart';
 
 class AboutAppScreen extends StatelessWidget {
   const AboutAppScreen({super.key});
@@ -383,13 +385,13 @@ class _HomeScreenState extends State<HomeScreen> {
   final WebSocketService _wsService = WebSocketService();
   StreamSubscription<WebSocketMessage>? _wsSubscription;
 
-  final List<String> _titles = [
-    "Dashboard",
-    "Purchase",
-    "Re-grading",
-    "Sales",
-    "Reports",
-  ];
+  List<String> get _titles => [
+        AppLocalizations.dashboard,
+        AppLocalizations.purchase,
+        AppLocalizations.reGrading,
+        AppLocalizations.sales,
+        AppLocalizations.reports,
+      ];
 
   @override
   void initState() {
@@ -408,28 +410,28 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!mounted) return;
 
     final notificationTitle = switch (message.event) {
-      WebSocketEvent.stockUpdate => 'Stock Updated',
-      WebSocketEvent.stockChanged => 'Stock Changed',
-      WebSocketEvent.purchaseCreated => 'New Purchase',
-      WebSocketEvent.exportCreated => 'New Sale',
-      WebSocketEvent.conversionCreated => 'Conversion Complete',
-      WebSocketEvent.paymentCreated => 'Payment Received',
-      WebSocketEvent.dashboardRefresh => 'Dashboard Updated',
-      WebSocketEvent.authSuccess => 'Connected',
+      WebSocketEvent.stockUpdate => AppLocalizations.stock,
+      WebSocketEvent.stockChanged => AppLocalizations.stock,
+      WebSocketEvent.purchaseCreated => AppLocalizations.purchase,
+      WebSocketEvent.exportCreated => AppLocalizations.sales,
+      WebSocketEvent.conversionCreated => AppLocalizations.reGrading,
+      WebSocketEvent.paymentCreated => AppLocalizations.customers,
+      WebSocketEvent.dashboardRefresh => AppLocalizations.dashboard,
+      WebSocketEvent.authSuccess => AppLocalizations.login,
       _ => null,
     };
 
     if (notificationTitle == null) return;
 
     final notificationBody = switch (message.event) {
-      WebSocketEvent.stockUpdate => 'Inventory has been updated',
-      WebSocketEvent.stockChanged => 'Stock values changed',
-      WebSocketEvent.purchaseCreated => 'A new purchase has been recorded',
-      WebSocketEvent.exportCreated => 'A new export has been recorded',
-      WebSocketEvent.conversionCreated => 'Items have been converted',
-      WebSocketEvent.paymentCreated => 'A payment was processed',
-      WebSocketEvent.dashboardRefresh => 'Dashboard data refreshed',
-      WebSocketEvent.authSuccess => 'Real-time updates enabled',
+      WebSocketEvent.stockUpdate => AppLocalizations.loading,
+      WebSocketEvent.stockChanged => AppLocalizations.noData,
+      WebSocketEvent.purchaseCreated => AppLocalizations.purchase,
+      WebSocketEvent.exportCreated => AppLocalizations.sales,
+      WebSocketEvent.conversionCreated => AppLocalizations.reGrading,
+      WebSocketEvent.paymentCreated => AppLocalizations.customers,
+      WebSocketEvent.dashboardRefresh => AppLocalizations.dashboard,
+      WebSocketEvent.authSuccess => AppLocalizations.success,
       _ => null,
     };
 
@@ -678,6 +680,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     }),
                     _drawerSection("About"),
+                    _drawerItem(Icons.settings, "Language", () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const LanguageSettingsScreen(),
+                        ),
+                      );
+                    }),
                     _drawerItem(Icons.info_outline, "About App", _showAboutApp),
                   ],
                 ),

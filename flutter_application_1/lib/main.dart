@@ -3,9 +3,12 @@ import 'package:flutter/services.dart';
 import 'features/auth/presentation/home_screen.dart';
 import 'features/auth/presentation/splash_screen.dart';
 import 'services/secure_storage.dart';
+import 'services/localization_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await AppLocalizations.init();
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -39,7 +42,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "Seafood ERP",
+      title: AppLocalizations.appName,
+      locale: AppLocalizations.currentLocale,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         useMaterial3: true,

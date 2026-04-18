@@ -1,0 +1,22 @@
+{
+  "appName": "OceanSync",
+  "dashboard": "Dashboard",
+  "purchase": "Purchase",
+  "reGrading": "Re-grading",
+  "sales": "Sales",
+  "reports": "Reports",
+  "customers": "Customers",
+  "vendors": "Vendors",
+  "stock": "Stock",
+  "login": "Login",
+  "logout": "Logout",
+  "settings": "Settings",
+  "language": "Language",
+  "totalSales": "Total Sales",
+  "profit": "Profit",
+  "loading": "Loading...",
+  "noData": "No data available",
+  "english": "English",
+  "tamil": "Tamil",
+  "telugu": "Telugu"
+}
