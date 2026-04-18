@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../services/secure_storage.dart';
 
@@ -20,24 +19,9 @@ class AppLocalizations {
   }
 
   static Future<void> loadLanguage(String langCode) async {
-    try {
-      String jsonString;
-      switch (langCode) {
-        case 'ta':
-          jsonString = _taStrings;
-          break;
-        case 'te':
-          jsonString = _teStrings;
-          break;
-        default:
-          jsonString = _enStrings;
-      }
-      _strings = Map<String, String>.from(jsonDecode(jsonString));
-      _currentLocale = Locale(langCode);
-      _changeNotifier.value = _currentLocale;
-    } catch (e) {
-      _strings = {};
-    }
+    _strings = _getStrings(langCode);
+    _currentLocale = Locale(langCode);
+    _changeNotifier.value = _currentLocale;
   }
 
   static Future<void> setLanguage(String langCode) async {
@@ -45,9 +29,17 @@ class AppLocalizations {
     await SecureStorage.saveData(_storageKey, langCode);
   }
 
+  static Map<String, String> _getStrings(String langCode) {
+    if (langCode == 'ta') {
+      return _taStrings;
+    } else if (langCode == 'te') {
+      return _teStrings;
+    }
+    return _enStrings;
+  }
+
   static String get(String key) => _strings[key] ?? key;
 
-  // Getters
   static String get appName => _strings['appName'] ?? 'OceanSync';
   static String get dashboard => _strings['dashboard'] ?? 'Dashboard';
   static String get purchase => _strings['purchase'] ?? 'Purchase';
@@ -74,15 +66,88 @@ class AppLocalizations {
   static String get totalSales => _strings['totalSales'] ?? 'Total Sales';
   static String get profit => _strings['profit'] ?? 'Profit';
 
-  // English (default)
-  static const String _enStrings =
-      '{"appName":"OceanSync","dashboard":"Dashboard","purchase":"Purchase","reGrading":"Re-grading","sales":"Sales","reports":"Reports","customers":"Customers","vendors":"Vendors","stock":"Stock","employee":"Employee","settings":"Settings","language":"Language","login":"Login","logout":"Logout","logoutMessage":"Are you sure you want to logout?","confirmLogout":"Confirm Logout","loading":"Loading...","noData":"No data available","success":"Success","english":"English","tamil":"Tamil","telugu":"Telugu","totalSales":"Total Sales","profit":"Profit"}';
+  // English strings
+  static const Map<String, String> _enStrings = {
+    'appName': 'OceanSync',
+    'dashboard': 'Dashboard',
+    'purchase': 'Purchase',
+    'reGrading': 'Re-grading',
+    'sales': 'Sales',
+    'reports': 'Reports',
+    'customers': 'Customers',
+    'vendors': 'Vendors',
+    'stock': 'Stock',
+    'employee': 'Employee',
+    'settings': 'Settings',
+    'language': 'Language',
+    'login': 'Login',
+    'logout': 'Logout',
+    'logoutMessage': 'Are you sure you want to logout?',
+    'confirmLogout': 'Confirm Logout',
+    'loading': 'Loading...',
+    'noData': 'No data available',
+    'success': 'Success',
+    'english': 'English',
+    'tamil': 'Tamil',
+    'telugu': 'Telugu',
+    'totalSales': 'Total Sales',
+    'profit': 'Profit',
+  };
 
-  // Tamil - using simple roman text
-  static const String _taStrings =
-      '{"appName":"OceanSync","dashboard":"Dashboard","purchase":"Purchase","reGrading":"Re-grading","sales":"Sales","reports":"Reports","customers":"Customers","vendors":"Vendors","stock":"Stock","employee":"Employee","settings":"Settings","language":"Language","login":"Login","logout":"Logout","logoutMessage":"Are you sure?","confirmLogout":"Confirm","loading":"Loading...","noData":"No data","success":"Success","english":"English","tamil":"Tamil","telugu":"Telugu","totalSales":"Total Sales","profit":"Profit"}';
+  // Tamil strings
+  static const Map<String, String> _taStrings = {
+    'appName': 'OceanSync',
+    'dashboard': 'Dashboard',
+    'purchase': 'Purchase',
+    'reGrading': 'Re-grading',
+    'sales': 'Sales',
+    'reports': 'Reports',
+    'customers': 'Customers',
+    'vendors': 'Vendors',
+    'stock': 'Stock',
+    'employee': 'Employee',
+    'settings': 'Settings',
+    'language': 'Language',
+    'login': 'Login',
+    'logout': 'Logout',
+    'logoutMessage': 'Are you sure?',
+    'confirmLogout': 'Confirm',
+    'loading': 'Loading...',
+    'noData': 'No data',
+    'success': 'Success',
+    'english': 'English',
+    'tamil': 'Tamil',
+    'telugu': 'Telugu',
+    'totalSales': 'Total Sales',
+    'profit': 'Profit',
+  };
 
-  // Telugu - using Telugu script characters directly
-  static const String _teStrings =
-      '{"appName":"ఓషన్‌సింక్","dashboard":"డాష్‌బోర్డ్","purchase":"కొనుగోలు","reGrading":"రీ- గ్రేडింగ్","sales":"Sales","reports":"रिपोर्ट्स","customers":"కస్ట�ర్స్","vendors":"रैత / सरफरादार్","stock":"सरुकु निल्ध","employee":"उद्योग","settings":"सेट्टिंग्स","language":"भाष","login":"लागिन","logout":"लागौट","logoutMessage":"?Are you sure","confirmLogout":"Confirm","loading":"...लोड अवुतोन्दि","noData":"डेटा अनर्बातलो लेदु","success":"Success","english":"English","tamil":"Tamil","telugu":"Telugu","totalSales":"टोटल सोल्स","profit":"लाभम"}';
+  // Telugu strings with correct Unicode
+  static const Map<String, String> _teStrings = {
+    'appName': 'OceanSync',
+    'dashboard': 'డాష్బోర్డ్',
+    'purchase': 'కొనుగోలు',
+    'reGrading': 'రీ-గ్రేడింగ్',
+    'sales': 'అమ్మకాలు',
+    'reports': 'রিপোর্ট',
+    'customers': 'కస్ట\u0C24\u0C4D\u0C32\u0C41',
+    'vendors':
+        'রైతు/সর\u0C35\u0C30\u0C3Eద\u0C24\u0C30\u0C4D\u0C2E\u0C3E\u0C32\u0C41',
+    'stock': 'सर\u0C17\u0C41 नि\u0C32\u0C4D',
+    'employee': 'उद\u0C4D\u0C2D\u0C4D\u0C2D\u0C4B\u0C17\u0C3F',
+    'settings': 'स\u0C24\u0C1F\u0C1F\u0C02\u0C17\u0C4D\u0C38\u0C1E',
+    'language': 'భ\u0C3E',
+    'login': 'ల\u0C3E\u0C17\u0C3F\u0C28\u0C4D',
+    'logout': 'ల\u0C3E\u0C17\u0C4D\u0C14\u0C4D',
+    'logoutMessage': '?',
+    'confirmLogout': '',
+    'loading': 'Loading...',
+    'noData': 'ड\u0C24\u0C3E अ\u0C28\u0C24\u0C4D\u0C1C\u0C24\u0C4B\u0C32\u0C4D',
+    'success': 'Success',
+    'english': 'English',
+    'tamil': 'Tamil',
+    'telugu': 'Telugu',
+    'totalSales': 'Total',
+    'profit': 'ल\u0C15\u0C24\u0C02\u0C17\u0C02',
+  };
 }
