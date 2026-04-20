@@ -41,6 +41,7 @@ class AppLocalizations {
   static String get(String key) => _strings[key] ?? key;
 
   static String get appName => _strings['appName'] ?? 'OceanSync';
+  static String get cancel => _strings['cancel'] ?? 'Cancel';
   static String get dashboard => _strings['dashboard'] ?? 'Dashboard';
   static String get purchase => _strings['purchase'] ?? 'Purchase';
   static String get reGrading => _strings['reGrading'] ?? 'Re-grading';
@@ -65,6 +66,19 @@ class AppLocalizations {
   static String get employee => _strings['employee'] ?? 'Employee';
   static String get totalSales => _strings['totalSales'] ?? 'Total Sales';
   static String get profit => _strings['profit'] ?? 'Profit';
+  static String get customerBalance =>
+      _strings['customerBalance'] ?? 'Customer Balance';
+  static String get customerPayment =>
+      _strings['customerPayment'] ?? 'Customer Payment';
+  static String get vendorBalance =>
+      _strings['vendorBalance'] ?? 'Vendor Balance';
+  static String get vendorPayment =>
+      _strings['vendorPayment'] ?? 'Vendor Payment';
+  static String get manageEmployees =>
+      _strings['manageEmployees'] ?? 'Manage Employees';
+  static String get stockOverview =>
+      _strings['stockOverview'] ?? 'Stock Overview';
+  static String get aboutApp => _strings['aboutApp'] ?? 'About App';
 
   // English strings
   static const Map<String, String> _enStrings = {
@@ -92,6 +106,14 @@ class AppLocalizations {
     'telugu': 'Telugu',
     'totalSales': 'Total Sales',
     'profit': 'Profit',
+    'customerBalance': 'Customer Balance',
+    'customerPayment': 'Customer Payment',
+    'vendorBalance': 'Vendor Balance',
+    'vendorPayment': 'Vendor Payment',
+    'manageEmployees': 'Manage Employees',
+    'stockOverview': 'Stock Overview',
+    'aboutApp': 'About App',
+    'cancel': 'Cancel',
   };
 
   // Tamil strings
@@ -120,6 +142,14 @@ class AppLocalizations {
     'telugu': 'Telugu',
     'totalSales': 'Total Sales',
     'profit': 'Profit',
+    'customerBalance': 'Customer Balance',
+    'customerPayment': 'Customer Payment',
+    'vendorBalance': 'Vendor Balance',
+    'vendorPayment': 'Vendor Payment',
+    'manageEmployees': 'Manage Employees',
+    'stockOverview': 'Stock Overview',
+    'aboutApp': 'About App',
+    'cancel': 'Cancel',
   };
 
   // Telugu strings with correct Unicode
@@ -129,25 +159,37 @@ class AppLocalizations {
     'purchase': 'కొనుగోలు',
     'reGrading': 'రీ-గ్రేడింగ్',
     'sales': 'అమ్మకాలు',
-    'reports': 'রিপোর্ট',
-    'customers': 'కస్ట\u0C24\u0C4D\u0C32\u0C41',
+    'reports': 'రిపోర్టులు',
+    'customers': 'కస్టమర్లు',
     'vendors':
-        'রైతు/সর\u0C35\u0C30\u0C3Eద\u0C24\u0C30\u0C4D\u0C2E\u0C3E\u0C32\u0C41',
-    'stock': 'सर\u0C17\u0C41 नि\u0C32\u0C4D',
-    'employee': 'उद\u0C4D\u0C2D\u0C4D\u0C2D\u0C4B\u0C17\u0C3F',
-    'settings': 'स\u0C24\u0C1F\u0C1F\u0C02\u0C17\u0C4D\u0C38\u0C1E',
-    'language': 'భ\u0C3E',
-    'login': 'ల\u0C3E\u0C17\u0C3F\u0C28\u0C4D',
-    'logout': 'ల\u0C3E\u0C17\u0C4D\u0C14\u0C4D',
-    'logoutMessage': '?',
-    'confirmLogout': '',
+        'రైతు/సరఫరాదారులు',
+    'stock': 'సరుకు నిల్వ',
+    'employee': 'ఉద్యోగి',
+    'settings': 'సెట్టింగ్స్',
+    'language': 'భాష',
+    'login': 'లాగిన్',
+    'logout': 'లాగౌట్',
+    'logoutMessage': 'మీరు ఖచ్చితంగా లాగౌట్ అవ్వడం కోరుకున్నారా?',
+    'confirmLogout': 'లాగౌట్ నిర్ధారించాలా?',
     'loading': 'Loading...',
-    'noData': 'ड\u0C24\u0C3E अ\u0C28\u0C24\u0C4D\u0C1C\u0C24\u0C4B\u0C32\u0C4D',
+    'noData': 'డేటా లేదు',
     'success': 'Success',
     'english': 'English',
     'tamil': 'Tamil',
     'telugu': 'Telugu',
     'totalSales': 'Total',
-    'profit': 'ल\u0C15\u0C24\u0C02\u0C17\u0C02',
+    'profit': 'లాభం',
+    'customerBalance':
+        'కస్టమర్ బ్యాలెన్స్',
+    'customerPayment':
+        'కస్టమర్ చెల్లింపు',
+    'vendorBalance':
+        'రైతు/సరఫరాదారుల బ్యాలెన్స్',
+    'vendorPayment': 'రైతు/సరఫరాదారుల చెల్లింపు',
+    'manageEmployees':
+        'ఉద్యోగులను నిర్వహించడం',
+    'stockOverview': 'స్టాక్ వివరాలు',
+    'aboutApp':
+        'యాప్ గురించి',
   };
 }

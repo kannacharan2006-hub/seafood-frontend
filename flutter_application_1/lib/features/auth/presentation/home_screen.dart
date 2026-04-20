@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutter_application_1/services/secure_storage.dart';
 import 'package:flutter_application_1/services/websocket_service.dart';
+import 'package:flutter_application_1/services/notification_service.dart';
 
 import 'package:flutter_application_1/features/auth/presentation/login_screen.dart';
 import 'package:flutter_application_1/features/auth/presentation/dashboard_screen.dart';
@@ -307,27 +308,25 @@ class AboutAppScreen extends StatelessWidget {
 
   static Widget _buildContactBtn(
       IconData icon, String label, VoidCallback onTap) {
-    return Expanded(
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(10),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(10)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, size: 14, color: Colors.white),
-              const SizedBox(width: 4),
-              Text(label,
-                  style: const TextStyle(
-                      fontSize: 11,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600))
-            ],
-          ),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.2),
+            borderRadius: BorderRadius.circular(10)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 14, color: Colors.white),
+            const SizedBox(width: 4),
+            Text(label,
+                style: const TextStyle(
+                    fontSize: 11,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600))
+          ],
         ),
       ),
     );
@@ -397,6 +396,15 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _initWebSocket();
+    _showDailyNotifications();
+  }
+
+  void _showDailyNotifications() {
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        NotificationService.showDailyNotification(context);
+      }
+    });
   }
 
   void _initWebSocket() {

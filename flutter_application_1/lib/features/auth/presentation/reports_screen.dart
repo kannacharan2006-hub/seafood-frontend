@@ -13,12 +13,28 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
   List topCustomers = [];
   List topProducts = [];
   Map profitAnalysis = {};
+  Map yesterdayProfit = {};
   bool loading = true;
 
   @override
   void initState() {
     super.initState();
     loadReports();
+  }
+
+  bool get _isYesterdayProfit {
+    return (double.tryParse(yesterdayProfit['profit']?.toString() ?? '0') ??
+            0) >=
+        0;
+  }
+
+  String get _yesterdayDate {
+    final date = yesterdayProfit['date'];
+    if (date == null || date == 'N/A') {
+      final yesterday = DateTime.now().subtract(const Duration(days: 1));
+      return '${yesterday.year}-${yesterday.month.toString().padLeft(2, '0')}-${yesterday.day.toString().padLeft(2, '0')}';
+    }
+    return date;
   }
 
   Future<void> loadReports() async {
@@ -30,6 +46,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
       Map<String, dynamic> customers = {};
       Map<String, dynamic> products = {};
       Map<String, dynamic> profit = {};
+      Map<String, dynamic> yesterday = {};
 
       try {
         daily = await ReportsService.getDailySales("2024-01-01", "2030-01-01");
@@ -47,11 +64,16 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
         profit = await ReportsService.getPurchaseVsSales();
       } catch (_) {}
 
+      try {
+        yesterday = await ReportsService.getYesterdayProfit();
+      } catch (_) {}
+
       setState(() {
         summary = daily["summary"] ?? {};
         topCustomers = customers["top_customers"] ?? [];
         topProducts = products["best_sellers"] ?? [];
         profitAnalysis = profit["profit_analysis"] ?? {};
+        yesterdayProfit = yesterday["yesterday"] ?? {};
       });
     } catch (e) {
       if (!mounted) return;
@@ -319,6 +341,129 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                         Icons.show_chart,
                         Colors.purple),
                   ],
+                ),
+
+                const SizedBox(height: 30),
+
+                /// YESTERDAY'S PROFIT/LOSS
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(18),
+                    boxShadow: [
+                      BoxShadow(
+                          blurRadius: 20,
+                          color: Colors.black.withValues(alpha: 0.08)),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text("Yesterday's Performance",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold)),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 4),
+                            decoration: BoxDecoration(
+                                color: Colors.grey[100],
+                                borderRadius: BorderRadius.circular(12)),
+                            child: Text(_yesterdayDate,
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.grey[600])),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Center(
+                        child: Column(
+                          children: [
+                            Text(_isYesterdayProfit ? 'Profit' : 'Loss',
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.grey[600])),
+                            const SizedBox(height: 4),
+                            Text('₹ ${yesterdayProfit['profit'] ?? '0.00'}',
+                                style: TextStyle(
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.bold,
+                                    color: _isYesterdayProfit
+                                        ? Colors.green
+                                        : Colors.red)),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 4),
+                              decoration: BoxDecoration(
+                                  color: _isYesterdayProfit
+                                      ? Colors.green.withValues(alpha: 0.1)
+                                      : Colors.red.withValues(alpha: 0.1),
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: Text(
+                                  '${yesterdayProfit['margin'] ?? 0}% margin',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: _isYesterdayProfit
+                                          ? Colors.green
+                                          : Colors.red)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Expanded(
+                              child: Container(
+                            padding: const EdgeInsets.all(14),
+                            decoration: BoxDecoration(
+                                color: Colors.green.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(12)),
+                            child: Column(children: [
+                              const Icon(Icons.trending_up,
+                                  color: Colors.green, size: 20),
+                              const SizedBox(height: 6),
+                              Text('₹ ${yesterdayProfit['sales'] ?? '0.00'}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      color: Colors.green)),
+                              Text(
+                                  'Sales (${yesterdayProfit['sales_invoices'] ?? 0})',
+                                  style: TextStyle(
+                                      fontSize: 11, color: Colors.grey[600]))
+                            ]),
+                          )),
+                          const SizedBox(width: 10),
+                          Expanded(
+                              child: Container(
+                            padding: const EdgeInsets.all(14),
+                            decoration: BoxDecoration(
+                                color: Colors.orange.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(12)),
+                            child: Column(children: [
+                              const Icon(Icons.shopping_cart,
+                                  color: Colors.orange, size: 20),
+                              const SizedBox(height: 6),
+                              Text(
+                                  '₹ ${yesterdayProfit['purchases'] ?? '0.00'}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                      color: Colors.orange)),
+                              Text(
+                                  'Purchases (${yesterdayProfit['purchase_orders'] ?? 0})',
+                                  style: TextStyle(
+                                      fontSize: 11, color: Colors.grey[600]))
+                            ]),
+                          )),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
 
                 const SizedBox(height: 30),

@@ -22,10 +22,10 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
     if (mounted) {
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: const Text('Language changed'),
-          backgroundColor: const Color(0xFF10B981),
-          duration: const Duration(seconds: 2),
+        const SnackBar(
+          content: Text('Language changed'),
+          backgroundColor: Color(0xFF10B981),
+          duration: Duration(seconds: 2),
         ),
       );
     }

@@ -42,4 +42,8 @@ class ReportsService {
   static Future getPurchaseVsSales() async {
     return await Api.get("/api/reports/purchase-vs-sales");
   }
+
+  static Future getYesterdayProfit() async {
+    return await Api.get("/api/reports/yesterday-profit");
+  }
 }
