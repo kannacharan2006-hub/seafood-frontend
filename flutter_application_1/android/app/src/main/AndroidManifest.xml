@@ -43,6 +43,10 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
+        <meta-data
+            android:name="privacy_policy"
+            android:value="https://kannacharan2006-hub.github.io/-oceansync-privacy/" />
+
     </application>
 
     <queries>

@@ -2,9 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../services/secure_storage.dart';
+import 'app_config.dart';
 
 class Api {
-  static const String baseUrl = "https://seafood-backend-3.onrender.com";
+  static String get baseUrl => AppConfig.baseUrl;
   static const Duration timeout = Duration(seconds: 30);
   static bool _isRefreshing = false;
   static final List<Function()> _pendingRequests = [];
