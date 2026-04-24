@@ -47,4 +47,13 @@ class PurchaseService {
   Future<void> addVendor(Map<String, dynamic> body) async {
     await Api.post("/api/vendors/vendors", body);
   }
+
+  Future<void> updateVendor(
+      int vendorId, String name, String phone, String address) async {
+    await Api.put("/api/vendors/vendors/$vendorId", {
+      "name": name,
+      "phone": phone,
+      "address": address,
+    });
+  }
 }

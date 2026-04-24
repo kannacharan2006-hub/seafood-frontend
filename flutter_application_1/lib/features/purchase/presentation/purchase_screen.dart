@@ -35,6 +35,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
   Map<String, List> itemsMap = {};
   Map<String, List> variantsMap = {};
   String? selectedVendor;
+  String currentVendorPhone = '';
   List<PurchaseItem> items = [PurchaseItem()];
   bool isSaving = false;
   final TextEditingController vendorNameController = TextEditingController();
@@ -85,25 +86,21 @@ class _PurchaseScreenState extends State<PurchaseScreen>
                 controller: vendorNameController,
                 decoration: const InputDecoration(labelText: "Vendor Name"),
               ),
-
               TextField(
                 controller: vendorPhoneController,
                 decoration: const InputDecoration(labelText: "Phone"),
               ),
-
               TextField(
                 controller: vendorAddressController,
                 decoration: const InputDecoration(labelText: "Address"),
               ),
             ],
           ),
-
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
               child: const Text("Cancel"),
             ),
-
             ElevatedButton(
               onPressed: () async {
                 final body = {
@@ -114,7 +111,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
 
                 final navigator = Navigator.of(context);
                 final scaffoldMessenger = ScaffoldMessenger.of(context);
-                
+
                 try {
                   await purchaseService.addVendor(body);
 
@@ -124,7 +121,8 @@ class _PurchaseScreenState extends State<PurchaseScreen>
                   await fetchVendors();
 
                   if (!mounted) return;
-                  scaffoldMessenger.showSnackBar(const SnackBar(content: Text("Vendor Added")));
+                  scaffoldMessenger.showSnackBar(
+                      const SnackBar(content: Text("Vendor Added")));
                 } catch (e) {
                   if (!mounted) return;
                   scaffoldMessenger.showSnackBar(
@@ -170,6 +168,21 @@ class _PurchaseScreenState extends State<PurchaseScreen>
     setState(() => isSaving = true);
 
     try {
+      if (selectedVendor != null && currentVendorPhone.isNotEmpty) {
+        final vendor = vendors.firstWhere(
+          (v) => v['id'].toString() == selectedVendor,
+          orElse: () => {'name': '', 'phone': '', 'address': ''},
+        );
+        if (vendor['phone']?.toString() != currentVendorPhone) {
+          await purchaseService.updateVendor(
+            int.parse(selectedVendor!),
+            vendor['name'] ?? '',
+            currentVendorPhone,
+            vendor['address'] ?? '',
+          );
+        }
+      }
+
       List purchaseItems = [];
 
       for (var item in items) {
@@ -266,8 +279,8 @@ class _PurchaseScreenState extends State<PurchaseScreen>
                 const SizedBox(height: 32),
                 _label("PURCHASE ITEMS"),
                 ...items.asMap().entries.map(
-                  (entry) => _buildFigmaItemRow(entry.key, entry.value),
-                ),
+                      (entry) => _buildFigmaItemRow(entry.key, entry.value),
+                    ),
                 const SizedBox(height: 8),
                 Center(
                   child: TextButton.icon(
@@ -309,58 +322,98 @@ class _PurchaseScreenState extends State<PurchaseScreen>
   }
 
   Widget _buildVendorSelector() {
-    return Row(
+    final selectedVendorData = selectedVendor != null
+        ? vendors.firstWhere(
+            (v) => v['id'].toString() == selectedVendor,
+            orElse: () => {'name': '', 'phone': '', 'address': ''},
+          )
+        : null;
+
+    if (selectedVendor != null && selectedVendorData != null) {
+      currentVendorPhone = selectedVendorData['phone']?.toString() ?? '';
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
-            ),
-
-            child: DropdownSearch<String>(
-              selectedItem: selectedVendor,
-
-              items: vendors.map<String>((v) => v['id'].toString()).toList(),
-
-              itemAsString: (id) {
-                final vendor = vendors.firstWhere(
-                  (v) => v['id'].toString() == id,
-                  orElse: () => {'name': ''},
-                );
-                return vendor['name'];
-              },
-
-              popupProps: const PopupProps.menu(showSearchBox: true),
-
-              dropdownDecoratorProps: const DropDownDecoratorProps(
-                dropdownSearchDecoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search_rounded),
-                  hintText: "Select supplier",
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(vertical: 16),
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
+                ),
+                child: DropdownSearch<String>(
+                  selectedItem: selectedVendor,
+                  items:
+                      vendors.map<String>((v) => v['id'].toString()).toList(),
+                  itemAsString: (id) {
+                    final vendor = vendors.firstWhere(
+                      (v) => v['id'].toString() == id,
+                      orElse: () => {'name': ''},
+                    );
+                    return vendor['name'];
+                  },
+                  popupProps: const PopupProps.menu(showSearchBox: true),
+                  dropdownDecoratorProps: const DropDownDecoratorProps(
+                    dropdownSearchDecoration: InputDecoration(
+                      prefixIcon: Icon(Icons.search_rounded),
+                      hintText: "Select supplier",
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(vertical: 16),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedVendor = value;
+                    });
+                  },
                 ),
               ),
-
-              onChanged: (value) {
-                setState(() {
-                  selectedVendor = value;
-                });
+            ),
+            const SizedBox(width: 10),
+            IconButton(
+              icon: const Icon(Icons.add_circle, color: Colors.green, size: 30),
+              onPressed: () {
+                showAddVendorDialog();
               },
             ),
+          ],
+        ),
+        if (selectedVendor != null) ...[
+          const SizedBox(height: 16),
+          Text(
+            "SUPPLIER PHONE",
+            style: TextStyle(
+              color: kSubtle,
+              fontSize: 11,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.5,
+            ),
           ),
-        ),
-
-        const SizedBox(width: 10),
-
-        /// ADD VENDOR BUTTON
-        IconButton(
-          icon: const Icon(Icons.add_circle, color: Colors.green, size: 30),
-          onPressed: () {
-            showAddVendorDialog();
-          },
-        ),
+          const SizedBox(height: 8),
+          TextFormField(
+            initialValue: currentVendorPhone,
+            decoration: InputDecoration(
+              hintText: "Enter phone number",
+              filled: true,
+              fillColor: Colors.white,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey.shade300),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey.shade300),
+              ),
+              prefixIcon: const Icon(Icons.phone, color: Colors.green),
+            ),
+            keyboardType: TextInputType.phone,
+            onChanged: (value) => currentVendorPhone = value,
+          ),
+        ],
       ],
     );
   }
@@ -454,8 +507,8 @@ class _PurchaseScreenState extends State<PurchaseScreen>
                     onChanged: (val) => setState(() => item.variantId = val),
                     itemLabel: (id) =>
                         (variantsMap[item.itemId] ?? []).firstWhere(
-                          (v) => v['id'].toString() == id,
-                        )['variant_name'],
+                      (v) => v['id'].toString() == id,
+                    )['variant_name'],
                   ),
                 ),
               ],
@@ -529,7 +582,8 @@ class _PurchaseScreenState extends State<PurchaseScreen>
       dropdownDecoratorProps: DropDownDecoratorProps(
         dropdownSearchDecoration: InputDecoration(
           hintText: hint,
-          hintStyle: TextStyle(color: kSubtle.withValues(alpha: 0.6), fontSize: 14),
+          hintStyle:
+              TextStyle(color: kSubtle.withValues(alpha: 0.6), fontSize: 14),
           filled: true,
           fillColor: Colors.white,
           contentPadding: const EdgeInsets.symmetric(
