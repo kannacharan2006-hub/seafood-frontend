@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '/features/purchase/data/purchase_detail_service.dart';
+import '/features/purchase/data/purchase_invoice_service.dart';
 
 class PurchaseDetailScreen extends StatefulWidget {
   final int purchaseId;
@@ -16,6 +17,7 @@ class PurchaseDetailScreen extends StatefulWidget {
 class _PurchaseDetailScreenState extends State<PurchaseDetailScreen> {
   Map<String, dynamic>? purchaseData;
   bool isLoading = true;
+  final PurchaseInvoiceService _invoiceService = PurchaseInvoiceService();
 
   // Figma "Studio" Design Tokens
   final Color kBase = const Color(0xFFFFFFFF);
@@ -34,8 +36,8 @@ class _PurchaseDetailScreenState extends State<PurchaseDetailScreen> {
   Future<void> loadDetails() async {
     try {
       final data = await PurchaseDetailService.fetchDetails(
-          widget.purchaseId,
-          );
+        widget.purchaseId,
+      );
 
       if (!mounted) return;
 
@@ -103,9 +105,37 @@ class _PurchaseDetailScreenState extends State<PurchaseDetailScreen> {
           ),
         ),
         actions: [
-          IconButton(
+          PopupMenuButton<String>(
             icon: Icon(Icons.ios_share_rounded, color: kTextPrimary, size: 20),
-            onPressed: () {}, // Optional: Share functionality
+            onSelected: (value) async {
+              if (value == 'share') {
+                await _invoiceService.shareInvoice(widget.purchaseId);
+              } else if (value == 'whatsapp') {
+                await _invoiceService.shareViaWhatsApp(widget.purchaseId);
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'whatsapp',
+                child: Row(
+                  children: [
+                    Icon(Icons.send, color: Color(0xFF25D366)),
+                    SizedBox(width: 8),
+                    Text('Share to WhatsApp'),
+                  ],
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'share',
+                child: Row(
+                  children: [
+                    Icon(Icons.share, color: Color(0xFF6366F1)),
+                    SizedBox(width: 8),
+                    Text('Share PDF'),
+                  ],
+                ),
+              ),
+            ],
           ),
           const SizedBox(width: 8),
         ],
@@ -305,7 +335,7 @@ class _PurchaseDetailScreenState extends State<PurchaseDetailScreen> {
             ),
           ),
           Text(
-            "₹${item['total']?? 0}",
+            "₹${item['total'] ?? 0}",
             style: TextStyle(
               color: kTextPrimary,
               fontWeight: FontWeight.w900,
