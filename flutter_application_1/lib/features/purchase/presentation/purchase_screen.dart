@@ -41,6 +41,8 @@ class _PurchaseScreenState extends State<PurchaseScreen>
   final TextEditingController vendorNameController = TextEditingController();
   final TextEditingController vendorPhoneController = TextEditingController();
   final TextEditingController vendorAddressController = TextEditingController();
+  final TextEditingController editVendorPhoneController =
+      TextEditingController();
 
   // Figma Design Tokens - Lightly Enhanced for Visibility
   final Color kPrimary = const Color(0xFF0F172A); // Midnight Slate
@@ -168,16 +170,16 @@ class _PurchaseScreenState extends State<PurchaseScreen>
     setState(() => isSaving = true);
 
     try {
-      if (selectedVendor != null && currentVendorPhone.isNotEmpty) {
+      if (selectedVendor != null && editVendorPhoneController.text.isNotEmpty) {
         final vendor = vendors.firstWhere(
           (v) => v['id'].toString() == selectedVendor,
           orElse: () => {'name': '', 'phone': '', 'address': ''},
         );
-        if (vendor['phone']?.toString() != currentVendorPhone) {
+        if (vendor['phone']?.toString() != editVendorPhoneController.text) {
           await purchaseService.updateVendor(
             int.parse(selectedVendor!),
             vendor['name'] ?? '',
-            currentVendorPhone,
+            editVendorPhoneController.text,
             vendor['address'] ?? '',
           );
         }
@@ -366,8 +368,14 @@ class _PurchaseScreenState extends State<PurchaseScreen>
                     ),
                   ),
                   onChanged: (value) {
+                    final vendor = vendors.firstWhere(
+                      (v) => v['id'].toString() == value,
+                      orElse: () => {'name': '', 'phone': '', 'address': ''},
+                    );
                     setState(() {
                       selectedVendor = value;
+                      currentVendorPhone = vendor['phone']?.toString() ?? '';
+                      editVendorPhoneController.text = currentVendorPhone;
                     });
                   },
                 ),
@@ -395,7 +403,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
           ),
           const SizedBox(height: 8),
           TextFormField(
-            initialValue: currentVendorPhone,
+            controller: editVendorPhoneController,
             decoration: InputDecoration(
               hintText: "Enter phone number",
               filled: true,
@@ -411,7 +419,6 @@ class _PurchaseScreenState extends State<PurchaseScreen>
               prefixIcon: const Icon(Icons.phone, color: Colors.green),
             ),
             keyboardType: TextInputType.phone,
-            onChanged: (value) => currentVendorPhone = value,
           ),
         ],
       ],
