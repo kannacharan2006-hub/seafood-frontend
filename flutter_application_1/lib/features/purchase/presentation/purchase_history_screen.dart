@@ -4,7 +4,6 @@ import 'package:intl/intl.dart'; // Standard for date formatting
 import '/features/purchase/data/purchase_history_service.dart';
 import '/features/purchase/presentation/purchase_detail_screen.dart';
 
-
 class PurchaseHistoryScreen extends StatefulWidget {
   const PurchaseHistoryScreen({super.key});
 
@@ -33,12 +32,22 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
     loadHistory();
   }
 
-  // Improved Date Formatter: Mar 06, 2024
+  // Improved Date Formatter: Mar 06, 2024 at 10:30 AM
   String _formatDate(String? dateStr) {
     if (dateStr == null || dateStr.isEmpty) return 'No Date';
     try {
       DateTime dateTime = DateTime.parse(dateStr);
       return DateFormat('MMM dd, yyyy').format(dateTime);
+    } catch (e) {
+      return dateStr;
+    }
+  }
+
+  String _formatDateTime(String? dateStr) {
+    if (dateStr == null || dateStr.isEmpty) return 'No Date';
+    try {
+      DateTime dateTime = DateTime.parse(dateStr);
+      return DateFormat('MMM dd, yyyy HH:mm').format(dateTime);
     } catch (e) {
       return dateStr;
     }
@@ -287,7 +296,9 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              _formatDate(purchase['date']),
+                              purchase['created_at'] != null
+                                  ? _formatDateTime(purchase['created_at'])
+                                  : _formatDate(purchase['date']),
                               style: TextStyle(
                                 color: kTextSecondary,
                                 fontSize: 11,
