@@ -92,7 +92,9 @@ class WebSocketService {
 
       _channel!.stream.listen(
         _onMessage,
-        onError: _onError,
+        onError: (error) {
+          _onError(error);
+        },
         onDone: _onDone,
         cancelOnError: false,
       );
