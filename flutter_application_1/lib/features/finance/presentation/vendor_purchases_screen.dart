@@ -309,7 +309,7 @@ class _PurchasePaymentScreenState extends State<PurchasePaymentScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        title: Text(
+        title: const Text(
           "PAYMENT DETAILS",
           style: TextStyle(
             color: Colors.black87,
