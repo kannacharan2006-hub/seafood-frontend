@@ -382,6 +382,14 @@ class _VendorBalanceScreenState extends State<VendorBalanceScreen>
               },
             ),
             ListTile(
+              leading: const Icon(Icons.payment, color: Colors.green),
+              title: const Text("Payment History"),
+              onTap: () {
+                Navigator.pop(context);
+                _showPaymentHistory(context, vendor);
+              },
+            ),
+            ListTile(
               leading: const Icon(Icons.edit, color: Colors.blue),
               title: const Text("Edit Vendor"),
               onTap: () {
@@ -404,6 +412,99 @@ class _VendorBalanceScreenState extends State<VendorBalanceScreen>
                 },
               ),
           ],
+        ),
+      ),
+    );
+  }
+
+  void _showPaymentHistory(
+      BuildContext context, Map<String, dynamic> vendor) async {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.6,
+        minChildSize: 0.3,
+        maxChildSize: 0.9,
+        expand: false,
+        builder: (context, scrollController) => FutureBuilder(
+          future: _service.fetchVendorPaymentHistory(vendor['id'].toString()),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            final payments = snapshot.data ?? [];
+            return Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Payment History - ${vendor['name']}",
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(height: 1),
+                Expanded(
+                  child: payments.isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.payment,
+                                  size: 48, color: Colors.grey[300]),
+                              const SizedBox(height: 16),
+                              Text(
+                                "No payments yet",
+                                style: TextStyle(color: Colors.grey[600]),
+                              ),
+                            ],
+                          ),
+                        )
+                      : ListView.builder(
+                          controller: scrollController,
+                          itemCount: payments.length,
+                          itemBuilder: (context, index) {
+                            final payment = payments[index];
+                            return ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor: Colors.green.shade50,
+                                child: const Icon(Icons.check,
+                                    color: Colors.green),
+                              ),
+                              title: Text(
+                                "₹${payment['amount']}",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(
+                                payment['date']?.toString().substring(0, 10) ??
+                                    '',
+                              ),
+                              trailing:
+                                  const Icon(Icons.arrow_forward_ios, size: 16),
+                            );
+                          },
+                        ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

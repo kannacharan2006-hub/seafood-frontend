@@ -11,6 +11,12 @@ class VendorBalanceService {
     return Map<String, dynamic>.from(data["data"] ?? data);
   }
 
+  Future<List<dynamic>> fetchVendorPaymentHistory(String vendorId) async {
+    final data =
+        await Api.get("/api/payments/vendor-payment-history/$vendorId");
+    return List<dynamic>.from(data["data"] ?? data);
+  }
+
   Future<void> updateVendor(
       int vendorId, String name, String phone, String address) async {
     await Api.put("/api/vendors/vendors/$vendorId", {
