@@ -33,7 +33,7 @@ class _ExportHistoryScreenState extends State<ExportHistoryScreen> {
       if (!mounted) return;
 
       final pagination = result['pagination'] as Map<String, dynamic>;
-      
+
       setState(() {
         exports = List.from(result['data']);
         currentPage = 1;
@@ -177,7 +177,8 @@ class _ExportHistoryScreenState extends State<ExportHistoryScreen> {
       color: Theme.of(context).primaryColor,
       child: NotificationListener<ScrollNotification>(
         onNotification: (scrollInfo) {
-          if (scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent - 200) {
+          if (scrollInfo.metrics.pixels >=
+              scrollInfo.metrics.maxScrollExtent - 200) {
             loadMoreExports();
           }
           return false;
@@ -196,7 +197,29 @@ class _ExportHistoryScreenState extends State<ExportHistoryScreen> {
             }
 
             final exp = exports[index];
-            final dateStr = (exp['date'] ?? '').toString().split('T')[0];
+            final dateStr = (exp['created_at'] ?? exp['date'] ?? '').toString();
+            String displayDate = dateStr;
+            if (dateStr.contains('T')) {
+              final dt = DateTime.tryParse(dateStr);
+              if (dt != null) {
+                final months = [
+                  'Jan',
+                  'Feb',
+                  'Mar',
+                  'Apr',
+                  'May',
+                  'Jun',
+                  'Jul',
+                  'Aug',
+                  'Sep',
+                  'Oct',
+                  'Nov',
+                  'Dec'
+                ];
+                displayDate =
+                    '${dt.day} ${months[dt.month - 1]} ${dt.year} ${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
+              }
+            }
             final theme = Theme.of(context);
 
             return Container(
@@ -263,7 +286,7 @@ class _ExportHistoryScreenState extends State<ExportHistoryScreen> {
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  dateStr,
+                                  displayDate,
                                   style: TextStyle(
                                     color: Colors.blueGrey.shade400,
                                     fontSize: 12,
