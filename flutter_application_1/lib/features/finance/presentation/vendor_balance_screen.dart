@@ -86,6 +86,15 @@ class _VendorBalanceScreenState extends State<VendorBalanceScreen>
     }
   }
 
+  String _formatDateTime(Map<String, dynamic> payment) {
+    final date = payment['date']?.toString().substring(0, 10) ?? '';
+    final time = payment['time']?.toString().substring(0, 5) ?? '';
+    if (time.isNotEmpty) {
+      return "$date at $time";
+    }
+    return date;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -479,8 +488,7 @@ class _VendorBalanceScreenState extends State<VendorBalanceScreen>
                                     fontWeight: FontWeight.bold),
                               ),
                               subtitle: Text(
-                                payment['date']?.toString().substring(0, 10) ??
-                                    '',
+                                _formatDateTime(payment),
                               ),
                               trailing:
                                   const Icon(Icons.arrow_forward_ios, size: 16),
