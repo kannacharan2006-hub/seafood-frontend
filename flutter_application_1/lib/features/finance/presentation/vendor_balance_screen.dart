@@ -397,20 +397,6 @@ class _VendorBalanceScreenState extends State<VendorBalanceScreen>
                 _showEditVendorDialog(context, vendor);
               },
             ),
-            if (vendor['phone'] != null &&
-                vendor['phone'].toString().isNotEmpty)
-              ListTile(
-                leading: const Icon(Icons.phone, color: Colors.green),
-                title: const Text("Copy Phone Number"),
-                onTap: () {
-                  Clipboard.setData(
-                      ClipboardData(text: vendor['phone'].toString()));
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Phone copied: ${vendor['phone']}")),
-                  );
-                },
-              ),
           ],
         ),
       ),
