@@ -254,7 +254,8 @@ class _VendorBalanceScreenState extends State<VendorBalanceScreen>
 
                   Expanded(
                     child: InkWell(
-                      onTap: () => _showVendorOptions(context, vendor),
+                      onTap: () => _showVendorOptions(
+                          context, Map<String, dynamic>.from(vendor)),
                       child: ListTile(
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 16,
