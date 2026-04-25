@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../data/vendor_balance_service.dart';
+import 'vendor_purchases_screen.dart';
 
 class VendorBalanceScreen extends StatefulWidget {
   const VendorBalanceScreen({super.key});
@@ -363,6 +364,22 @@ class _VendorBalanceScreenState extends State<VendorBalanceScreen>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            ListTile(
+              leading: const Icon(Icons.receipt_long, color: Colors.blue),
+              title: const Text("View Purchases"),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => VendorPurchasesScreen(
+                      vendorId: vendor['id'].toString(),
+                      vendorName: vendor['name'] ?? '',
+                    ),
+                  ),
+                ).then((_) => _loadData());
+              },
+            ),
             ListTile(
               leading: const Icon(Icons.edit, color: Colors.blue),
               title: const Text("Edit Vendor"),

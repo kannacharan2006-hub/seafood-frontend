@@ -38,6 +38,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
   String currentVendorPhone = '';
   List<PurchaseItem> items = [PurchaseItem()];
   bool isSaving = false;
+  String selectedPaymentMode = 'CASH';
   final TextEditingController vendorNameController = TextEditingController();
   final TextEditingController vendorPhoneController = TextEditingController();
   final TextEditingController vendorAddressController = TextEditingController();
@@ -205,6 +206,10 @@ class _PurchaseScreenState extends State<PurchaseScreen>
         "vendor_id": int.parse(selectedVendor!),
         "date": DateTime.now().toString().split(' ')[0],
         "items": purchaseItems,
+        "payment_mode": selectedPaymentMode,
+        "payment_phone": editVendorPhoneController.text.isNotEmpty
+            ? editVendorPhoneController.text
+            : null,
       };
 
       await purchaseService.savePurchase(body);
@@ -419,6 +424,33 @@ class _PurchaseScreenState extends State<PurchaseScreen>
               prefixIcon: const Icon(Icons.phone, color: Colors.green),
             ),
             keyboardType: TextInputType.phone,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            "PAYMENT MODE",
+            style: TextStyle(
+              color: kSubtle,
+              fontSize: 11,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.5,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            children: ['CASH', 'UPI', 'BANK_TRANSFER'].map((mode) {
+              final isSelected = selectedPaymentMode == mode;
+              return ChoiceChip(
+                label: Text(mode.replaceAll('_', ' ')),
+                selected: isSelected,
+                onSelected: (selected) {
+                  if (selected) {
+                    setState(() => selectedPaymentMode = mode);
+                  }
+                },
+                selectedColor: Colors.blue.withValues(alpha: 0.2),
+              );
+            }).toList(),
           ),
         ],
       ],
