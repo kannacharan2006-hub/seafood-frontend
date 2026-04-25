@@ -12,8 +12,9 @@ class ConversionDetailsScreen extends StatelessWidget {
     final finalItems = conversion['final_items'] ?? [];
 
     String formattedDate = "Unknown Date";
-    if (conversion['date'] != null) {
-      DateTime parsedDate = DateTime.parse(conversion['date']).toLocal();
+    final dateStr = conversion['created_at'] ?? conversion['date'];
+    if (dateStr != null) {
+      DateTime parsedDate = DateTime.parse(dateStr.toString());
       formattedDate = DateFormat('dd MMM yyyy, hh:mm a').format(parsedDate);
     }
 
@@ -43,7 +44,9 @@ class ConversionDetailsScreen extends StatelessWidget {
             _buildItemsList(rawItems, isRaw: true),
 
             const SizedBox(height: 15),
-            const Center(child: Icon(Icons.arrow_downward, color: Colors.grey, size: 30)),
+            const Center(
+                child:
+                    Icon(Icons.arrow_downward, color: Colors.grey, size: 30)),
             const SizedBox(height: 15),
 
             // SECTION 2: Items Produced (FINAL)
@@ -53,7 +56,7 @@ class ConversionDetailsScreen extends StatelessWidget {
               color: Colors.green.shade700,
             ),
             _buildItemsList(finalItems, isRaw: false),
-            
+
             const SizedBox(height: 30),
           ],
         ),
@@ -77,23 +80,28 @@ class ConversionDetailsScreen extends StatelessWidget {
             children: [
               const Icon(Icons.calendar_today, size: 18, color: Colors.teal),
               const SizedBox(width: 10),
-              Text(date, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              Text(date,
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold)),
             ],
           ),
           const Divider(height: 25),
-          Text("Performed by: ${conversion['created_by'] ?? 'Unknown Staff'}", 
-               style: const TextStyle(fontSize: 15)),
+          Text("Performed by: ${conversion['created_by'] ?? 'Unknown Staff'}",
+              style: const TextStyle(fontSize: 15)),
           const SizedBox(height: 8),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("Notes: ", style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text("Notes: ",
+                  style: TextStyle(fontWeight: FontWeight.bold)),
               Expanded(
                 child: Text(
-                  conversion['notes'] == null || conversion['notes'].toString().isEmpty 
-                    ? "No notes added" 
-                    : conversion['notes'],
-                  style: TextStyle(color: Colors.grey.shade700, fontStyle: FontStyle.italic),
+                  conversion['notes'] == null ||
+                          conversion['notes'].toString().isEmpty
+                      ? "No notes added"
+                      : conversion['notes'],
+                  style: TextStyle(
+                      color: Colors.grey.shade700, fontStyle: FontStyle.italic),
                 ),
               ),
             ],
@@ -103,7 +111,8 @@ class ConversionDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader({required String title, required IconData icon, required Color color}) {
+  Widget _buildSectionHeader(
+      {required String title, required IconData icon, required Color color}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Row(
@@ -112,7 +121,8 @@ class ConversionDetailsScreen extends StatelessWidget {
           const SizedBox(width: 8),
           Text(
             title.toUpperCase(),
-            style: TextStyle(color: color, fontWeight: FontWeight.bold, letterSpacing: 1.1),
+            style: TextStyle(
+                color: color, fontWeight: FontWeight.bold, letterSpacing: 1.1),
           ),
         ],
       ),
@@ -150,9 +160,9 @@ class ConversionDetailsScreen extends StatelessWidget {
               child: Text(
                 "Qty: ${item['quantity']}",
                 style: TextStyle(
-                  fontWeight: FontWeight.bold, 
-                  color: isRaw ? Colors.orange.shade900 : Colors.green.shade900
-                ),
+                    fontWeight: FontWeight.bold,
+                    color:
+                        isRaw ? Colors.orange.shade900 : Colors.green.shade900),
               ),
             ),
           ),
