@@ -93,15 +93,22 @@ class WebSocketService {
       _channel!.stream.listen(
         _onMessage,
         onError: (error) {
-          _onError(error);
+          _isConnected = false;
+          _isConnecting = false;
+          _scheduleReconnect();
         },
-        onDone: _onDone,
+        onDone: () {
+          _isConnected = false;
+          _isConnecting = false;
+          _scheduleReconnect();
+        },
         cancelOnError: false,
       );
 
       _startHeartbeat();
     } catch (e) {
       _isConnecting = false;
+      _scheduleReconnect();
     }
   }
 
