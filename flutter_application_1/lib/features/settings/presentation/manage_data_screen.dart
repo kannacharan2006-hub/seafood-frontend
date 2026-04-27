@@ -344,11 +344,10 @@ class _ManageDataScreenState extends State<ManageDataScreen>
                     {'name': nameController.text});
                 _loadData();
               } catch (e) {
-                if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Error: $e')),
-                  );
-                }
+                if (!mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Error: $e')),
+                );
               }
             },
             child: const Text('Save'),
@@ -363,7 +362,7 @@ class _ManageDataScreenState extends State<ManageDataScreen>
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete?'),
-        content: Text('Are you sure you want to delete this ${type}?'),
+        content: Text('Are you sure you want to delete this $type?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
