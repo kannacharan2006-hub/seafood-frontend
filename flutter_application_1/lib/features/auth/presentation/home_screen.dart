@@ -409,10 +409,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _initWebSocket() {
-    if (widget.companyId != null) {
-      _wsService.connectWithCompany(widget.companyId!);
-      _wsSubscription = _wsService.messages?.listen(_handleWebSocketMessage);
-    }
+    // WebSocket disabled for simpler app
+    // Real-time features work with manual refresh only
   }
 
   void _handleWebSocketMessage(WebSocketMessage message) {
@@ -469,8 +467,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    _wsSubscription?.cancel();
-    _wsService.disconnectAndClear();
     super.dispose();
   }
 
