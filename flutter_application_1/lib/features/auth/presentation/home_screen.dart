@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutter_application_1/services/secure_storage.dart';
-import 'package:flutter_application_1/services/websocket_service.dart';
 import 'package:flutter_application_1/services/notification_service.dart';
 
 import 'package:flutter_application_1/features/auth/presentation/login_screen.dart';

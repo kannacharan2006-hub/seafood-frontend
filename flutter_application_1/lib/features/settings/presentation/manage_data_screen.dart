@@ -301,13 +301,10 @@ class _ManageDataScreenState extends State<ManageDataScreen>
                 }
                 _loadData();
               } catch (e) {
-                if (!mounted) return;
-                var messenger = ScaffoldMessenger.of(context);
-                if (mounted) {
-                  messenger.showSnackBar(
-                    SnackBar(content: Text('Error: $e')),
-                  );
-                }
+                if (!mounted || !context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Error: $e')),
+                );
               }
             },
             child: const Text('Add'),
@@ -346,7 +343,7 @@ class _ManageDataScreenState extends State<ManageDataScreen>
                     {'name': nameController.text});
                 _loadData();
               } catch (e) {
-                if (!mounted) return;
+                if (!mounted || !context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Error: $e')),
                 );
