@@ -102,7 +102,6 @@ class WebSocketService {
       _startHeartbeat();
     } catch (e) {
       _isConnecting = false;
-      _scheduleReconnect();
     }
   }
 
@@ -201,19 +200,11 @@ class WebSocketService {
   void _onError(dynamic error) {
     _isConnected = false;
     _isConnecting = false;
-    _messageController?.add(WebSocketMessage(
-      event: WebSocketEvent.error,
-      message: error.toString(),
-    ));
-    _scheduleReconnect();
   }
 
   void _onDone() {
     _isConnected = false;
     _isConnecting = false;
-    _messageController
-        ?.add(WebSocketMessage(event: WebSocketEvent.disconnected));
-    _scheduleReconnect();
   }
 
   void _startHeartbeat() {
