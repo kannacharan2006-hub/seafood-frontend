@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/config/api.dart';
-import 'package:flutter_application_1/config/app_config.dart';
 
 class ManageDataScreen extends StatefulWidget {
   const ManageDataScreen({super.key});
