@@ -22,7 +22,8 @@ class Api {
   static Future<String> _refreshToken() async {
     final refreshToken = await SecureStorage.getRefreshToken();
     if (refreshToken == null) {
-      throw Exception("No refresh token");
+      await _logout();
+      throw Exception("Session expired. Please login again.");
     }
 
     try {
@@ -42,11 +43,11 @@ class Api {
         return newToken;
       } else {
         await _logout();
-        throw Exception("Session expired");
+        throw Exception("Session expired. Please login again.");
       }
     } catch (e) {
       await _logout();
-      throw Exception("Session expired");
+      throw Exception("Session expired. Please login again.");
     }
   }
 
