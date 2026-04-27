@@ -492,7 +492,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                               color: Colors.white, size: 24),
                           SizedBox(width: 10),
                           Text(
-                            "This Month Profit",
+                            "Last Month Profit",
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
