@@ -36,7 +36,7 @@ class ExportService {
   }
 
   Future<List<dynamic>> getVariants(String itemId) async {
-    final data = await Api.get("/api/variants/$itemId");
+    final data = await Api.get("/api/variants/by-item/$itemId");
     return List<dynamic>.from(data["data"]);
   }
 

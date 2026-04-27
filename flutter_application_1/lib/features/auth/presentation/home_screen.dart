@@ -23,6 +23,7 @@ import 'package:flutter_application_1/features/finance/presentation/vendor_payme
 
 import 'package:flutter_application_1/features/stock/presentation/stock_screen.dart';
 import 'package:flutter_application_1/features/company/presentation/manage_employees_screen.dart';
+import 'package:flutter_application_1/features/settings/presentation/manage_data_screen.dart';
 import 'package:flutter_application_1/features/settings/presentation/language_settings_screen.dart';
 import 'package:flutter_application_1/services/localization_service.dart';
 
@@ -675,6 +676,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (_) => const ManageEmployeesScreen(),
+                          ),
+                        );
+                      }),
+                      _drawerItem(Icons.storage, "Manage Data", () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const ManageDataScreen(),
                           ),
                         );
                       }),

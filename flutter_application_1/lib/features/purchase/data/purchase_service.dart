@@ -17,7 +17,7 @@ class PurchaseService {
   }
 
   Future<List<Map<String, dynamic>>> fetchVariants(String itemId) async {
-    final data = await Api.get("/api/variants/$itemId");
+    final data = await Api.get("/api/variants/by-item/$itemId");
     return List<Map<String, dynamic>>.from(data["data"]);
   }
 
