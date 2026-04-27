@@ -301,8 +301,10 @@ class _ManageDataScreenState extends State<ManageDataScreen>
                 }
                 _loadData();
               } catch (e) {
+                if (!mounted) return;
+                var messenger = ScaffoldMessenger.of(context);
                 if (mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  messenger.showSnackBar(
                     SnackBar(content: Text('Error: $e')),
                   );
                 }

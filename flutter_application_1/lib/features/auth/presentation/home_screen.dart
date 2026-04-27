@@ -382,8 +382,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  final WebSocketService _wsService = WebSocketService();
-  StreamSubscription<WebSocketMessage>? _wsSubscription;
 
   List<String> get _titles => [
         AppLocalizations.dashboard,
@@ -413,57 +411,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // Real-time features work with manual refresh only
   }
 
-  void _handleWebSocketMessage(WebSocketMessage message) {
-    if (!mounted) return;
-
-    final notificationTitle = switch (message.event) {
-      WebSocketEvent.stockUpdate => AppLocalizations.stock,
-      WebSocketEvent.stockChanged => AppLocalizations.stock,
-      WebSocketEvent.purchaseCreated => AppLocalizations.purchase,
-      WebSocketEvent.exportCreated => AppLocalizations.sales,
-      WebSocketEvent.conversionCreated => AppLocalizations.reGrading,
-      WebSocketEvent.paymentCreated => AppLocalizations.customers,
-      WebSocketEvent.dashboardRefresh => AppLocalizations.dashboard,
-      WebSocketEvent.authSuccess => AppLocalizations.login,
-      _ => null,
-    };
-
-    if (notificationTitle == null) return;
-
-    final notificationBody = switch (message.event) {
-      WebSocketEvent.stockUpdate => AppLocalizations.loading,
-      WebSocketEvent.stockChanged => AppLocalizations.noData,
-      WebSocketEvent.purchaseCreated => AppLocalizations.purchase,
-      WebSocketEvent.exportCreated => AppLocalizations.sales,
-      WebSocketEvent.conversionCreated => AppLocalizations.reGrading,
-      WebSocketEvent.paymentCreated => AppLocalizations.customers,
-      WebSocketEvent.dashboardRefresh => AppLocalizations.dashboard,
-      WebSocketEvent.authSuccess => AppLocalizations.success,
-      _ => null,
-    };
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              notificationTitle,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            if (notificationBody != null)
-              Text(
-                notificationBody,
-                style: const TextStyle(fontSize: 12),
-              ),
-          ],
-        ),
-        backgroundColor: const Color(0xFF10B981),
-        duration: const Duration(seconds: 3),
-      ),
-    );
-  }
+  // ignore: used_by_scoped_code
 
   @override
   void dispose() {

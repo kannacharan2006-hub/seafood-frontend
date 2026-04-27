@@ -204,11 +204,13 @@ class WebSocketService {
     }
   }
 
+  // ignore: used_by_scoped_code
   void _onError(dynamic error) {
     _isConnected = false;
     _isConnecting = false;
   }
 
+  // ignore: used_by_scoped_code
   void _onDone() {
     _isConnected = false;
     _isConnecting = false;
