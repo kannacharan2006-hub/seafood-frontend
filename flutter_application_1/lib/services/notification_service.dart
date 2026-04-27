@@ -13,9 +13,7 @@ class NotificationService {
   ];
 
   static final List<String> _eveningNotifications = [
-    
     "!, మీ రోజు బిజినెస్ ఫలితం చూడండి 📊",
-
     "!, మీ లెక్కలు మీ కోసం సిద్ధంగా ఉన్నాయి 📈",
     "!, మీ స్నేహితులతో షేర్ చేయండి 👍",
     "!, ఈరోజు స్టాక్ ఎంత మిగిలిందో చూడండి 📦",
@@ -55,6 +53,7 @@ class NotificationService {
   }
 
   static void _showSnackBar(BuildContext context, String message) {
+    if (!context.mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -66,13 +65,6 @@ class NotificationService {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         margin: const EdgeInsets.all(16),
         duration: const Duration(seconds: 4),
-        action: SnackBarAction(
-          label: 'OK',
-          textColor: Colors.white,
-          onPressed: () {
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          },
-        ),
       ),
     );
   }
