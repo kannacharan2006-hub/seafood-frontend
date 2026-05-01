@@ -11,8 +11,8 @@ class ExportService {
     return data;
   }
 
-  Future<List<dynamic>> getExports() async {
-    final data = await Api.get("/api/exports");
+  Future<List<dynamic>> getExports({int page = 1, int limit = 20}) async {
+    final data = await Api.get("/api/exports?page=$page&limit=$limit");
     return List<dynamic>.from(data["data"] ?? []);
   }
 
@@ -21,22 +21,26 @@ class ExportService {
   }
 
   Future<List<dynamic>> getCustomers() async {
-    final data = await Api.get("/api/customers");
+    final data =
+        await Api.get("/api/customers", cacheTtl: const Duration(minutes: 30));
     return List<dynamic>.from(data["data"]);
   }
 
   Future<List<dynamic>> getCategories() async {
-    final data = await Api.get("/api/categories");
+    final data =
+        await Api.get("/api/categories", cacheTtl: const Duration(minutes: 30));
     return List<dynamic>.from(data["data"]);
   }
 
   Future<List<dynamic>> getItems(String categoryId) async {
-    final data = await Api.get("/api/items/$categoryId");
+    final data = await Api.get("/api/items/$categoryId",
+        cacheTtl: const Duration(minutes: 15));
     return List<dynamic>.from(data["data"]);
   }
 
   Future<List<dynamic>> getVariants(String itemId) async {
-    final data = await Api.get("/api/variants/by-item/$itemId");
+    final data = await Api.get("/api/variants/by-item/$itemId",
+        cacheTtl: const Duration(minutes: 15));
     return List<dynamic>.from(data["data"]);
   }
 

@@ -2,13 +2,19 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../services/secure_storage.dart';
+import '../services/cache_service.dart';
 import 'app_config.dart';
 
 class Api {
   static String get baseUrl => AppConfig.baseUrl;
   static const Duration timeout = Duration(seconds: 30);
+  static Future<String>? _refreshingToken;
   static bool _isRefreshing = false;
-  static final List<Function()> _pendingRequests = [];
+  static bool _cacheEnabled = true;
+
+  static void setCacheEnabled(bool enabled) {
+    _cacheEnabled = enabled;
+  }
 
   static Future<Map<String, String>> _headers() async {
     String? token = await SecureStorage.getToken();
@@ -20,6 +26,26 @@ class Api {
   }
 
   static Future<String> _refreshToken() async {
+    if (_refreshingToken != null) {
+      return _refreshingToken!;
+    }
+
+    final completer = Completer<String>();
+    _refreshingToken = completer.future;
+
+    try {
+      final result = await _doRefreshToken();
+      completer.complete(result);
+      return result;
+    } catch (e) {
+      completer.completeError(e);
+      rethrow;
+    } finally {
+      _refreshingToken = null;
+    }
+  }
+
+  static Future<String> _doRefreshToken() async {
     final refreshToken = await SecureStorage.getRefreshToken();
     if (refreshToken == null) {
       await _logout();
@@ -77,10 +103,16 @@ class Api {
     String endpoint, {
     Map<String, dynamic>? body,
     bool retry = true,
+    Duration? cacheTtl,
   }) async {
     try {
       final uri = Uri.parse("$baseUrl$endpoint");
       http.Response response;
+
+      if (method == "GET" && _cacheEnabled && cacheTtl != null) {
+        final cached = await CacheService.get(endpoint);
+        if (cached != null) return cached;
+      }
 
       switch (method) {
         case "POST":
@@ -109,39 +141,39 @@ class Api {
           try {
             await _refreshToken();
             _isRefreshing = false;
-            for (final callback in _pendingRequests) {
-              callback();
-            }
-            _pendingRequests.clear();
             return _request(method, endpoint, body: body, retry: false);
           } catch (e) {
             _isRefreshing = false;
-            _pendingRequests.clear();
             rethrow;
           }
         } else {
-          final completer = Completer<dynamic>();
-          _pendingRequests.add(() async {
-            try {
-              final result =
-                  await _request(method, endpoint, body: body, retry: true);
-              completer.complete(result);
-            } catch (e) {
-              completer.completeError(e);
-            }
-          });
-          return completer.future;
+          await _refreshingToken;
+          return _request(method, endpoint, body: body, retry: false);
         }
       }
 
-      return _handleResponse(response);
+      final result = _handleResponse(response);
+
+      if (method == "GET" &&
+          _cacheEnabled &&
+          cacheTtl != null &&
+          response.statusCode >= 200 &&
+          response.statusCode < 300) {
+        await CacheService.set(endpoint, result, ttl: cacheTtl);
+      }
+
+      if (method == "POST" || method == "PUT" || method == "DELETE") {
+        await CacheService.invalidatePrefix(endpoint.split('?').first);
+      }
+
+      return result;
     } catch (e) {
       rethrow;
     }
   }
 
-  static Future<dynamic> get(String endpoint) {
-    return _request("GET", endpoint);
+  static Future<dynamic> get(String endpoint, {Duration? cacheTtl}) {
+    return _request("GET", endpoint, cacheTtl: cacheTtl);
   }
 
   static Future<dynamic> post(String endpoint, Map<String, dynamic> body) {
@@ -178,9 +210,30 @@ class Api {
 
     String? message;
     if (data is Map) {
-      message = data["message"] ?? data["Message"];
+      message = data["message"] ?? data["Message"] ?? data["error"];
     }
-    throw Exception(message ?? "Request failed");
+
+    final errorMsg = message ?? _getDefaultErrorMessage(response.statusCode);
+    throw Exception(errorMsg);
+  }
+
+  static String _getDefaultErrorMessage(int statusCode) {
+    switch (statusCode) {
+      case 400:
+        return 'Invalid request. Please check your input.';
+      case 403:
+        return 'You do not have permission to perform this action.';
+      case 404:
+        return 'The requested resource was not found.';
+      case 429:
+        return 'Too many requests. Please wait a moment and try again.';
+      case 500:
+      case 502:
+      case 503:
+        return 'Server error. Please try again later.';
+      default:
+        return 'Request failed with status $statusCode';
+    }
   }
 
   static Future<void> logout() async {

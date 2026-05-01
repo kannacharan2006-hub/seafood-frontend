@@ -87,7 +87,7 @@ class ExportDetailsScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: kSuccess.withValues(alpha: 0.1),
+              color: kSuccess.withAlpha((0.1 * 255).round()),
               borderRadius: BorderRadius.circular(100),
             ),
             child: Row(
@@ -149,7 +149,7 @@ class ExportDetailsScreen extends StatelessWidget {
           Text(
             exportData['invoice_no'] ?? 'ID: INV-0000',
             style: GoogleFonts.plusJakartaSans(
-              color: kTextLight.withValues(alpha: 0.6),
+              color: kTextLight.withAlpha((0.6 * 255).round()),
               fontSize: 12,
               fontWeight: FontWeight.w600,
             ),
@@ -167,7 +167,7 @@ class ExportDetailsScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: kTextDark.withValues(alpha: 0.04),
+            color: kTextDark.withAlpha((0.04 * 255).round()),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),

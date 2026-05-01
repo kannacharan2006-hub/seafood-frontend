@@ -26,6 +26,10 @@ class AppDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textColor =
+        Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -33,10 +37,10 @@ class AppDropdown extends StatelessWidget {
           children: [
             Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 14,
-                color: Color(0xFF3C3C43),
+                color: textColor,
               ),
             ),
             if (isRequired)
@@ -52,12 +56,12 @@ class AppDropdown extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: const Color(0xFFE8E8E8),
+              color: Colors.grey[300]!,
               width: 1,
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.03),
+                color: Colors.black.withAlpha((0.03 * 255).round()),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -76,13 +80,14 @@ class AppDropdown extends StatelessWidget {
                     fontSize: 15,
                   ),
                 ),
-                icon: const Icon(
+                icon: Icon(
                   Icons.keyboard_arrow_down_rounded,
-                  color: Color(0xFF2563EB),
+                  color: colorScheme.primary,
                 ),
                 underline: const SizedBox(),
                 borderRadius: BorderRadius.circular(12),
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 items: items.map((String item) {
                   return DropdownMenuItem<String>(
                     value: item,
@@ -92,16 +97,16 @@ class AppDropdown extends StatelessWidget {
                           Icon(
                             prefixIcon,
                             size: 18,
-                            color: const Color(0xFF2563EB),
+                            color: colorScheme.primary,
                           ),
                           const SizedBox(width: 8),
                         ],
                         Expanded(
                           child: Text(
                             item,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 15,
-                              color: Color(0xFF1A1A1A),
+                              color: textColor,
                             ),
                           ),
                         ),
@@ -111,7 +116,7 @@ class AppDropdown extends StatelessWidget {
                 }).toList(),
                 onChanged: enabled ? onChanged : null,
                 dropdownColor: Colors.white,
-                focusColor: const Color(0xFFF1F5F9),
+                focusColor: colorScheme.primary.withAlpha((0.1 * 255).round()),
               ),
             ),
           ),
@@ -151,6 +156,10 @@ class AppDropdownWithSearch<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textColor =
+        Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -158,10 +167,10 @@ class AppDropdownWithSearch<T> extends StatelessWidget {
           children: [
             Text(
               label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 14,
-                color: Color(0xFF3C3C43),
+                color: textColor,
               ),
             ),
             if (isRequired)
@@ -178,7 +187,7 @@ class AppDropdownWithSearch<T> extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
+                color: Colors.black.withAlpha((0.05 * 255).round()),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -189,25 +198,26 @@ class AppDropdownWithSearch<T> extends StatelessWidget {
             isExpanded: true,
             isDense: false,
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: Color(0xFFE8E8E8)),
+                borderSide: BorderSide(color: Colors.grey[300]!),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: Color(0xFFE8E8E8)),
+                borderSide: BorderSide(color: Colors.grey[300]!),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: Color(0xFF2563EB), width: 1.5),
+                borderSide: BorderSide(color: colorScheme.primary, width: 1.5),
               ),
               errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: const BorderSide(color: Colors.red),
               ),
               prefixIcon: prefixIcon != null
-                  ? Icon(prefixIcon, color: const Color(0xFF2563EB), size: 20)
+                  ? Icon(prefixIcon, color: colorScheme.primary, size: 20)
                   : null,
               hintText: hint,
               hintStyle: TextStyle(color: Colors.grey[400]),
@@ -218,18 +228,18 @@ class AppDropdownWithSearch<T> extends StatelessWidget {
               hint,
               style: TextStyle(color: Colors.grey[400]),
             ),
-            icon: const Icon(
+            icon: Icon(
               Icons.keyboard_arrow_down_rounded,
-              color: Color(0xFF2563EB),
+              color: colorScheme.primary,
             ),
             items: items.map((T item) {
               return DropdownMenuItem<T>(
                 value: item,
                 child: Text(
                   itemAsString?.call(item) ?? item.toString(),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 15,
-                    color: Color(0xFF1A1A1A),
+                    color: textColor,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -268,15 +278,19 @@ class OptimizedDropdown<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textColor =
+        Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 14,
-            color: Color(0xFF3C3C43),
+            color: textColor,
           ),
         ),
         const SizedBox(height: 8),
@@ -285,7 +299,7 @@ class OptimizedDropdown<T> extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: errorText != null ? Colors.red : const Color(0xFFE8E8E8),
+              color: errorText != null ? Colors.red : Colors.grey[300]!,
             ),
           ),
           child: isLoading
@@ -306,9 +320,9 @@ class OptimizedDropdown<T> extends StatelessWidget {
                       value: value,
                       isExpanded: true,
                       underline: const SizedBox(),
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.arrow_drop_down_circle_outlined,
-                        color: Color(0xFF2563EB),
+                        color: colorScheme.primary,
                       ),
                       borderRadius: BorderRadius.circular(12),
                       padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -321,14 +335,17 @@ class OptimizedDropdown<T> extends StatelessWidget {
                                 Icon(
                                   leadingIcon,
                                   size: 18,
-                                  color: const Color(0xFF64748B),
+                                  color: colorScheme.secondary,
                                 ),
                                 const SizedBox(width: 8),
                               ],
                               Expanded(
                                 child: Text(
                                   itemLabel(item),
-                                  style: const TextStyle(fontSize: 15),
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: textColor,
+                                  ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ),

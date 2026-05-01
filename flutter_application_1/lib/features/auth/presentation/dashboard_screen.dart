@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../data/dashboard_service.dart';
+import '../../../utils/error_handler.dart';
 
 class DashboardScreen extends StatefulWidget {
   final String? userName;
@@ -53,11 +54,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         dashboardData = {};
       });
 
-      if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text("Error: ${e.toString()}")));
-      }
+      ErrorHandler.showError(context, e, onRetry: loadDashboard);
     }
   }
 
@@ -152,7 +149,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "$greeting, ${widget.userName ?? "Charan"}",
+              "$greeting, ${widget.userName ?? ""}",
               style: GoogleFonts.plusJakartaSans(
                 fontWeight: FontWeight.w800,
                 fontSize: 18,
@@ -195,10 +192,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ],
         ),
-        Icon(
+            Icon(
           Icons.arrow_forward_ios_rounded,
           size: 14,
-          color: kSlate.withValues(alpha: 0.5),
+          color: kSlate.withAlpha((0.5 * 255).round()),
         ),
       ],
     );
@@ -249,7 +246,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
-            color: kSlateDark.withValues(alpha: 0.04),
+            color: kSlateDark.withAlpha((0.04 * 255).round()),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -264,7 +261,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.1),
+                  color: color.withAlpha((0.1 * 255).round()),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(icon, color: color, size: 18),
@@ -363,7 +360,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          kEmerald.withValues(alpha: 0.3),
+                          kEmerald.withAlpha((0.3 * 255).round()),
                           Colors.transparent
                         ],
                       ),
@@ -457,7 +454,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               height: 4,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: col.withValues(alpha: 0.1),
+                  color: col.withAlpha((0.1 * 255).round()),
                 borderRadius: BorderRadius.circular(2),
               ),
               child: FractionallySizedBox(
@@ -542,9 +539,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             margin: EdgeInsets.only(right: index == 2 ? 0 : 8),
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
             decoration: BoxDecoration(
-              color: kIndigo.withValues(alpha: 0.04),
+              color: kIndigo.withAlpha((0.04 * 255).round()),
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: kIndigo.withValues(alpha: 0.08)),
+              border: Border.all(color: kIndigo.withAlpha((0.08 * 255).round())),
             ),
             child: Column(
               children: [

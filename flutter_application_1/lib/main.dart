@@ -27,8 +27,29 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    AppLocalizations.changeNotifier.addListener(_onLocaleChanged);
+  }
+
+  void _onLocaleChanged() {
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    AppLocalizations.changeNotifier.removeListener(_onLocaleChanged);
+    super.dispose();
+  }
 
   Future<bool> checkLoginStatus() async {
     final token = await SecureStorage.getToken();
@@ -67,7 +88,8 @@ class MyApp extends StatelessWidget {
               future: getUserRole(),
               builder: (context, roleSnapshot) {
                 return HomeScreen(
-                  userName: "User",
+                  userName:
+                      "", // Will be fetched from secure storage in HomeScreen.initState
                   userRole: roleSnapshot.data ?? "EMPLOYEE",
                 );
               },

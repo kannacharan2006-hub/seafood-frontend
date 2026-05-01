@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_application_1/features/company/data/manage_employees_service.dart';
+import '../../../utils/error_handler.dart';
 
 class ManageEmployeesScreen extends StatefulWidget {
   const ManageEmployeesScreen({super.key});
@@ -21,13 +22,21 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
   }
 
   Future<void> loadEmployees() async {
-    final data = await ManageEmployeesService.getEmployees();
+    try {
+      final data = await ManageEmployeesService.getEmployees();
 
-    setState(() {
-      employees = data;
-      filteredEmployees = data;
-      loading = false;
-    });
+      if (!mounted) return;
+
+      setState(() {
+        employees = data;
+        filteredEmployees = data;
+        loading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => loading = false);
+      ErrorHandler.showError(context, e, onRetry: loadEmployees);
+    }
   }
 
   void searchEmployee(String value) {
@@ -51,12 +60,9 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
             child: const Text("Cancel"),
           ),
           ElevatedButton(
-            onPressed: () async {
+            onPressed: () {
               final navigator = Navigator.of(context);
-              await ManageEmployeesService.deleteEmployee(id);
-              if (!mounted) return;
-              navigator.pop();
-              loadEmployees();
+              _deleteEmployee(id, navigator);
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             child: const Text("Delete"),
@@ -66,11 +72,28 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
     );
   }
 
+  Future<void> _deleteEmployee(int id, NavigatorState navigator) async {
+    try {
+      await ManageEmployeesService.deleteEmployee(id);
+      if (!mounted) return;
+      navigator.pop();
+      loadEmployees();
+      if (mounted) {
+        ErrorHandler.showSuccess(context, "Employee deleted successfully");
+      }
+    } catch (e) {
+      if (!mounted) return;
+      navigator.pop();
+      if (mounted) {
+        ErrorHandler.showError(context, e);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
-
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -83,19 +106,16 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
           ),
         ),
       ),
-
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showAddEmployeeDialog(context),
         backgroundColor: const Color(0xFF2563EB),
         icon: const Icon(Icons.add),
         label: const Text("Add Employee"),
       ),
-
       body: loading
           ? const Center(child: CircularProgressIndicator())
           : Column(
               children: [
-
                 /// SEARCH
                 Padding(
                   padding: const EdgeInsets.all(16),
@@ -132,14 +152,13 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
                                 borderRadius: BorderRadius.circular(14),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.05),
+                                    color: Colors.black.withAlpha((0.05 * 255).round()),
                                     blurRadius: 8,
                                   )
                                 ],
                               ),
                               child: Row(
                                 children: [
-
                                   /// AVATAR
                                   const CircleAvatar(
                                     radius: 22,
@@ -159,7 +178,6 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-
                                         Text(
                                           emp['name'],
                                           style: GoogleFonts.montserrat(
@@ -167,9 +185,7 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
-
                                         const SizedBox(height: 2),
-
                                         Text(
                                           "ID: ${emp['id']}",
                                           style: TextStyle(
@@ -177,7 +193,6 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
                                             color: Colors.grey[600],
                                           ),
                                         ),
-
                                         if (emp['phone'] != null)
                                           Text(
                                             emp['phone'],
@@ -215,15 +230,12 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
                                   /// ACTIONS
                                   Row(
                                     children: [
-
                                       IconButton(
                                         icon: const Icon(Icons.edit,
-                                            size: 20,
-                                            color: Color(0xFF2563EB)),
+                                            size: 20, color: Color(0xFF2563EB)),
                                         onPressed: () =>
                                             _showEditEmployeeDialog(emp),
                                       ),
-
                                       IconButton(
                                         icon: const Icon(Icons.delete,
                                             size: 20, color: Colors.red),
@@ -253,28 +265,23 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text("Add Employee"),
         content: SingleChildScrollView(
           child: Column(
             children: [
-
               TextField(
                 controller: nameController,
                 decoration: const InputDecoration(labelText: "Name"),
               ),
-
               TextField(
                 controller: emailController,
                 decoration: const InputDecoration(labelText: "Email"),
               ),
-
               TextField(
                 controller: phoneController,
                 decoration: const InputDecoration(labelText: "Phone"),
               ),
-
               TextField(
                 controller: passwordController,
                 decoration: const InputDecoration(labelText: "Password"),
@@ -284,12 +291,10 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
           ),
         ),
         actions: [
-
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: const Text("Cancel"),
           ),
-
           ElevatedButton(
             onPressed: () async {
               await ManageEmployeesService.createEmployee(
@@ -320,23 +325,19 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text("Edit Employee"),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-
             TextField(
               controller: nameController,
               decoration: const InputDecoration(labelText: "Name"),
             ),
-
             TextField(
               controller: emailController,
               decoration: const InputDecoration(labelText: "Email"),
             ),
-
             TextField(
               controller: phoneController,
               decoration: const InputDecoration(labelText: "Phone"),
@@ -344,12 +345,10 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
           ],
         ),
         actions: [
-
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: const Text("Cancel"),
           ),
-
           ElevatedButton(
             onPressed: () async {
               await ManageEmployeesService.updateEmployee(

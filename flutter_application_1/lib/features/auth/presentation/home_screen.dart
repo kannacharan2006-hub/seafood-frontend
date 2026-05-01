@@ -68,9 +68,9 @@ class AboutAppScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         shape: BoxShape.circle,
-                        boxShadow: [
+                          boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.2),
+                            color: Colors.black.withAlpha((0.2 * 255).round()),
                             blurRadius: 20,
                           ),
                         ],
@@ -89,9 +89,9 @@ class AboutAppScreen extends StatelessWidget {
                             color: Colors.white)),
                     const SizedBox(height: 6),
                     Text("Seafood Trading ERP",
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.white.withValues(alpha: 0.9))),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white.withAlpha((0.9 * 255).round()))),
                     const SizedBox(height: 14),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -143,8 +143,8 @@ class AboutAppScreen extends StatelessWidget {
                         width: 50,
                         height: 50,
                         decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(12)),
+                          color: Colors.white.withAlpha((0.2 * 255).round()),
+                          borderRadius: BorderRadius.circular(12)),
                         child: const Icon(Icons.person,
                             color: Colors.white, size: 28),
                       ),
@@ -164,8 +164,8 @@ class AboutAppScreen extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 2),
                             decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.2),
-                                borderRadius: BorderRadius.circular(10)),
+                              color: Colors.white.withAlpha((0.2 * 255).round()),
+                              borderRadius: BorderRadius.circular(10)),
                             child: const Text("Full Stack Developer",
                                 style: TextStyle(
                                     fontSize: 10, color: Colors.white)),
@@ -236,8 +236,8 @@ class AboutAppScreen extends StatelessWidget {
   static Widget _buildBadge(String text) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.2),
+        decoration: BoxDecoration(
+          color: Colors.white.withAlpha((0.2 * 255).round()),
           borderRadius: BorderRadius.circular(12)),
       child: Text(text,
           style: const TextStyle(
@@ -253,10 +253,10 @@ class AboutAppScreen extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
-            BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 4)),
+                BoxShadow(
+                  color: Colors.black.withAlpha((0.05 * 255).round()),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4)),
           ]),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -286,8 +286,8 @@ class AboutAppScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-                color: const Color(0xFF667EEA).withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8)),
+              color: const Color(0xFF667EEA).withAlpha((0.1 * 255).round()),
+              borderRadius: BorderRadius.circular(8)),
             child: Icon(icon, size: 18, color: const Color(0xFF667EEA)),
           ),
           const SizedBox(width: 12),
@@ -314,8 +314,8 @@ class AboutAppScreen extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.2),
-            borderRadius: BorderRadius.circular(10)),
+          color: Colors.white.withAlpha((0.2 * 255).round()),
+          borderRadius: BorderRadius.circular(10)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -364,15 +364,15 @@ class AboutAppScreen extends StatelessWidget {
 }
 
 class HomeScreen extends StatefulWidget {
-  final String userName;
+  final String? userName;
   final int? companyId;
   final String? userRole;
 
   const HomeScreen({
     super.key,
-    required this.userName,
+    required this.userRole,
+    this.userName,
     this.companyId,
-    this.userRole,
   });
 
   @override
@@ -381,6 +381,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  String _userName = "";
 
   List<String> get _titles => [
         AppLocalizations.dashboard,
@@ -393,8 +394,19 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    _loadUserName();
     _initWebSocket();
     _showDailyNotifications();
+  }
+
+  Future<void> _loadUserName() async {
+    // Try to get user name from secure storage
+    final storedUserName = await SecureStorage.getData("user_name");
+    if (mounted && storedUserName != null) {
+      setState(() {
+        _userName = storedUserName;
+      });
+    }
   }
 
   void _showDailyNotifications() {
@@ -561,7 +573,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      widget.userName,
+                      _userName.isNotEmpty ? _userName : "",
                       style:
                           const TextStyle(color: Colors.white70, fontSize: 13),
                     ),
@@ -747,7 +759,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
       decoration: BoxDecoration(
-        color: Colors.grey.withValues(alpha: 0.05),
+        color: Colors.grey.withAlpha((0.05 * 255).round()),
         borderRadius: BorderRadius.circular(10),
       ),
       child: ListTile(

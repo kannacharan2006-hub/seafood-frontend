@@ -1,5 +1,6 @@
 import 'package:flutter_application_1/features/auth/data/reports_service.dart';
 import 'package:flutter/material.dart';
+import '../../../utils/error_handler.dart';
 
 class ReportsDashboard extends StatefulWidget {
   const ReportsDashboard({super.key});
@@ -77,9 +78,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
       });
     } catch (e) {
       if (!mounted) return;
-
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text("Error loading reports")));
+      ErrorHandler.showError(context, e, onRetry: loadReports);
     } finally {
       setState(() => loading = false);
     }
@@ -162,13 +161,13 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [statusColor, statusColor.withValues(alpha: 0.7)],
+          colors: [statusColor, statusColor.withAlpha((0.7 * 255).round())],
         ),
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
             blurRadius: 20,
-            color: statusColor.withValues(alpha: 0.3),
+            color: statusColor.withAlpha((0.3 * 255).round()),
           ),
         ],
       ),
@@ -178,11 +177,11 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
           Container(
             width: 90,
             height: 90,
-            decoration: BoxDecoration(
+              decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white.withValues(alpha: 0.2),
+              color: Colors.white.withAlpha((0.2 * 255).round()),
               border: Border.all(
-                color: Colors.white.withValues(alpha: 0.5),
+                color: Colors.white.withAlpha((0.5 * 255).round()),
                 width: 3,
               ),
             ),
@@ -201,7 +200,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                   Text(
                     "/ 100",
                     style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.8),
+                      color: Colors.white.withAlpha((0.8 * 255).round()),
                       fontSize: 11,
                     ),
                   ),
@@ -242,8 +241,8 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                 Text(
                   "Profit: ${profitMargin.toStringAsFixed(1)}% • Orders: $totalInvoices",
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.8),
-                    fontSize: 12,
+                    color: Colors.white.withAlpha((0.7 * 255).round()),
+                    fontSize: 11,
                   ),
                 ),
               ],
@@ -259,7 +258,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [color.withValues(alpha: 0.85), color],
+          colors: [color.withAlpha((0.85 * 255).round()), color],
         ),
         borderRadius: BorderRadius.circular(16),
       ),
@@ -352,9 +351,9 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(18),
                     boxShadow: [
-                      BoxShadow(
+                        BoxShadow(
                           blurRadius: 20,
-                          color: Colors.black.withValues(alpha: 0.08)),
+                          color: Colors.black.withAlpha((0.08 * 255).round())),
                     ],
                   ),
                   child: Column(
@@ -396,10 +395,10 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                             Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 4),
-                              decoration: BoxDecoration(
+                                decoration: BoxDecoration(
                                   color: _isYesterdayProfit
-                                      ? Colors.green.withValues(alpha: 0.1)
-                                      : Colors.red.withValues(alpha: 0.1),
+                                    ? Colors.green.withAlpha((0.1 * 255).round())
+                                    : Colors.red.withAlpha((0.1 * 255).round()),
                                   borderRadius: BorderRadius.circular(20)),
                               child: Text(
                                   '${yesterdayProfit['margin'] ?? 0}% margin',
@@ -420,8 +419,8 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                               child: Container(
                             padding: const EdgeInsets.all(14),
                             decoration: BoxDecoration(
-                                color: Colors.green.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(12)),
+                              color: Colors.green.withAlpha((0.1 * 255).round()),
+                              borderRadius: BorderRadius.circular(12)),
                             child: Column(children: [
                               const Icon(Icons.trending_up,
                                   color: Colors.green, size: 20),
@@ -442,8 +441,8 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                               child: Container(
                             padding: const EdgeInsets.all(14),
                             decoration: BoxDecoration(
-                                color: Colors.orange.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(12)),
+                              color: Colors.orange.withAlpha((0.1 * 255).round()),
+                              borderRadius: BorderRadius.circular(12)),
                             child: Column(children: [
                               const Icon(Icons.shopping_cart,
                                   color: Colors.orange, size: 20),
@@ -478,9 +477,9 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                     borderRadius: BorderRadius.circular(18),
                     boxShadow: [
                       BoxShadow(
-                        blurRadius: 20,
-                        color: Colors.indigo.withValues(alpha: 0.3),
-                      ),
+                          blurRadius: 20,
+                          color: Colors.indigo.withAlpha((0.3 * 255).round()),
+                        ),
                     ],
                   ),
                   child: Column(
@@ -510,7 +509,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                             Text(
                               "Gross Profit",
                               style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.8),
+                                color: Colors.white.withAlpha((0.8 * 255).round()),
                                 fontSize: 14,
                               ),
                             ),
@@ -528,7 +527,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 4),
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.2),
+                                color: Colors.white.withAlpha((0.2 * 255).round()),
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
@@ -553,7 +552,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                             child: Container(
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.15),
+                                color: Colors.white.withAlpha((0.15 * 255).round()),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Column(
@@ -586,7 +585,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                                     "${double.tryParse(profitAnalysis['kg_sold']?.toString() ?? '0')?.toStringAsFixed(0) ?? '0'} kg",
                                     style: TextStyle(
                                       color:
-                                          Colors.white.withValues(alpha: 0.7),
+                                          Colors.white.withAlpha((0.7 * 255).round()),
                                       fontSize: 11,
                                     ),
                                   ),
@@ -598,7 +597,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                           Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.2),
+                              color: Colors.white.withAlpha((0.2 * 255).round()),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: const Icon(Icons.compare_arrows,
@@ -609,7 +608,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                             child: Container(
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.15),
+                                color: Colors.white.withAlpha((0.15 * 255).round()),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Column(
@@ -642,7 +641,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                                     "${double.tryParse(profitAnalysis['kg_purchased']?.toString() ?? '0')?.toStringAsFixed(0) ?? '0'} kg",
                                     style: TextStyle(
                                       color:
-                                          Colors.white.withValues(alpha: 0.7),
+                                          Colors.white.withAlpha((0.7 * 255).round()),
                                       fontSize: 11,
                                     ),
                                   ),
@@ -677,9 +676,9 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        blurRadius: 10,
-                        color: Colors.black.withValues(alpha: 0.05),
-                      ),
+                          blurRadius: 10,
+                          color: Colors.black.withAlpha((0.05 * 255).round()),
+                        ),
                     ],
                   ),
                   child: ListView.separated(
@@ -693,7 +692,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
 
                       return ListTile(
                         leading: CircleAvatar(
-                          backgroundColor: Colors.indigo.withValues(alpha: 0.1),
+                          backgroundColor: Colors.indigo.withAlpha((0.1 * 255).round()),
                           child: Text(
                             "${index + 1}",
                             style: const TextStyle(
@@ -732,9 +731,9 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        blurRadius: 10,
-                        color: Colors.black.withValues(alpha: 0.05),
-                      ),
+                          blurRadius: 10,
+                          color: Colors.black.withAlpha((0.05 * 255).round()),
+                        ),
                     ],
                   ),
                   child: ListView.separated(
@@ -757,7 +756,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                         leading: Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: Colors.orange.withValues(alpha: 0.1),
+                            color: Colors.orange.withAlpha((0.1 * 255).round()),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: const Icon(
@@ -781,7 +780,7 @@ class _ReportsDashboardState extends State<ReportsDashboard> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 6, vertical: 2),
                               decoration: BoxDecoration(
-                                color: profitColor.withValues(alpha: 0.1),
+                                color: profitColor.withAlpha((0.1 * 255).round()),
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(

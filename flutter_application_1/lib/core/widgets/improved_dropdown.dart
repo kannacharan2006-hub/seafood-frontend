@@ -61,7 +61,7 @@ class ImprovedDropdownSearch<T> extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
+                color: Colors.black.withAlpha((0.04 * 255).round()),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -202,7 +202,7 @@ class ImprovedDropdownButton<T> extends StatelessWidget {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.03),
+                color: Colors.black.withAlpha((0.03 * 255).round()),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),

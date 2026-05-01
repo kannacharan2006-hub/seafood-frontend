@@ -1,55 +1,83 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'platform_storage.dart';
 
 class SecureStorage {
-  static const FlutterSecureStorage _storage = FlutterSecureStorage();
-
   static const String _tokenKey = "auth_token";
   static const String _refreshTokenKey = "refresh_token";
   static const String _sessionKey = "session_time";
 
   static Future<void> saveToken(String token) async {
-    await _storage.write(key: _tokenKey, value: token);
-    await _storage.write(
-      key: _sessionKey,
-      value: DateTime.now().millisecondsSinceEpoch.toString(),
+    final storage = await PlatformStorage.instance;
+    await storage.write(_tokenKey, token);
+    await storage.write(
+      _sessionKey,
+      DateTime.now().millisecondsSinceEpoch.toString(),
     );
   }
 
   static Future<void> saveRefreshToken(String refreshToken) async {
-    await _storage.write(key: _refreshTokenKey, value: refreshToken);
+    final storage = await PlatformStorage.instance;
+    await storage.write(_refreshTokenKey, refreshToken);
   }
 
   static Future<String?> getToken() async {
-    return await _storage.read(key: _tokenKey);
+    final storage = await PlatformStorage.instance;
+    final token = await storage.read(_tokenKey);
+    if (token == null) return null;
+
+    final sessionTimeStr = await storage.read(_sessionKey);
+    if (sessionTimeStr == null) return token;
+
+    final sessionTime = int.tryParse(sessionTimeStr);
+    if (sessionTime == null) return token;
+
+    final now = DateTime.now().millisecondsSinceEpoch;
+    const sessionDurationHours = 24;
+    final sessionDuration =
+        const Duration(hours: sessionDurationHours).inMilliseconds;
+
+    if (now - sessionTime > sessionDuration) {
+      await deleteToken();
+      await deleteRefreshToken();
+      return null;
+    }
+
+    return token;
   }
 
   static Future<String?> getRefreshToken() async {
-    return await _storage.read(key: _refreshTokenKey);
+    final storage = await PlatformStorage.instance;
+    return await storage.read(_refreshTokenKey);
   }
 
   static Future<bool> isLoggedIn() async {
-    final token = await _storage.read(key: _tokenKey);
+    final storage = await PlatformStorage.instance;
+    final token = await storage.read(_tokenKey);
     return token != null && token.isNotEmpty;
   }
 
   static Future<void> deleteToken() async {
-    await _storage.delete(key: _tokenKey);
-    await _storage.delete(key: _sessionKey);
+    final storage = await PlatformStorage.instance;
+    await storage.delete(_tokenKey);
+    await storage.delete(_sessionKey);
   }
 
   static Future<void> deleteRefreshToken() async {
-    await _storage.delete(key: _refreshTokenKey);
+    final storage = await PlatformStorage.instance;
+    await storage.delete(_refreshTokenKey);
   }
 
   static Future<void> clearAll() async {
-    await _storage.deleteAll();
+    final storage = await PlatformStorage.instance;
+    await storage.deleteAll();
   }
 
   static Future<void> saveData(String key, String value) async {
-    await _storage.write(key: key, value: value);
+    final storage = await PlatformStorage.instance;
+    await storage.write(key, value);
   }
 
   static Future<String?> getData(String key) async {
-    return await _storage.read(key: key);
+    final storage = await PlatformStorage.instance;
+    return await storage.read(key);
   }
 }

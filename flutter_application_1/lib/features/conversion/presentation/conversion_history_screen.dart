@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../conversion/data/conversion_service.dart';
 import 'conversion_details_screen.dart';
 import 'package:intl/intl.dart';
+import '../../../utils/error_handler.dart';
 
 class ConversionHistoryScreen extends StatefulWidget {
   const ConversionHistoryScreen({super.key});
@@ -39,6 +40,7 @@ class _ConversionHistoryScreenState extends State<ConversionHistoryScreen> {
     } catch (e) {
       if (!mounted) return;
       setState(() => isLoading = false);
+      ErrorHandler.showError(context, e, onRetry: loadData);
     }
   }
 
@@ -59,6 +61,7 @@ class _ConversionHistoryScreenState extends State<ConversionHistoryScreen> {
     } catch (e) {
       if (!mounted) return;
       setState(() => isLoadingMore = false);
+      ErrorHandler.showError(context, e);
     }
   }
 
@@ -84,8 +87,16 @@ class _ConversionHistoryScreenState extends State<ConversionHistoryScreen> {
 
     if (confirm == true) {
       setState(() => isLoading = true);
-      await _service.deleteConversion(id);
-      loadData();
+      try {
+        await _service.deleteConversion(id);
+        if (!mounted) return;
+        ErrorHandler.showSuccess(context, "Record deleted successfully");
+        loadData();
+      } catch (e) {
+        if (!mounted) return;
+        setState(() => isLoading = false);
+        ErrorHandler.showError(context, e);
+      }
     }
   }
 
@@ -140,14 +151,14 @@ class _ConversionHistoryScreenState extends State<ConversionHistoryScreen> {
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: [
                             BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.05),
-                                blurRadius: 5)
-                          ],
+                              color: Colors.black.withAlpha((0.05 * 255).round()),
+                              blurRadius: 5)
+                            ],
                         ),
                         child: ListTile(
                           contentPadding: const EdgeInsets.all(15),
                           leading: CircleAvatar(
-                            backgroundColor: Colors.teal.withValues(alpha: 0.1),
+                            backgroundColor: Colors.teal.withAlpha((0.1 * 255).round()),
                             child:
                                 const Icon(Icons.sync_alt, color: Colors.teal),
                           ),

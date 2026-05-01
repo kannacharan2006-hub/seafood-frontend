@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../data/auth_service.dart';
+import '../../../utils/error_handler.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -11,7 +12,6 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen>
     with SingleTickerProviderStateMixin {
-
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController companyController = TextEditingController();
@@ -19,7 +19,8 @@ class _RegisterScreenState extends State<RegisterScreen>
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   bool isLoading = false;
   bool _obscurePassword = true;
@@ -32,8 +33,8 @@ class _RegisterScreenState extends State<RegisterScreen>
   void initState() {
     super.initState();
 
-    _animationController =
-        AnimationController(vsync: this, duration: const Duration(milliseconds: 600));
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 600));
 
     _fadeAnimation =
         CurvedAnimation(parent: _animationController, curve: Curves.easeIn);
@@ -54,23 +55,16 @@ class _RegisterScreenState extends State<RegisterScreen>
   }
 
   Future<void> registerCompany() async {
-
     if (!_formKey.currentState!.validate()) return;
 
     if (passwordController.text != confirmPasswordController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Passwords do not match"),
-          backgroundColor: Colors.red,
-        ),
-      );
+      ErrorHandler.showError(context, "Passwords do not match");
       return;
     }
 
     setState(() => isLoading = true);
 
     try {
-
       final result = await AuthService.registerCompany(
         companyName: companyController.text,
         ownerName: ownerController.text,
@@ -81,25 +75,14 @@ class _RegisterScreenState extends State<RegisterScreen>
 
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(result['message']),
-          backgroundColor: Colors.green,
-        ),
-      );
-
+      ErrorHandler.showSuccess(
+          context, result['message'] ?? "Registration successful");
       Navigator.pop(context);
-
     } catch (e) {
-
       if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toString()),
-          backgroundColor: Colors.red,
-        ),
-      );
+      ErrorHandler.showError(context, e);
+    } finally {
+      if (mounted) setState(() => isLoading = false);
     }
 
     setState(() => isLoading = false);
@@ -107,35 +90,21 @@ class _RegisterScreenState extends State<RegisterScreen>
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: const Color(0xFFF5F7FA),
-
       body: FadeTransition(
         opacity: _fadeAnimation,
-
         child: SafeArea(
-
           child: Center(
-
             child: SingleChildScrollView(
-
               padding: const EdgeInsets.symmetric(horizontal: 24),
-
               child: ConstrainedBox(
-
                 constraints: const BoxConstraints(maxWidth: 420),
-
                 child: Form(
-
                   key: _formKey,
-
                   child: Column(
-
                     crossAxisAlignment: CrossAxisAlignment.start,
-
                     children: [
-
                       const SizedBox(height: 40),
 
                       /// TITLE
@@ -165,8 +134,9 @@ class _RegisterScreenState extends State<RegisterScreen>
                         hint: "Enter company name",
                         icon: Icons.business,
                         controller: companyController,
-                        validator: (value) =>
-                            value?.isEmpty ?? true ? "Company name required" : null,
+                        validator: (value) => value?.isEmpty ?? true
+                            ? "Company name required"
+                            : null,
                       ),
 
                       _buildTextField(
@@ -174,8 +144,9 @@ class _RegisterScreenState extends State<RegisterScreen>
                         hint: "Enter owner name",
                         icon: Icons.person,
                         controller: ownerController,
-                        validator: (value) =>
-                            value?.isEmpty ?? true ? "Owner name required" : null,
+                        validator: (value) => value?.isEmpty ?? true
+                            ? "Owner name required"
+                            : null,
                       ),
 
                       _buildTextField(
@@ -185,11 +156,9 @@ class _RegisterScreenState extends State<RegisterScreen>
                         controller: emailController,
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
-
                           if (value?.isEmpty ?? true) return "Email required";
 
-                          if (!RegExp(
-                                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                               .hasMatch(value!)) {
                             return "Enter valid email";
                           }
@@ -209,7 +178,6 @@ class _RegisterScreenState extends State<RegisterScreen>
                           LengthLimitingTextInputFormatter(10),
                         ],
                         validator: (value) {
-
                           if (value?.isEmpty ?? true) return "Phone required";
 
                           if (value!.length != 10) {
@@ -239,8 +207,9 @@ class _RegisterScreenState extends State<RegisterScreen>
                           },
                         ),
                         validator: (value) {
-
-                          if (value?.isEmpty ?? true) return "Password required";
+                          if (value?.isEmpty ?? true) {
+                            return "Password required";
+                          }
 
                           if (value!.length < 8) {
                             return "Minimum 8 characters";
@@ -270,7 +239,6 @@ class _RegisterScreenState extends State<RegisterScreen>
                           },
                         ),
                         validator: (value) {
-
                           if (value?.isEmpty ?? true) return "Confirm password";
 
                           if (value != passwordController.text) {
@@ -320,14 +288,11 @@ class _RegisterScreenState extends State<RegisterScreen>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-
                           Text(
                             "Already have an account?",
                             style: TextStyle(color: Colors.grey[600]),
                           ),
-
                           const SizedBox(width: 6),
-
                           GestureDetector(
                             onTap: () => Navigator.pop(context),
                             child: const Text(
@@ -338,12 +303,10 @@ class _RegisterScreenState extends State<RegisterScreen>
                               ),
                             ),
                           ),
-
                         ],
                       ),
 
                       const SizedBox(height: 20),
-
                     ],
                   ),
                 ),
@@ -366,16 +329,11 @@ class _RegisterScreenState extends State<RegisterScreen>
     Widget? suffixIcon,
     String? Function(String?)? validator,
   }) {
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
-
       child: Column(
-
         crossAxisAlignment: CrossAxisAlignment.start,
-
         children: [
-
           Text(
             label,
             style: const TextStyle(
@@ -383,42 +341,29 @@ class _RegisterScreenState extends State<RegisterScreen>
               fontSize: 14,
             ),
           ),
-
           const SizedBox(height: 8),
-
           TextFormField(
-
             controller: controller,
             keyboardType: keyboardType,
             obscureText: obscureText,
             inputFormatters: inputFormatters,
             validator: validator,
-
             decoration: InputDecoration(
-
               prefixIcon: Icon(icon, color: const Color(0xFF4CAF50)),
-
               suffixIcon: suffixIcon,
-
               hintText: hint,
-
               filled: true,
-
               fillColor: Colors.white,
-
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
                 borderSide: BorderSide(color: Colors.grey.shade300),
               ),
-
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
                 borderSide: BorderSide(color: Colors.grey.shade300),
               ),
-
               focusedBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(14)),
                 borderSide: BorderSide(

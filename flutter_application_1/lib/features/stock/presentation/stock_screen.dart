@@ -110,7 +110,7 @@ final groupedData = _groupByCategory(stock);
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 4),
                       decoration: BoxDecoration(
-                        color: Colors.blue.withValues(alpha: 0.1),
+                        color: Colors.blue.withAlpha((0.1 * 255).round()),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
@@ -145,7 +145,7 @@ final groupedData = _groupByCategory(stock);
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: Colors.black.withAlpha((0.03 * 255).round()),
             blurRadius: 8,
             offset: const Offset(0, 2),
           )

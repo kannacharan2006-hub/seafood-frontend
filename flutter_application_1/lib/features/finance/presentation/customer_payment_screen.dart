@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../data/payment_service.dart';
 import '../data/customer_service.dart';
+import '../../../utils/error_handler.dart';
 
 class CustomerPaymentScreen extends StatefulWidget {
   const CustomerPaymentScreen({super.key});
@@ -26,6 +27,8 @@ class _CustomerPaymentScreenState extends State<CustomerPaymentScreen> {
     try {
       final data = await CustomerService().fetchCustomers();
 
+      if (!mounted) return;
+
       setState(() {
         customers = data;
 
@@ -34,7 +37,8 @@ class _CustomerPaymentScreenState extends State<CustomerPaymentScreen> {
         }
       });
     } catch (e) {
-      // Handle error silently
+      if (!mounted) return;
+      ErrorHandler.showError(context, e, onRetry: fetchCustomers);
     }
   }
 
@@ -42,9 +46,7 @@ class _CustomerPaymentScreenState extends State<CustomerPaymentScreen> {
     if (selectedCustomerId == null) return;
 
     if (amountController.text.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Enter amount")));
+      ErrorHandler.showError(context, "Please enter amount");
       return;
     }
 
@@ -56,15 +58,11 @@ class _CustomerPaymentScreenState extends State<CustomerPaymentScreen> {
 
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Payment Saved Successfully")),
-      );
-
+      ErrorHandler.showSuccess(context, "Payment saved successfully");
       Navigator.pop(context);
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Failed to save payment")));
+      if (!mounted) return;
+      ErrorHandler.showError(context, e);
     }
   }
 
@@ -83,27 +81,22 @@ class _CustomerPaymentScreenState extends State<CustomerPaymentScreen> {
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(16),
-
         child: Column(
           children: [
             DropdownButtonFormField<String>(
               initialValue: customers.isEmpty ? null : selectedCustomerId,
-
               decoration: const InputDecoration(
                 labelText: "Select Customer",
                 border: OutlineInputBorder(),
               ),
-
               items: customers.map<DropdownMenuItem<String>>((customer) {
                 return DropdownMenuItem(
                   value: customer['id'].toString(),
                   child: Text(customer['name']),
                 );
               }).toList(),
-
               onChanged: (value) {
                 setState(() {
                   selectedCustomerId = value;
@@ -117,7 +110,6 @@ class _CustomerPaymentScreenState extends State<CustomerPaymentScreen> {
             TextField(
               controller: amountController,
               keyboardType: TextInputType.number,
-
               decoration: const InputDecoration(
                 labelText: "Payment Amount",
                 prefixText: "₹ ",
@@ -129,7 +121,6 @@ class _CustomerPaymentScreenState extends State<CustomerPaymentScreen> {
             /// NOTE
             TextField(
               controller: noteController,
-
               decoration: const InputDecoration(
                 labelText: "Note (Optional)",
                 border: OutlineInputBorder(),
@@ -142,15 +133,12 @@ class _CustomerPaymentScreenState extends State<CustomerPaymentScreen> {
             SizedBox(
               width: double.infinity,
               height: 50,
-
               child: ElevatedButton(
                 onPressed: savePayment,
-
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   foregroundColor: Colors.white,
                 ),
-
                 child: const Text(
                   "Save Payment",
                   style: TextStyle(fontSize: 18),

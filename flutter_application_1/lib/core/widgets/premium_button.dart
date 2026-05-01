@@ -48,7 +48,7 @@ class _PremiumButtonState extends State<PremiumButton> {
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: AppColors.accentEnd.withValues(alpha: 0.4),
+                color: AppColors.accentEnd.withAlpha((0.4 * 255).round()),
                 blurRadius: 24,
                 offset: const Offset(0, 10),
               ),

@@ -17,7 +17,8 @@ class ManageEmployeesService {
   }
 
   static Future<List<dynamic>> getEmployees() async {
-    final response = await Api.get("/api/users");
+    final response =
+        await Api.get("/api/users", cacheTtl: const Duration(minutes: 30));
     return List<dynamic>.from(response["data"]);
   }
 

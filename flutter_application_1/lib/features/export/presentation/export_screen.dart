@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'export_history_screen.dart';
 import '../data/export_service.dart';
+import '../../../utils/error_handler.dart';
 
 class ExportScreen extends StatefulWidget {
   const ExportScreen({super.key});
@@ -82,7 +83,8 @@ class _ExportScreenState extends State<ExportScreen>
         }
       });
     } catch (e) {
-      debugPrint("Customer fetch error: $e");
+      if (!mounted) return;
+      ErrorHandler.showError(context, e, onRetry: fetchCustomers);
     }
   }
 
@@ -99,12 +101,10 @@ class _ExportScreenState extends State<ExportScreen>
                 controller: nameController,
                 decoration: const InputDecoration(labelText: "Customer Name"),
               ),
-
               TextField(
                 controller: phoneController,
                 decoration: const InputDecoration(labelText: "Phone"),
               ),
-
               TextField(
                 controller: addressController,
                 decoration: const InputDecoration(labelText: "Address"),
@@ -116,7 +116,6 @@ class _ExportScreenState extends State<ExportScreen>
               onPressed: () => Navigator.pop(context),
               child: const Text("Cancel"),
             ),
-
             ElevatedButton(
               onPressed: () async {
                 final navigator = Navigator.of(context);
@@ -309,10 +308,10 @@ class _ExportScreenState extends State<ExportScreen>
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.03),
-                  blurRadius: 20,
-                  offset: const Offset(0, 10),
-                ),
+                    color: Colors.black.withAlpha((0.03 * 255).round()),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  ),
               ],
             ),
             child: Column(
@@ -322,20 +321,16 @@ class _ExportScreenState extends State<ExportScreen>
                     Expanded(
                       child: DropdownSearch<String>(
                         selectedItem: selectedCustomer,
-
                         items: customers
                             .map<String>((c) => c['id'].toString())
                             .toList(),
-
                         popupProps: const PopupProps.menu(showSearchBox: true),
-
                         dropdownDecoratorProps: DropDownDecoratorProps(
                           dropdownSearchDecoration: _inputDecoration(
                             "Customer",
                             Icons.person_rounded,
                           ),
                         ),
-
                         itemAsString: (id) {
                           final customer = customers.firstWhere(
                             (c) => c['id'].toString() == id,
@@ -343,7 +338,6 @@ class _ExportScreenState extends State<ExportScreen>
                           );
                           return customer['name'];
                         },
-
                         onChanged: (value) {
                           setState(() {
                             selectedCustomer = value;
@@ -351,9 +345,7 @@ class _ExportScreenState extends State<ExportScreen>
                         },
                       ),
                     ),
-
                     const SizedBox(width: 10),
-
                     IconButton(
                       icon: const Icon(
                         Icons.add_circle,
@@ -381,7 +373,7 @@ class _ExportScreenState extends State<ExportScreen>
                       vertical: 16,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.blueGrey.shade50.withValues(alpha: 0.5),
+                      color: Colors.blueGrey.shade50.withAlpha((0.5 * 255).round()),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(color: Colors.blueGrey.shade100),
                     ),
@@ -444,7 +436,7 @@ class _ExportScreenState extends State<ExportScreen>
               gradient: LinearGradient(
                 colors: [
                   theme.primaryColor,
-                  theme.primaryColor.withValues(alpha: 0.8),
+                  theme.primaryColor.withAlpha((0.8 * 255).round()),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -452,7 +444,7 @@ class _ExportScreenState extends State<ExportScreen>
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
-                  color: theme.primaryColor.withValues(alpha: 0.3),
+                  color: theme.primaryColor.withAlpha((0.3 * 255).round()),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -544,7 +536,7 @@ class _ExportScreenState extends State<ExportScreen>
         border: Border.all(color: Colors.white),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: Colors.black.withAlpha((0.03 * 255).round()),
             blurRadius: 15,
             offset: const Offset(0, 8),
           ),
@@ -555,8 +547,8 @@ class _ExportScreenState extends State<ExportScreen>
           // Item Header
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: Colors.blueGrey.shade50.withValues(alpha: 0.4),
+                    decoration: BoxDecoration(
+                      color: Colors.blueGrey.shade50.withAlpha((0.5 * 255).round()),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(24),
                 topRight: Radius.circular(24),
@@ -567,7 +559,7 @@ class _ExportScreenState extends State<ExportScreen>
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: theme.primaryColor.withValues(alpha: 0.1),
+                    color: theme.primaryColor.withAlpha((0.1 * 255).round()),
                     shape: BoxShape.circle,
                   ),
                   child: Text(
@@ -679,8 +671,8 @@ class _ExportScreenState extends State<ExportScreen>
                     ),
                     itemAsString: (id) =>
                         (variantsMap[item.itemId] ?? []).firstWhere(
-                          (v) => v['id'].toString() == id,
-                        )['variant_name'],
+                      (v) => v['id'].toString() == id,
+                    )['variant_name'],
                     onChanged: (value) =>
                         setState(() => item.variantId = value),
                   ),
@@ -729,7 +721,7 @@ class _ExportScreenState extends State<ExportScreen>
                     vertical: 12,
                   ),
                   decoration: BoxDecoration(
-                    color: theme.primaryColor.withValues(alpha: 0.06),
+                    color: theme.primaryColor.withAlpha((0.06 * 255).round()),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Row(
@@ -767,7 +759,7 @@ class _ExportScreenState extends State<ExportScreen>
       prefixIcon: Icon(icon, size: 20, color: Colors.blueGrey.shade400),
       labelStyle: TextStyle(fontSize: 14, color: Colors.blueGrey.shade600),
       filled: true,
-      fillColor: Colors.blueGrey.shade50.withValues(alpha: 0.3),
+      fillColor: Colors.blueGrey.shade50.withAlpha((0.3 * 255).round()),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),

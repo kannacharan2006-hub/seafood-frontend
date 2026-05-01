@@ -2,12 +2,14 @@ import '/config/api.dart';
 
 class StockService {
   Future<List<dynamic>> getRawStock() async {
-    final response = await Api.get("/api/stocks/raw-stock");
+    final response = await Api.get("/api/stocks/raw-stock",
+        cacheTtl: const Duration(minutes: 10));
     return List<dynamic>.from(response["data"]);
   }
 
   Future<List<dynamic>> getFinalStock() async {
-    final response = await Api.get("/api/stocks/final-stock");
+    final response = await Api.get("/api/stocks/final-stock",
+        cacheTtl: const Duration(minutes: 10));
     return List<dynamic>.from(response["data"]);
   }
 }

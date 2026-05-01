@@ -2,7 +2,8 @@ import '/config/api.dart';
 
 class VendorBalanceService {
   Future<List<dynamic>> fetchVendors() async {
-    final data = await Api.get("/api/vendors/vendors");
+    final data = await Api.get("/api/vendors/vendors",
+        cacheTtl: const Duration(minutes: 30));
     return List<dynamic>.from(data["data"]);
   }
 

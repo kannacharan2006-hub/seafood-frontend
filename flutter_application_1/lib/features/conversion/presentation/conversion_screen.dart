@@ -3,6 +3,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import '../../conversion/data/conversion_service.dart';
 import '../../purchase/data/purchase_service.dart';
 import '../presentation/conversion_history_screen.dart';
+import '../../../utils/error_handler.dart';
 
 class ConversionScreen extends StatefulWidget {
   const ConversionScreen({super.key});
@@ -45,6 +46,7 @@ class _ConversionScreenState extends State<ConversionScreen> {
     } catch (e) {
       if (!mounted) return;
       setState(() => isLoadingVariants = false);
+      ErrorHandler.showError(context, e, onRetry: loadVariants);
     }
   }
 
@@ -168,7 +170,8 @@ class _ConversionScreenState extends State<ConversionScreen> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
-          BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10),
+          BoxShadow(
+              color: Colors.black.withAlpha((0.05 * 255).round()), blurRadius: 10),
         ],
       ),
       child: Column(

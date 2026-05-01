@@ -5,6 +5,7 @@ import 'home_screen.dart';
 import 'forgot_password_screen.dart';
 import 'register_screen.dart';
 import '/utils/page_transition.dart';
+import '/utils/error_handler.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -57,36 +58,24 @@ class _LoginScreenState extends State<LoginScreen>
         _passwordController.text.trim(),
       );
 
-      final userName = result["user"]?["name"] ?? "User";
-      final companyId = result["user"]?["company_id"];
+      final userName = result["user"]?["name"] ?? "";
       final userRole = result["user"]?["role"] ?? "EMPLOYEE";
 
       if (!mounted) return;
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(result["message"] ?? "Login Successful"),
-          backgroundColor: Colors.green,
-        ),
-      );
+      ErrorHandler.showSuccess(
+          context, result["message"] ?? "Login Successful");
 
       Navigator.pushReplacement(
         context,
         PageTransition.slide(HomeScreen(
           userName: userName,
-          companyId: companyId,
           userRole: userRole,
         )),
       );
     } catch (e) {
       if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(e.toString().replaceAll("Exception: ", "")),
-          backgroundColor: Colors.red,
-        ),
-      );
+      ErrorHandler.showError(context, e);
     }
 
     if (mounted) {
@@ -123,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen>
                           boxShadow: [
                             BoxShadow(
                               color: const Color(0xFF2563EB)
-                                  .withValues(alpha: 0.15),
+                                  .withAlpha((0.15 * 255).round()),
                               blurRadius: 24,
                               offset: const Offset(0, 8),
                             ),
@@ -268,7 +257,7 @@ class _LoginScreenState extends State<LoginScreen>
                           boxShadow: [
                             BoxShadow(
                               color: const Color(0xFF2563EB)
-                                  .withValues(alpha: 0.3),
+                                  .withAlpha((0.3 * 255).round()),
                               blurRadius: 12,
                               offset: const Offset(0, 4),
                             ),
@@ -368,7 +357,7 @@ class _LoginScreenState extends State<LoginScreen>
             border: Border.all(color: const Color(0xFFE8E8E8)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.03),
+                color: Colors.black.withAlpha((0.03 * 255).round()),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),

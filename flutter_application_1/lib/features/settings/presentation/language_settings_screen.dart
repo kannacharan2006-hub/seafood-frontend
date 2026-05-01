@@ -21,13 +21,18 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
     await AppLocalizations.setLanguage(langCode);
     if (mounted) {
       Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Language changed'),
-          backgroundColor: Color(0xFF10B981),
-          duration: Duration(seconds: 2),
-        ),
-      );
+      // Show success message on the previous screen
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Language changed'),
+              backgroundColor: Color(0xFF10B981),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+      });
     }
   }
 
@@ -66,8 +71,8 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       decoration: BoxDecoration(
         color: isSelected
-            ? const Color(0xFF6366F1).withValues(alpha: 0.1)
-            : Colors.white,
+          ? const Color(0xFF6366F1).withAlpha((0.1 * 255).round())
+          : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isSelected ? const Color(0xFF6366F1) : Colors.grey.shade200,

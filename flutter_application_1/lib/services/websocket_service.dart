@@ -83,7 +83,15 @@ class WebSocketService {
     _isConnecting = true;
 
     try {
-      final wsUrl = Api.baseUrl.replaceFirst('http', 'ws');
+      final baseUrl = Api.baseUrl;
+      String wsUrl;
+      if (baseUrl.startsWith('https://')) {
+        wsUrl = baseUrl.replaceFirst('https://', 'wss://');
+      } else if (baseUrl.startsWith('http://')) {
+        wsUrl = baseUrl.replaceFirst('http://', 'ws://');
+      } else {
+        wsUrl = 'ws://$baseUrl';
+      }
       final uri = Uri.parse('$wsUrl/ws');
 
       _channel = WebSocketChannel.connect(uri);

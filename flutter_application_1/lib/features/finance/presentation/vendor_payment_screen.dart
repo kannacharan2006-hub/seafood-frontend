@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../data/vendor_balance_service.dart';
 import '../data/vendor_payment_service.dart';
+import '../../../utils/error_handler.dart';
 
 class VendorPaymentScreen extends StatefulWidget {
   const VendorPaymentScreen({super.key});
@@ -45,8 +46,7 @@ class _VendorPaymentScreenState extends State<VendorPaymentScreen> {
     } catch (e) {
       if (!mounted) return;
       setState(() => isLoadingVendors = false);
-
-      _showFeedback("Failed to load vendors", isError: true);
+      ErrorHandler.showError(context, e, onRetry: loadVendors);
     }
   }
 
@@ -81,14 +81,10 @@ class _VendorPaymentScreenState extends State<VendorPaymentScreen> {
         selectedVendorId = null;
         selectedVendorName = null;
       });
-
     } catch (e) {
-_showFeedback("Payment failed. Try again.", isError: true);
-
+      _showFeedback("Payment failed. Try again.", isError: true);
     } finally {
-
       setState(() => isSubmitting = false);
-
     }
   }
 
@@ -106,26 +102,22 @@ _showFeedback("Payment failed. Try again.", isError: true);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.check_circle,
-                color: Colors.green, size: 80),
+            const Icon(Icons.check_circle, color: Colors.green, size: 80),
             const SizedBox(height: 16),
             const Text(
               "Money Sent!",
-              style: TextStyle(
-                  fontSize: 22, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text("Successfully paid to $selectedVendorName"),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => Navigator.pop(context),
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
               child: const Text(
                 "OK",
                 style: TextStyle(color: Colors.white),
@@ -139,32 +131,24 @@ _showFeedback("Payment failed. Try again.", isError: true);
 
   @override
   Widget build(BuildContext context) {
-return Scaffold(
+    return Scaffold(
       backgroundColor: const Color(0xFFF3F5F7),
-
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
         title: const Text(
           "Give Money to Vendor",
-          style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         iconTheme: const IconThemeData(color: Colors.black),
       ),
-
       body: isLoadingVendors
           ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-
               padding: const EdgeInsets.all(20),
-
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-
                 children: [
-
                   /// STEP 1
                   const Row(
                     children: [
@@ -173,16 +157,14 @@ return Scaffold(
                         child: Text(
                           "1",
                           style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
+                              color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       ),
                       SizedBox(width: 12),
                       Text(
                         "Who are you paying?",
                         style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600),
+                            fontSize: 18, fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
@@ -190,59 +172,43 @@ return Scaffold(
                   const SizedBox(height: 16),
 
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12),
-
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: const [
-                        BoxShadow(
-                            color: Colors.black12, blurRadius: 10)
+                        BoxShadow(color: Colors.black12, blurRadius: 10)
                       ],
                     ),
-
                     child: DropdownButtonHideUnderline(
                       child: DropdownButtonFormField<String>(
                         initialValue: selectedVendorId,
-                        hint:
-                            const Text("Select vendor"),
-
+                        hint: const Text("Select vendor"),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                         ),
-
                         items: vendors.map((vendor) {
                           return DropdownMenuItem<String>(
                             value: vendor['id'].toString(),
-
                             child: Row(
                               children: [
-                                const Icon(Icons.person,
-                                    color: Colors.blue),
+                                const Icon(Icons.person, color: Colors.blue),
                                 const SizedBox(width: 10),
                                 Text(
                                   vendor['name'],
-                                  style:
-                                      const TextStyle(fontSize: 16),
+                                  style: const TextStyle(fontSize: 16),
                                 ),
                               ],
                             ),
                           );
                         }).toList(),
-
                         onChanged: (value) {
-
                           setState(() {
                             selectedVendorId = value;
 
-                            selectedVendorName =
-                                vendors.firstWhere(
-                              (v) =>
-                                  v['id'].toString() ==
-                                  value,
+                            selectedVendorName = vendors.firstWhere(
+                              (v) => v['id'].toString() == value,
                             )['name'];
-
                           });
                         },
                       ),
@@ -259,16 +225,14 @@ return Scaffold(
                         child: Text(
                           "2",
                           style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
+                              color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       ),
                       SizedBox(width: 12),
                       Text(
                         "How much money?",
                         style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600),
+                            fontSize: 18, fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),
@@ -280,22 +244,18 @@ return Scaffold(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: const [
-                        BoxShadow(
-                            color: Colors.black12, blurRadius: 10)
+                        BoxShadow(color: Colors.black12, blurRadius: 10)
                       ],
                     ),
-
                     child: TextField(
                       controller: amountController,
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
-
                       style: const TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
                         color: Colors.green,
                       ),
-
                       decoration: InputDecoration(
                         hintText: "0.00",
                         prefixIcon: const Icon(
@@ -303,16 +263,12 @@ return Scaffold(
                           color: Colors.green,
                           size: 30,
                         ),
-
                         border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(15),
                           borderSide: BorderSide.none,
                         ),
-
                         contentPadding:
-                            const EdgeInsets.symmetric(
-                                vertical: 20),
+                            const EdgeInsets.symmetric(vertical: 20),
                       ),
                     ),
                   ),
@@ -323,31 +279,23 @@ return Scaffold(
                   SizedBox(
                     width: double.infinity,
                     height: 65,
-
                     child: ElevatedButton(
-
-                      onPressed:
-                          isSubmitting ? null : submitPayment,
-
+                      onPressed: isSubmitting ? null : submitPayment,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue.shade700,
                         shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(15),
                         ),
                         elevation: 5,
                       ),
-
                       child: isSubmitting
                           ? const CircularProgressIndicator(
                               color: Colors.white,
                             )
                           : const Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.send,
-                                    color: Colors.white),
+                                Icon(Icons.send, color: Colors.white),
                                 SizedBox(width: 10),
                                 Text(
                                   "FINISH PAYMENT",
@@ -367,13 +315,12 @@ return Scaffold(
                   const Center(
                     child: Text(
                       "Double-check the vendor name and amount",
-                      style: TextStyle(
-                          color: Colors.grey, fontSize: 12),
+                      style: TextStyle(color: Colors.grey, fontSize: 12),
                     ),
                   )
                 ],
               ),
-          ),
-);
+            ),
+    );
   }
 }

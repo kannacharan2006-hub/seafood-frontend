@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../data/auth_service.dart';
 import 'login_screen.dart';
+import '../../../utils/error_handler.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -59,7 +60,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
 
     try {
       await AuthService.forgotPassword(_emailController.text.trim());
-      
+
       if (!mounted) return;
 
       setState(() {
@@ -67,12 +68,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
         _otpSent = true;
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("OTP sent to your email!"),
-          backgroundColor: Colors.green,
-        ),
-      );
+      ErrorHandler.showSuccess(context, "OTP sent to your email!");
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -179,7 +175,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFF2563EB).withValues(alpha: 0.3),
+                              color: const Color(0xFF2563EB)
+                                  .withAlpha((0.3 * 255).round()),
                               blurRadius: 20,
                               offset: const Offset(0, 10),
                             ),
@@ -194,13 +191,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                                 shape: BoxShape.circle,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.1),
+                                    color: Colors.black.withAlpha((0.1 * 255).round()),
                                     blurRadius: 15,
                                   )
                                 ],
                               ),
                               child: Icon(
-                                _otpSent ? Icons.lock_open_rounded : Icons.lock_reset_rounded,
+                                _otpSent
+                                    ? Icons.lock_open_rounded
+                                    : Icons.lock_reset_rounded,
                                 size: 50,
                                 color: const Color(0xFF2563EB),
                               ),
@@ -222,7 +221,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Colors.white.withValues(alpha: 0.8),
+                                color: Colors.white.withAlpha((0.8 * 255).round()),
                               ),
                             ),
                           ],
@@ -360,7 +359,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                         child: ElevatedButton(
                           onPressed: _isLoading
                               ? null
-                              : (_otpSent ? _handleResetPassword : _handleSendOtp),
+                              : (_otpSent
+                                  ? _handleResetPassword
+                                  : _handleSendOtp),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF2563EB),
                             shape: RoundedRectangleBorder(
@@ -391,6 +392,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                       const SizedBox(height: 20),
 
                       if (!_otpSent)
+
                         /// BACK TO LOGIN
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -420,6 +422,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                         ),
 
                       if (_otpSent)
+
                         /// BACK TO EMAIL ENTRY
                         Center(
                           child: TextButton.icon(
@@ -474,7 +477,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
             border: Border.all(color: const Color(0xFFE8E8E8)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.03),
+                color: Colors.black.withAlpha((0.03 * 255).round()),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -495,7 +498,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
               suffixIcon: suffixIcon,
               hintText: hint,
               hintStyle: TextStyle(color: Colors.grey[400], fontSize: 15),
-              contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,
