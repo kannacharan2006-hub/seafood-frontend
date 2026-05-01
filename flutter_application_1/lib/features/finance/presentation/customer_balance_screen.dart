@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../data/customer_service.dart';
 import '../data/customer_balance_service.dart';
 import '../data/payment_service.dart';
+import '../../../utils/error_handler.dart';
+import '../../../core/utils/date_format_util.dart';
 
 class CustomerBalanceScreen extends StatefulWidget {
   const CustomerBalanceScreen({super.key});
@@ -12,7 +13,6 @@ class CustomerBalanceScreen extends StatefulWidget {
 }
 
 class _CustomerBalanceScreenState extends State<CustomerBalanceScreen> {
-
   Future<Map<String, dynamic>>? futureBalance;
   String selectedCustomerId = "";
   List<dynamic> customers = [];
@@ -23,21 +23,14 @@ class _CustomerBalanceScreenState extends State<CustomerBalanceScreen> {
     fetchCustomers();
   }
 
-  String formatDate(String? dateStr) {
-    if (dateStr == null) return "-";
-    try {
-      DateTime dt = DateTime.parse(dateStr);
-      return DateFormat('dd MMM yyyy').format(dt);
-    } catch (e) {
-      return dateStr;
-    }
-  }
+  String formatDate(String? dateStr) =>
+      DateFormatUtil.formatDateDdMMMyyyy(dateStr);
 
   void loadBalance() {
     if (selectedCustomerId.isNotEmpty) {
       setState(() {
-        futureBalance = CustomerBalanceService()
-            .fetchCustomerBalance(selectedCustomerId);
+        futureBalance =
+            CustomerBalanceService().fetchCustomerBalance(selectedCustomerId);
       });
     }
   }
@@ -48,8 +41,7 @@ class _CustomerBalanceScreenState extends State<CustomerBalanceScreen> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         title: const Text("Receive Money"),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -59,9 +51,7 @@ class _CustomerBalanceScreenState extends State<CustomerBalanceScreen> {
             TextField(
               controller: amountController,
               keyboardType: TextInputType.number,
-              style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               decoration: const InputDecoration(
                 prefixText: "₹ ",
                 labelText: "Amount",
@@ -74,8 +64,7 @@ class _CustomerBalanceScreenState extends State<CustomerBalanceScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text("CANCEL",
-                style: TextStyle(color: Colors.grey)),
+            child: const Text("CANCEL", style: TextStyle(color: Colors.grey)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -85,19 +74,21 @@ class _CustomerBalanceScreenState extends State<CustomerBalanceScreen> {
             onPressed: () async {
               if (amountController.text.isEmpty) return;
 
-              await PaymentService().recordCustomerPayment(
-                selectedCustomerId,
-                amountController.text,
-              );
-if (mounted) {
-                Navigator.pop(context);
-                loadBalance();
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content:
-                          Text("Payment Saved Successfully")),
+              try {
+                await PaymentService().recordCustomerPayment(
+                  selectedCustomerId,
+                  amountController.text,
                 );
+                if (mounted) {
+                  Navigator.pop(context);
+                  loadBalance();
+                  ErrorHandler.showSuccess(
+                      context, "Payment saved successfully");
+                }
+              } catch (e) {
+                if (mounted) {
+                  ErrorHandler.showError(context, e);
+                }
               }
             },
             child: const Text("SAVE PAYMENT"),
@@ -109,7 +100,7 @@ if (mounted) {
 
   Future<void> fetchCustomers() async {
     try {
-        final data = await CustomerService().fetchCustomers();
+      final data = await CustomerService().fetchCustomers();
       if (!mounted) return;
       if (data.isNotEmpty) {
         setState(() {
@@ -120,6 +111,8 @@ if (mounted) {
       }
     } catch (e) {
       debugPrint("Error fetching customers: $e");
+      if (!mounted) return;
+      ErrorHandler.showError(context, e, onRetry: fetchCustomers);
     }
   }
 
@@ -127,16 +120,13 @@ if (mounted) {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7F6),
-
       appBar: AppBar(
         title: const Text("Customer Khata"),
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
       ),
-
       body: Column(
         children: [
-
           Container(
             padding: const EdgeInsets.all(16),
             color: Colors.white,
@@ -145,8 +135,8 @@ if (mounted) {
               decoration: InputDecoration(
                 labelText: "Select Customer Name",
                 prefixIcon: const Icon(Icons.person),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10)),
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
               ),
               items: customers.map<DropdownMenuItem<String>>((customer) {
                 return DropdownMenuItem<String>(
@@ -162,19 +152,16 @@ if (mounted) {
               },
             ),
           ),
-/// BALANCE SECTION
+
+          /// BALANCE SECTION
           Expanded(
             child: futureBalance == null
-                ? const Center(
-                    child: Text("Please select a customer"))
+                ? const Center(child: Text("Please select a customer"))
                 : FutureBuilder<Map<String, dynamic>>(
                     future: futureBalance,
                     builder: (context, snapshot) {
-
-                      if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return const Center(
-                            child: CircularProgressIndicator());
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
                       }
 
                       if (!snapshot.hasData) {
@@ -203,24 +190,20 @@ if (mounted) {
                       return ListView(
                         padding: const EdgeInsets.all(16),
                         children: [
-
                           /// STATUS CARD
                           Container(
                             padding: const EdgeInsets.all(20),
                             decoration: BoxDecoration(
                               color: statusColor,
-                              borderRadius:
-                                  BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(15),
                             ),
                             child: Column(
                               children: [
-                                Icon(statusIcon,
-                                    color: Colors.white, size: 40),
+                                Icon(statusIcon, color: Colors.white, size: 40),
                                 const SizedBox(height: 10),
                                 Text(
                                   statusText,
-                                  style: const TextStyle(
-                                      color: Colors.white),
+                                  style: const TextStyle(color: Colors.white),
                                 ),
                                 Text(
                                   "₹ ${balance.abs().toStringAsFixed(0)}",
@@ -259,42 +242,36 @@ if (mounted) {
 
                           const Text(
                             "LAST PAYMENTS",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold),
+                            style: TextStyle(fontWeight: FontWeight.bold),
                           ),
 
                           const Divider(),
 
-                         FutureBuilder<List<dynamic>>(
+                          FutureBuilder<List<dynamic>>(
                             future: PaymentService()
                                 .fetchCustomerPaymentHistory(
                                     selectedCustomerId),
                             builder: (context, historySnapshot) {
-
                               if (!historySnapshot.hasData ||
                                   historySnapshot.data!.isEmpty) {
                                 return const Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(vertical: 20),
+                                  padding: EdgeInsets.symmetric(vertical: 20),
                                   child: Center(
-                                      child: Text(
-                                          "No payments recorded yet.")),
+                                      child: Text("No payments recorded yet.")),
                                 );
                               }
 
-                              final payments =
-                                  historySnapshot.data!;
+                              final payments = historySnapshot.data!;
 
                               return Column(
                                 children: payments.map((p) {
                                   return Card(
                                     child: ListTile(
-                                      leading: const Icon(
-                                          Icons.arrow_downward,
+                                      leading: const Icon(Icons.arrow_downward,
                                           color: Colors.green),
                                       title: Text("₹ ${p["amount"]}"),
-                                      subtitle: Text(formatDate(
-                                          p["date"]?.toString())),
+                                      subtitle: Text(
+                                          formatDate(p["date"]?.toString())),
                                     ),
                                   );
                                 }).toList(),
@@ -310,10 +287,7 @@ if (mounted) {
           ),
         ],
       ),
-
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.centerFloat,
-
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: recordPaymentDialog,
         backgroundColor: Colors.green,
@@ -340,9 +314,7 @@ if (mounted) {
           Text(
             "₹ $amount",
             style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: color),
+                fontSize: 18, fontWeight: FontWeight.bold, color: color),
           ),
         ],
       ),

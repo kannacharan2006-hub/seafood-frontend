@@ -4,6 +4,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 
 import 'package:flutter_application_1/features/purchase/presentation/purchase_history_screen.dart';
 import '../data/purchase_service.dart';
+import '../../../utils/error_handler.dart';
 
 class PurchaseScreen extends StatefulWidget {
   const PurchaseScreen({super.key});
@@ -65,11 +66,16 @@ class _PurchaseScreenState extends State<PurchaseScreen>
 
   /* ================= Logic (Preserved) ================= */
   Future<void> fetchVendors() async {
-    final data = await purchaseService.fetchVendors();
-
-    setState(() {
-      vendors = data;
-    });
+    try {
+      final data = await purchaseService.fetchVendors();
+      if (!mounted) return;
+      setState(() {
+        vendors = data;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      ErrorHandler.showError(context, e, onRetry: fetchVendors);
+    }
   }
 
   Future<void> showAddVendorDialog() async {
@@ -350,7 +356,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
+                  border: Border.all(color: Colors.grey.withAlpha((0.1 * 255).round())),
                 ),
                 child: DropdownSearch<String>(
                   selectedItem: selectedVendor,
@@ -448,7 +454,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
                     setState(() => selectedPaymentMode = mode);
                   }
                 },
-                selectedColor: Colors.blue.withValues(alpha: 0.2),
+                selectedColor: Colors.blue.withAlpha((0.2 * 255).round()),
               );
             }).toList(),
           ),
@@ -621,8 +627,8 @@ class _PurchaseScreenState extends State<PurchaseScreen>
       dropdownDecoratorProps: DropDownDecoratorProps(
         dropdownSearchDecoration: InputDecoration(
           hintText: hint,
-          hintStyle:
-              TextStyle(color: kSubtle.withValues(alpha: 0.6), fontSize: 14),
+            hintStyle:
+              TextStyle(color: kSubtle.withAlpha((0.6 * 255).round()), fontSize: 14),
           filled: true,
           fillColor: Colors.white,
           contentPadding: const EdgeInsets.symmetric(
@@ -631,7 +637,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.2)),
+            borderSide: BorderSide(color: Colors.grey.withAlpha((0.2 * 255).round())),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
@@ -659,7 +665,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
         isDense: true,
         contentPadding: const EdgeInsets.symmetric(vertical: 8),
         enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
+          borderSide: BorderSide(color: Colors.grey.withAlpha((0.3 * 255).round())),
         ),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: kPrimary, width: 2),
@@ -679,11 +685,11 @@ class _PurchaseScreenState extends State<PurchaseScreen>
           topRight: Radius.circular(32),
         ),
         border: Border(
-          top: BorderSide(color: Colors.white.withValues(alpha: 0.1), width: 1),
+          top: BorderSide(color: Colors.white.withAlpha((0.1 * 255).round()), width: 1),
         ),
         boxShadow: [
           BoxShadow(
-            color: kPrimary.withValues(alpha: 0.4),
+            color: kPrimary.withAlpha((0.4 * 255).round()),
             blurRadius: 40,
             offset: const Offset(0, -10),
           ),
@@ -700,7 +706,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
                 Text(
                   "GRAND TOTAL",
                   style: TextStyle(
-                    color: Colors.white.withValues(alpha: 0.6),
+                    color: Colors.white.withAlpha((0.6 * 255).round()),
                     fontSize: 10,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 1.2,
@@ -726,7 +732,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
                   backgroundColor: kAccent,
                   foregroundColor: Colors.white,
                   elevation: 8,
-                  shadowColor: kAccent.withValues(alpha: 0.4),
+                  shadowColor: kAccent.withAlpha((0.4 * 255).round()),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18),
                   ),

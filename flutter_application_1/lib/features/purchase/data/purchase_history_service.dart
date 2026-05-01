@@ -11,7 +11,17 @@ class PurchaseHistoryService {
     };
   }
 
-  static Future<bool> deletePurchase(int id) async {
+  static Future<Map<String, dynamic>> fetchPurchases(
+      {int page = 1, int limit = 20}) async {
+    final data = await Api.get("/api/purchase-history?page=$page&limit=$limit");
+    final responseData = data["data"] ?? {};
+    return {
+      'data': List.from(responseData["data"] ?? []),
+      'pagination': responseData["pagination"] ?? {},
+    };
+  }
+
+  static Future<bool> deletePurchase(String id) async {
     await Api.delete("/api/purchases/$id");
     return true;
   }

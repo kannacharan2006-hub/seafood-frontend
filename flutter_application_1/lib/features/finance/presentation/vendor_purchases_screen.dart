@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../data/vendor_purchase_service.dart';
+import '../../../utils/error_handler.dart';
+import '../../../core/utils/date_format_util.dart';
 
 class VendorPurchasesScreen extends StatefulWidget {
   final String vendorId;
@@ -31,23 +32,20 @@ class _VendorPurchasesScreenState extends State<VendorPurchasesScreen> {
     setState(() => isLoading = true);
     try {
       final data = await _service.fetchVendorPurchases(widget.vendorId);
+      if (!mounted) return;
       setState(() {
         purchases = data;
         isLoading = false;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() => isLoading = false);
+      ErrorHandler.showError(context, e, onRetry: loadPurchases);
     }
   }
 
-  String _formatDate(String? dateStr) {
-    if (dateStr == null || dateStr.isEmpty) return 'N/A';
-    try {
-      return DateFormat('dd MMM yyyy').format(DateTime.parse(dateStr));
-    } catch (e) {
-      return dateStr;
-    }
-  }
+  String _formatDate(String? dateStr) =>
+      DateFormatUtil.formatDateDdMMMyyyy(dateStr);
 
   @override
   Widget build(BuildContext context) {
@@ -138,8 +136,10 @@ class _VendorPurchasesScreenState extends State<VendorPurchasesScreen> {
                               ),
                               decoration: BoxDecoration(
                                 color: isPaid
-                                    ? Colors.green.withValues(alpha: 0.1)
-                                    : Colors.orange.withValues(alpha: 0.1),
+                                    ? Colors.green
+                                        .withAlpha((0.1 * 255).round())
+                                    : Colors.orange
+                                        .withAlpha((0.1 * 255).round()),
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Text(
@@ -253,14 +253,8 @@ class _PurchasePaymentScreenState extends State<PurchasePaymentScreen> {
     }
   }
 
-  String _formatDate(String? dateStr) {
-    if (dateStr == null || dateStr.isEmpty) return 'N/A';
-    try {
-      return DateFormat('dd MMM yyyy').format(DateTime.parse(dateStr));
-    } catch (e) {
-      return dateStr;
-    }
-  }
+  String _formatDate(String? dateStr) =>
+      DateFormatUtil.formatDateDdMMMyyyy(dateStr);
 
   Future<void> savePayment() async {
     setState(() => isSaving = true);
@@ -396,7 +390,7 @@ class _PurchasePaymentScreenState extends State<PurchasePaymentScreen> {
                       setState(() => selectedMode = mode);
                     }
                   },
-                  selectedColor: Colors.blue.withValues(alpha: 0.2),
+                  selectedColor: Colors.blue.withAlpha((0.2 * 255).round()),
                 );
               }).toList(),
             ),

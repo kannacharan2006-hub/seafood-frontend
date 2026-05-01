@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../data/vendor_balance_service.dart';
 import 'vendor_purchases_screen.dart';
+import '../../../utils/error_handler.dart';
 
 class VendorBalanceScreen extends StatefulWidget {
   const VendorBalanceScreen({super.key});
@@ -72,17 +73,9 @@ class _VendorBalanceScreenState extends State<VendorBalanceScreen>
         isLoading = false;
       });
     } catch (e) {
-      setState(() => isLoading = false);
-
       if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Error loading vendors"),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.redAccent,
-        ),
-      );
+      setState(() => isLoading = false);
+      ErrorHandler.showError(context, e, onRetry: _loadData);
     }
   }
 
@@ -173,7 +166,7 @@ class _VendorBalanceScreenState extends State<VendorBalanceScreen>
           horizontal: 16,
         ),
         decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.08),
+          color: color.withAlpha((0.08 * 255).round()),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
@@ -240,7 +233,7 @@ class _VendorBalanceScreenState extends State<VendorBalanceScreen>
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.03),
+                  color: Colors.black.withAlpha((0.03 * 255).round()),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 )
@@ -299,7 +292,8 @@ class _VendorBalanceScreenState extends State<VendorBalanceScreen>
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8, vertical: 4),
                                   decoration: BoxDecoration(
-                                    color: Colors.green.withValues(alpha: 0.1),
+                                    color: Colors.green
+                                        .withAlpha((0.1 * 255).round()),
                                     borderRadius: BorderRadius.circular(6),
                                   ),
                                   child: Row(

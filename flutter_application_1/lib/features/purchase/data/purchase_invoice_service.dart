@@ -35,18 +35,25 @@ class PurchaseInvoiceService {
   }
 
   Future<void> shareViaWhatsApp(int purchaseId) async {
-    final file = await downloadInvoice(purchaseId);
+    try {
+      final file = await downloadInvoice(purchaseId);
+      final whatsappUrl = Uri.parse("whatsapp://send");
+      final canLaunchWhatsApp = await canLaunchUrl(whatsappUrl);
 
-    final uri = Uri.parse(
-        "whatsapp://send?text=Purchase Receipt PR-${purchaseId.toString().padLeft(6, '0')}");
-
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+      if (canLaunchWhatsApp) {
+        await Share.shareXFiles(
+          [XFile(file.path)],
+          text: "Purchase Receipt PR-${purchaseId.toString().padLeft(6, '0')}",
+          sharePositionOrigin: null,
+        );
+      } else {
+        await Share.shareXFiles(
+          [XFile(file.path)],
+          text: "Purchase Receipt PR-${purchaseId.toString().padLeft(6, '0')}",
+        );
+      }
+    } catch (e) {
+      throw Exception("Failed to share via WhatsApp: $e");
     }
-
-    await Share.shareXFiles(
-      [XFile(file.path)],
-      text: "Purchase Receipt PR-${purchaseId.toString().padLeft(6, '0')}",
-    );
   }
 }

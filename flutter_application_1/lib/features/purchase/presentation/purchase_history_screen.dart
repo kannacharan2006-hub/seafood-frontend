@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import 'package:intl/intl.dart'; // Standard for date formatting
 import '/features/purchase/data/purchase_history_service.dart';
 import '/features/purchase/presentation/purchase_detail_screen.dart';
+import '../../../core/widgets/skeleton_loader.dart';
+import '../../../core/utils/date_format_util.dart';
 
 class PurchaseHistoryScreen extends StatefulWidget {
   const PurchaseHistoryScreen({super.key});
@@ -32,26 +33,11 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
     loadHistory();
   }
 
-  // Improved Date Formatter: Mar 06, 2024 at 10:30 AM
-  String _formatDate(String? dateStr) {
-    if (dateStr == null || dateStr.isEmpty) return 'No Date';
-    try {
-      DateTime dateTime = DateTime.parse(dateStr);
-      return DateFormat('MMM dd, yyyy').format(dateTime);
-    } catch (e) {
-      return dateStr;
-    }
-  }
-
-  String _formatDateTime(String? dateStr) {
-    if (dateStr == null || dateStr.isEmpty) return 'No Date';
-    try {
-      DateTime dateTime = DateTime.parse(dateStr);
-      return DateFormat('MMM dd, yyyy HH:mm').format(dateTime);
-    } catch (e) {
-      return dateStr;
-    }
-  }
+  // Date Formatters - Using utility class for consistency
+  String _formatDate(String? dateStr) =>
+      DateFormatUtil.formatDateMMMddyyyy(dateStr);
+  String _formatDateTime(String? dateStr) =>
+      DateFormatUtil.formatDateTimeMMMddyyyyHHmm(dateStr);
 
   Future<void> loadHistory({bool isRefresh = true}) async {
     if (isRefresh) {
@@ -65,7 +51,7 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
     }
 
     try {
-      final result = await PurchaseHistoryService.fetchHistory(
+      final result = await PurchaseHistoryService.fetchPurchases(
         page: currentPage,
         limit: 20,
       );
@@ -93,8 +79,9 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
     }
   }
 
-  Future<void> deletePurchase(int id) async {
-    final index = purchases.indexWhere((p) => p['purchase_id'] == id);
+  Future<void> deletePurchase(String id) async {
+    final index =
+        purchases.indexWhere((p) => p['purchase_id'].toString() == id);
     if (index == -1) return;
 
     final deletedItem = purchases[index];
@@ -134,8 +121,9 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return Center(
-        child: CircularProgressIndicator(color: kTextPrimary, strokeWidth: 1.5),
+      return ListView.builder(
+        itemCount: 6, // Show 6 skeleton items
+        itemBuilder: (context, index) => _buildSkeletonItem(),
       );
     }
 
@@ -177,6 +165,80 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
           final purchase = purchases[index];
           return _buildSwipeableRow(purchase, index);
         },
+      ),
+    );
+  }
+
+  Widget _buildSkeletonItem() {
+    return Container(
+      color: kBase,
+      child: const Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SkeletonLoader(
+                        width: 100,
+                        height: 16,
+                        borderRadius: 4,
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        children: [
+                          SkeletonLoader(
+                            width: 80,
+                            height: 12,
+                            borderRadius: 4,
+                          ),
+                          SizedBox(width: 8),
+                          SkeletonLoader(
+                            width: 60,
+                            height: 12,
+                            borderRadius: 4,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    SkeletonLoader(
+                      width: 80,
+                      height: 16,
+                      borderRadius: 4,
+                    ),
+                    SizedBox(height: 4),
+                    SkeletonLoader(
+                      width: 60,
+                      height: 12,
+                      borderRadius: 4,
+                    ),
+                  ],
+                ),
+                SizedBox(width: 16),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  color: Color(0xFF64748B),
+                  size: 20,
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: Color(0xFFF1F5F9),
+            indent: 24,
+            endIndent: 24,
+          ),
+        ],
       ),
     );
   }
@@ -224,34 +286,48 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
     return Dismissible(
       key: Key("purchase_${purchase['purchase_id']}"),
       direction: DismissDirection.endToStart,
-      onDismissed: (_) => deletePurchase(purchase['purchase_id']),
+      background: _buildDeleteBackground(),
+      // Increased touch target for better accessibility
+      child: Semantics(
+        label:
+            'Purchase from ${purchase['vendor_name'] ?? 'unknown vendor'}. Tap to view details. Swipe to delete.',
+        button: true,
+        child: Container(
+          width: double.infinity,
+          color: kBase,
+          child: _buildStudioRowContent(purchase, index),
+        ),
+      ),
+      onDismissed: (_) => deletePurchase(purchase['purchase_id'].toString()),
       confirmDismiss: (direction) =>
           _showConfirmDialog(purchase['vendor_name']),
-      background: _buildDeleteBackground(),
-      child: _buildStudioRowContent(purchase, index),
     );
   }
 
   Widget _buildDeleteBackground() {
-    return Container(
-      alignment: Alignment.centerRight,
-      padding: const EdgeInsets.only(right: 32),
-      color: kDanger,
-      child: const Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.delete_outline_rounded, color: Colors.white, size: 24),
-          SizedBox(height: 4),
-          Text(
-            "REMOVE",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w900,
-              fontSize: 9,
-              letterSpacing: 0.5,
+    return Semantics(
+      label: 'Delete',
+      button: true,
+      child: Container(
+        alignment: Alignment.centerRight,
+        width: 80, // Fixed width for touch target
+        color: kDanger,
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.delete_outline_rounded, color: Colors.white, size: 24),
+            SizedBox(height: 4),
+            Text(
+              "REMOVE",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w900,
+                fontSize: 9,
+                letterSpacing: 0.5,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -334,10 +410,14 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
                     ],
                   ),
                   const SizedBox(width: 16),
-                  Icon(
-                    Icons.chevron_right_rounded,
-                    color: kTextSecondary.withValues(alpha: 0.2),
-                    size: 20,
+                  Semantics(
+                    label: 'View details',
+                    button: true,
+                    child: const Icon(
+                      Icons.chevron_right_rounded,
+                      color: Color(0xFF64748B),
+                      size: 24,
+                    ),
                   ),
                 ],
               ),

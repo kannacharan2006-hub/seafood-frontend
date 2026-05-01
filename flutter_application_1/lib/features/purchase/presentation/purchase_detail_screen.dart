@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:intl/intl.dart';
-
 import '/features/purchase/data/purchase_detail_service.dart';
 import '/features/purchase/data/purchase_invoice_service.dart';
+import '../../../core/utils/date_format_util.dart';
 
 class PurchaseDetailScreen extends StatefulWidget {
   final int purchaseId;
@@ -84,8 +83,7 @@ class _PurchaseDetailScreenState extends State<PurchaseDetailScreen> {
 
     String formattedDate = "N/A";
     if (purchaseData!['date'] != null) {
-      DateTime parsedDate = DateTime.parse(purchaseData!['date']).toLocal();
-      formattedDate = DateFormat('dd MMM yyyy').format(parsedDate);
+      formattedDate = DateFormatUtil.formatDateDdMMMyyyy(purchaseData!['date']);
     }
 
     return Scaffold(
@@ -228,7 +226,7 @@ class _PurchaseDetailScreenState extends State<PurchaseDetailScreen> {
       child: Row(
         children: [
           CircleAvatar(
-            backgroundColor: kAccent.withValues(alpha: 0.1),
+            backgroundColor: kAccent.withAlpha((0.1 * 255).round()),
             child: Icon(Icons.business_rounded, color: kAccent, size: 20),
           ),
           const SizedBox(width: 16),
