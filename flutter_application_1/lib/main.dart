@@ -6,9 +6,12 @@ import 'features/auth/presentation/splash_screen.dart';
 import 'services/secure_storage.dart';
 import 'services/localization_service.dart';
 import 'services/connectivity_service.dart';
+import 'core/widgets/error_boundary.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  AppErrorHandler.setup();
 
   await dotenv.load(fileName: ".env");
   await AppLocalizations.init();
@@ -26,7 +29,15 @@ void main() async {
     ),
   );
 
-  runApp(const MyApp());
+  runApp(
+    ErrorBoundary(
+      onError: (error, stackTrace) {
+        debugPrint('App Error: $error');
+        debugPrint('Stack trace: $stackTrace');
+      },
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
