@@ -30,13 +30,15 @@ class _ConversionHistoryScreenState extends State<ConversionHistoryScreen> {
     try {
       final result = await _service.getConversions(page: 1);
       if (!mounted) return;
-      final pagination = result['pagination'] as Map<String, dynamic>;
-      setState(() {
-        conversions = List.from(result['data']);
-        currentPage = 1;
-        hasMoreData = pagination['hasNextPage'] ?? false;
-        isLoading = false;
-      });
+      final pagination = result['pagination'];
+      if (pagination is Map<String, dynamic>) {
+        setState(() {
+          conversions = List.from(result['data'] ?? []);
+          currentPage = 1;
+          hasMoreData = pagination['hasNextPage'] ?? false;
+          isLoading = false;
+        });
+      }
     } catch (e) {
       if (!mounted) return;
       setState(() => isLoading = false);
@@ -50,14 +52,16 @@ class _ConversionHistoryScreenState extends State<ConversionHistoryScreen> {
     try {
       final result = await _service.getConversions(page: currentPage + 1);
       if (!mounted) return;
-      final pagination = result['pagination'] as Map<String, dynamic>;
-      final newData = List.from(result['data']);
-      setState(() {
-        conversions.addAll(newData);
-        currentPage++;
-        hasMoreData = pagination['hasNextPage'] ?? false;
-        isLoadingMore = false;
-      });
+      final pagination = result['pagination'];
+      if (pagination is Map<String, dynamic>) {
+        final newData = List.from(result['data'] ?? []);
+        setState(() {
+          conversions.addAll(newData);
+          currentPage++;
+          hasMoreData = pagination['hasNextPage'] ?? false;
+          isLoadingMore = false;
+        });
+      }
     } catch (e) {
       if (!mounted) return;
       setState(() => isLoadingMore = false);
@@ -151,14 +155,16 @@ class _ConversionHistoryScreenState extends State<ConversionHistoryScreen> {
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withAlpha((0.05 * 255).round()),
-                              blurRadius: 5)
-                            ],
+                                color: Colors.black
+                                    .withAlpha((0.05 * 255).round()),
+                                blurRadius: 5)
+                          ],
                         ),
                         child: ListTile(
                           contentPadding: const EdgeInsets.all(15),
                           leading: CircleAvatar(
-                            backgroundColor: Colors.teal.withAlpha((0.1 * 255).round()),
+                            backgroundColor:
+                                Colors.teal.withAlpha((0.1 * 255).round()),
                             child:
                                 const Icon(Icons.sync_alt, color: Colors.teal),
                           ),

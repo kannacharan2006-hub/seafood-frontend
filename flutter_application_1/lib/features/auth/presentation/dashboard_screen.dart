@@ -192,7 +192,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           ],
         ),
-            Icon(
+        Icon(
           Icons.arrow_forward_ios_rounded,
           size: 14,
           color: kSlate.withAlpha((0.5 * 255).round()),
@@ -454,7 +454,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               height: 4,
               width: double.infinity,
               decoration: BoxDecoration(
-                  color: col.withAlpha((0.1 * 255).round()),
+                color: col.withAlpha((0.1 * 255).round()),
                 borderRadius: BorderRadius.circular(2),
               ),
               child: FractionallySizedBox(
@@ -475,7 +475,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildRecentActivity() {
-    final activities = (dashboardData?['recent_activity'] as List? ?? []);
+    final activities = dashboardData?['recent_activity'] is List
+        ? List<Map<String, dynamic>>.from(
+            dashboardData!['recent_activity'] as List)
+        : <Map<String, dynamic>>[];
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -529,8 +532,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildTopSuppliers() {
-    final suppliers =
-        (dashboardData?['top_5_suppliers'] as List? ?? []).take(3).toList();
+    final suppliers = dashboardData?['top_5_suppliers'] is List
+        ? (dashboardData!['top_5_suppliers'] as List).take(3).toList()
+        : [];
     return Row(
       children: List.generate(suppliers.length, (index) {
         final s = suppliers[index];
@@ -541,7 +545,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             decoration: BoxDecoration(
               color: kIndigo.withAlpha((0.04 * 255).round()),
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: kIndigo.withAlpha((0.08 * 255).round())),
+              border:
+                  Border.all(color: kIndigo.withAlpha((0.08 * 255).round())),
             ),
             child: Column(
               children: [

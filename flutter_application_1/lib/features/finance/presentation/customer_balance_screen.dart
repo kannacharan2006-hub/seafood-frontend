@@ -170,8 +170,9 @@ class _CustomerBalanceScreenState extends State<CustomerBalanceScreen> {
                       }
 
                       final data = snapshot.data!;
-                      final double balance =
-                          (data["balance"] as num).toDouble();
+                      final balance = (data["balance"] is num)
+                          ? (data["balance"] as num).toDouble()
+                          : 0.0;
 
                       Color statusColor = Colors.red;
                       String statusText = "DUE PAYMENT";

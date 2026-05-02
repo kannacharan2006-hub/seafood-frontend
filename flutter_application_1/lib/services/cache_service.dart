@@ -22,11 +22,15 @@ class CacheService {
       final cached = await _storage.read(key: '$_cachePrefix$key');
       if (cached == null) return null;
 
-      final cacheData = jsonDecode(cached) as Map<String, dynamic>;
-      final timestamp = cacheData['timestamp'] as int;
-      final ttl = cacheData['ttl'] as int?;
+      final decoded = jsonDecode(cached);
+      if (decoded is! Map<String, dynamic>) return null;
 
-      if (ttl != null) {
+      final cacheData = decoded;
+      final timestamp = cacheData['timestamp'];
+      final ttl = cacheData['ttl'];
+
+      if (timestamp is! int) return null;
+      if (ttl is int) {
         final now = DateTime.now().millisecondsSinceEpoch;
         if (now - timestamp > ttl) {
           await remove(key);
@@ -34,7 +38,9 @@ class CacheService {
         }
       }
 
-      return cacheData['data'] as T;
+      final data = cacheData['data'];
+      if (data is T) return data;
+      return null;
     } catch (e) {
       return null;
     }
@@ -45,11 +51,15 @@ class CacheService {
     if (cached == null) return false;
 
     try {
-      final cacheData = jsonDecode(cached) as Map<String, dynamic>;
-      final timestamp = cacheData['timestamp'] as int;
-      final ttl = cacheData['ttl'] as int?;
+      final decoded = jsonDecode(cached);
+      if (decoded is! Map<String, dynamic>) return false;
 
-      if (ttl != null) {
+      final cacheData = decoded;
+      final timestamp = cacheData['timestamp'];
+      final ttl = cacheData['ttl'];
+
+      if (timestamp is! int) return false;
+      if (ttl is int) {
         final now = DateTime.now().millisecondsSinceEpoch;
         if (now - timestamp > ttl) {
           await remove(key);

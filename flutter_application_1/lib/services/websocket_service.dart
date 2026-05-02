@@ -132,7 +132,11 @@ class WebSocketService {
 
   void _onMessage(dynamic data) {
     try {
-      final message = jsonDecode(data as String) as Map<String, dynamic>;
+      if (data is! String) return;
+      final decoded = jsonDecode(data);
+      if (decoded is! Map<String, dynamic>) return;
+
+      final message = decoded;
       final type = message['type'] as String?;
 
       WebSocketEvent event;
@@ -157,49 +161,63 @@ class WebSocketService {
 
         case 'stock_update':
           event = WebSocketEvent.stockUpdate;
-          eventData = message['data'] as Map<String, dynamic>?;
+          eventData = message['data'] is Map<String, dynamic>
+              ? message['data'] as Map<String, dynamic>
+              : null;
           _messageController
               ?.add(WebSocketMessage(event: event, data: eventData));
           break;
 
         case 'purchase_created':
           event = WebSocketEvent.purchaseCreated;
-          eventData = message['data'] as Map<String, dynamic>?;
+          eventData = message['data'] is Map<String, dynamic>
+              ? message['data'] as Map<String, dynamic>
+              : null;
           _messageController
               ?.add(WebSocketMessage(event: event, data: eventData));
           break;
 
         case 'export_created':
           event = WebSocketEvent.exportCreated;
-          eventData = message['data'] as Map<String, dynamic>?;
+          eventData = message['data'] is Map<String, dynamic>
+              ? message['data'] as Map<String, dynamic>
+              : null;
           _messageController
               ?.add(WebSocketMessage(event: event, data: eventData));
           break;
 
         case 'conversion_created':
           event = WebSocketEvent.conversionCreated;
-          eventData = message['data'] as Map<String, dynamic>?;
+          eventData = message['data'] is Map<String, dynamic>
+              ? message['data'] as Map<String, dynamic>
+              : null;
           _messageController
               ?.add(WebSocketMessage(event: event, data: eventData));
           break;
 
         case 'payment_created':
           event = WebSocketEvent.paymentCreated;
-          eventData = message['data'] as Map<String, dynamic>?;
+          eventData = message['data'] is Map<String, dynamic>
+              ? message['data'] as Map<String, dynamic>
+              : null;
           _messageController
               ?.add(WebSocketMessage(event: event, data: eventData));
           break;
 
         case 'stock_changed':
           event = WebSocketEvent.stockChanged;
-          eventData = message['data'] as Map<String, dynamic>?;
+          eventData = message['data'] is Map<String, dynamic>
+              ? message['data'] as Map<String, dynamic>
+              : null;
           _messageController
               ?.add(WebSocketMessage(event: event, data: eventData));
           break;
 
         case 'dashboard_refresh':
           event = WebSocketEvent.dashboardRefresh;
-          eventData = message['data'] as Map<String, dynamic>?;
+          eventData = message['data'] is Map<String, dynamic>
+              ? message['data'] as Map<String, dynamic>
+              : null;
           _messageController
               ?.add(WebSocketMessage(event: event, data: eventData));
           break;

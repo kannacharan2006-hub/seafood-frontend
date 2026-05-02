@@ -33,14 +33,15 @@ class _ExportHistoryScreenState extends State<ExportHistoryScreen> {
 
       if (!mounted) return;
 
-      final pagination = result['pagination'] as Map<String, dynamic>;
-
-      setState(() {
-        exports = List.from(result['data']);
-        currentPage = 1;
-        hasMoreData = pagination['hasNextPage'] ?? false;
-        isLoading = false;
-      });
+      final pagination = result['pagination'];
+      if (pagination is Map<String, dynamic>) {
+        setState(() {
+          exports = List.from(result['data'] ?? []);
+          currentPage = 1;
+          hasMoreData = pagination['hasNextPage'] ?? false;
+          isLoading = false;
+        });
+      }
     } catch (e) {
       if (!mounted) return;
       setState(() => isLoading = false);
@@ -61,15 +62,16 @@ class _ExportHistoryScreenState extends State<ExportHistoryScreen> {
 
       if (!mounted) return;
 
-      final pagination = result['pagination'] as Map<String, dynamic>;
-      final newData = List.from(result['data']);
-
-      setState(() {
-        exports.addAll(newData);
-        currentPage++;
-        hasMoreData = pagination['hasNextPage'] ?? false;
-        isLoadingMore = false;
-      });
+      final pagination = result['pagination'];
+      if (pagination is Map<String, dynamic>) {
+        final newData = List.from(result['data'] ?? []);
+        setState(() {
+          exports.addAll(newData);
+          currentPage++;
+          hasMoreData = pagination['hasNextPage'] ?? false;
+          isLoadingMore = false;
+        });
+      }
     } catch (e) {
       if (!mounted) return;
       setState(() => isLoadingMore = false);
@@ -258,8 +260,8 @@ class _ExportHistoryScreenState extends State<ExportHistoryScreen> {
                                 width: 50,
                                 height: 50,
                                 decoration: BoxDecoration(
-                                    color:
-                                      theme.primaryColor.withAlpha((0.1 * 255).round()),
+                                  color: theme.primaryColor
+                                      .withAlpha((0.1 * 255).round()),
                                   borderRadius: BorderRadius.circular(14),
                                 ),
                                 child: Icon(
