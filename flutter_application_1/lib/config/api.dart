@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../services/secure_storage.dart';
 import '../services/cache_service.dart';
+import '../services/connectivity_service.dart';
 import 'app_config.dart';
 
 class Api {
@@ -105,6 +106,13 @@ class Api {
     bool retry = true,
     Duration? cacheTtl,
   }) async {
+    // Check connectivity before making API call
+    final hasConnection = await ConnectivityService().checkConnection();
+    if (!hasConnection) {
+      throw Exception(
+          "No internet connection. Please check your network and try again.");
+    }
+
     try {
       final uri = Uri.parse("$baseUrl$endpoint");
       http.Response response;

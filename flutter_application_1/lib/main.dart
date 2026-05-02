@@ -5,12 +5,14 @@ import 'features/auth/presentation/home_screen.dart';
 import 'features/auth/presentation/splash_screen.dart';
 import 'services/secure_storage.dart';
 import 'services/localization_service.dart';
+import 'services/connectivity_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await dotenv.load(fileName: ".env");
   await AppLocalizations.init();
+  await ConnectivityService().initialize();
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
