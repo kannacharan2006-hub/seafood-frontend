@@ -3,7 +3,7 @@ import '/config/api.dart';
 class VendorPurchaseService {
   Future<List<dynamic>> fetchVendorPurchases(String vendorId) async {
     final data = await Api.get("/api/purchase-history/vendor/$vendorId",
-        cacheTtl: const Duration(minutes: 10));
+        cacheTtl: Duration.zero); // No cache for immediate updates
     return List<dynamic>.from(data["data"] ?? data);
   }
 

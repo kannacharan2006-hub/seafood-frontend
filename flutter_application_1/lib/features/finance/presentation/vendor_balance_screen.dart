@@ -381,7 +381,9 @@ class _VendorBalanceScreenState extends State<VendorBalanceScreen>
                       vendorName: vendor['name'] ?? '',
                     ),
                   ),
-                ).then((_) => _loadData());
+                ).then((value) {
+                  _loadData(); // Refresh vendor balance after returning from purchases
+                });
               },
             ),
             ListTile(

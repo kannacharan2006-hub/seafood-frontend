@@ -188,7 +188,13 @@ class _VendorPurchasesScreenState extends State<VendorPurchasesScreen> {
                                 vendorId: widget.vendorId,
                               ),
                             ),
-                          ).then((_) => loadPurchases());
+                          ).then((_) {
+                            loadPurchases();
+                            // Notify parent to refresh vendor balance
+                            if (context.mounted) {
+                              Navigator.of(context).pop(true);
+                            }
+                          });
                         },
                       ),
                     );
