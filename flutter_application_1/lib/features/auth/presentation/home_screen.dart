@@ -25,6 +25,7 @@ import 'package:flutter_application_1/features/company/presentation/manage_emplo
 import 'package:flutter_application_1/features/settings/presentation/manage_data_screen.dart';
 import 'package:flutter_application_1/features/settings/presentation/language_settings_screen.dart';
 import 'package:flutter_application_1/services/localization_service.dart';
+import 'package:flutter_application_1/features/subscription/presentation/subscription_status_screen.dart';
 
 class AboutAppScreen extends StatelessWidget {
   const AboutAppScreen({super.key});
@@ -68,7 +69,7 @@ class AboutAppScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         shape: BoxShape.circle,
-                          boxShadow: [
+                        boxShadow: [
                           BoxShadow(
                             color: Colors.black.withAlpha((0.2 * 255).round()),
                             blurRadius: 20,
@@ -89,9 +90,10 @@ class AboutAppScreen extends StatelessWidget {
                             color: Colors.white)),
                     const SizedBox(height: 6),
                     Text("Seafood Trading ERP",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white.withAlpha((0.9 * 255).round()))),
+                        style: TextStyle(
+                            fontSize: 14,
+                            color:
+                                Colors.white.withAlpha((0.9 * 255).round()))),
                     const SizedBox(height: 14),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -143,8 +145,8 @@ class AboutAppScreen extends StatelessWidget {
                         width: 50,
                         height: 50,
                         decoration: BoxDecoration(
-                          color: Colors.white.withAlpha((0.2 * 255).round()),
-                          borderRadius: BorderRadius.circular(12)),
+                            color: Colors.white.withAlpha((0.2 * 255).round()),
+                            borderRadius: BorderRadius.circular(12)),
                         child: const Icon(Icons.person,
                             color: Colors.white, size: 28),
                       ),
@@ -164,8 +166,9 @@ class AboutAppScreen extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 2),
                             decoration: BoxDecoration(
-                              color: Colors.white.withAlpha((0.2 * 255).round()),
-                              borderRadius: BorderRadius.circular(10)),
+                                color:
+                                    Colors.white.withAlpha((0.2 * 255).round()),
+                                borderRadius: BorderRadius.circular(10)),
                             child: const Text("Full Stack Developer",
                                 style: TextStyle(
                                     fontSize: 10, color: Colors.white)),
@@ -236,7 +239,7 @@ class AboutAppScreen extends StatelessWidget {
   static Widget _buildBadge(String text) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        decoration: BoxDecoration(
+      decoration: BoxDecoration(
           color: Colors.white.withAlpha((0.2 * 255).round()),
           borderRadius: BorderRadius.circular(12)),
       child: Text(text,
@@ -253,10 +256,10 @@ class AboutAppScreen extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withAlpha((0.05 * 255).round()),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4)),
+            BoxShadow(
+                color: Colors.black.withAlpha((0.05 * 255).round()),
+                blurRadius: 10,
+                offset: const Offset(0, 4)),
           ]),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -286,8 +289,8 @@ class AboutAppScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: const Color(0xFF667EEA).withAlpha((0.1 * 255).round()),
-              borderRadius: BorderRadius.circular(8)),
+                color: const Color(0xFF667EEA).withAlpha((0.1 * 255).round()),
+                borderRadius: BorderRadius.circular(8)),
             child: Icon(icon, size: 18, color: const Color(0xFF667EEA)),
           ),
           const SizedBox(width: 12),
@@ -314,8 +317,8 @@ class AboutAppScreen extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         decoration: BoxDecoration(
-          color: Colors.white.withAlpha((0.2 * 255).round()),
-          borderRadius: BorderRadius.circular(10)),
+            color: Colors.white.withAlpha((0.2 * 255).round()),
+            borderRadius: BorderRadius.circular(10)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -639,6 +642,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (_) => const ManageDataScreen(),
+                          ),
+                        );
+                      }),
+                      _drawerItem(Icons.subscriptions, "Subscription", () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const SubscriptionStatusScreen(),
                           ),
                         );
                       }),
