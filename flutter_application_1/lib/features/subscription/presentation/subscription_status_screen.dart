@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../data/subscription_service.dart';
+import 'plans_screen.dart';
+import 'referral_screen.dart';
 
 class SubscriptionStatusScreen extends StatefulWidget {
   const SubscriptionStatusScreen({super.key});
@@ -165,7 +167,7 @@ class _SubscriptionStatusScreenState extends State<SubscriptionStatusScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.2),
+        color: color.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: color),
       ),
