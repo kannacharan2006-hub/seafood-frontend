@@ -62,7 +62,6 @@ class _ErrorBoundaryScope extends InheritedWidget {
   const _ErrorBoundaryScope({
     required this.onError,
     required super.child,
-    super.key,
   });
 
   @override
@@ -78,7 +77,6 @@ class _DefaultErrorWidget extends StatelessWidget {
     required this.error,
     required this.stackTrace,
     required this.onRetry,
-    super.key,
   });
 
   @override

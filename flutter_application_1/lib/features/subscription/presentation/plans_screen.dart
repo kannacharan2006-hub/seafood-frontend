@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../data/subscription_service.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class PlansScreen extends StatefulWidget {
   const PlansScreen({super.key});
@@ -109,7 +107,7 @@ class _PlansScreenState extends State<PlansScreen> {
       margin: const EdgeInsets.only(bottom: 16),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: color.withOpacity(0.5), width: 2),
+        side: BorderSide(color: color.withValues(alpha: 0.5), width: 2),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -249,8 +247,6 @@ class _PlansScreenState extends State<PlansScreen> {
   }
 
   void _openRazorpayCheckout(Map<String, dynamic> data) {
-    // TODO: Implement Razorpay Flutter SDK
-    // Use the payment_link or open Razorpay checkout
     final paymentLink = data['payment_link'];
     _showSnackBar('Opening payment: $paymentLink');
   }
