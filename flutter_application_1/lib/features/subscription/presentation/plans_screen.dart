@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import '../data/subscription_service.dart';
 
 class PlansScreen extends StatefulWidget {
@@ -13,11 +14,22 @@ class _PlansScreenState extends State<PlansScreen> {
   bool _isLoading = true;
   String? _errorMessage;
   String? _appliedCoupon;
+  late final Razorpay _razorpay;
 
   @override
   void initState() {
     super.initState();
     _loadPlans();
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _razorpay.clear();
   }
 
   Future<void> _loadPlans() async {
@@ -248,7 +260,35 @@ class _PlansScreenState extends State<PlansScreen> {
 
   void _openRazorpayCheckout(Map<String, dynamic> data) {
     final paymentLink = data['payment_link'];
-    _showSnackBar('Opening payment: $paymentLink');
+    if (paymentLink == null) {
+      _showSnackBar('Payment link not available', isError: true);
+      return;
+    }
+
+    var options = {
+      'external': {'url': paymentLink}
+    };
+
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      _showSnackBar('Error in opening Razorpay: $e', isError: true);
+    }
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    _showSnackBar('Payment successful: ${response.paymentId}');
+    // Optionally verify payment with backend if needed
+    // For now, we rely on webhook to update subscription status
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    _showSnackBar('Payment failed: ${response.code} - ${response.message}',
+        isError: true);
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    _showSnackBar('External wallet: ${response.walletName}');
   }
 
   void _showSnackBar(String message, {bool isError = false}) {
