@@ -161,6 +161,116 @@ class _ExportHistoryScreenState extends State<ExportHistoryScreen> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
       ),
+      body: RefreshIndicator(
+        onRefresh: fetchExports,
+        displacement: 20,
+        color: Theme.of(context).primaryColor,
+        child: exports.isEmpty
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.history_rounded,
+                      size: 80,
+                      color: Colors.blueGrey.shade100,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      "No export history found",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.blueGrey.shade400,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+              : NotificationListener<ScrollNotification>(
+                  onNotification: (scrollInfo) {
+                    if (scrollInfo.metrics.pixels >=
+                        scrollInfo.metrics.maxScrollExtent - 200) {
+                      loadMoreExports();
+                    }
+                    return false;
+                  },
+                  child: ListView.builder(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                    itemCount: exports.length + (hasMoreData ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index == exports.length) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(16),
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      }
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC),
+      appBar: AppBar(
+        title: const Text("Export History"),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+      ),
+      body: RefreshIndicator(
+        onRefresh: fetchExports,
+        displacement: 20,
+        color: Theme.of(context).primaryColor,
+        child: exports.isEmpty
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.history_rounded,
+                      size: 80,
+                      color: Colors.blueGrey.shade100,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      "No export history found",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.blueGrey.shade400,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+              : NotificationListener<ScrollNotification>(
+                  onNotification: (scrollInfo) {
+                    if (scrollInfo.metrics.pixels >=
+                        scrollInfo.metrics.maxScrollExtent - 200) {
+                      loadMoreExports();
+                    }
+                    return false;
+                  },
+                  child: ListView.builder(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                    itemCount: exports.length + (hasMoreData ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index == exports.length) {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(16),
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      }
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC),
+      appBar: AppBar(
+        title: const Text("Export History"),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+      ),
       body: exports.isEmpty
           ? Center(
               child: Column(
