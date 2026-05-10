@@ -371,14 +371,17 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
                               "TXN-${purchase['purchase_id'].toString().padLeft(4, '0')}",
                             ),
                             const SizedBox(width: 8),
-                            Text(
-                              purchase['created_at'] != null
-                                  ? _formatDateTime(purchase['created_at'])
-                                  : _formatDate(purchase['date']),
-                              style: TextStyle(
-                                color: kTextSecondary,
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600,
+                            Flexible(
+                              child: Text(
+                                purchase['created_at'] != null
+                                    ? _formatDateTime(purchase['created_at'])
+                                    : _formatDate(purchase['date']),
+                                style: TextStyle(
+                                  color: kTextSecondary,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],
