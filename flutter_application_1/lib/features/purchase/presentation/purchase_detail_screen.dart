@@ -106,10 +106,23 @@ class _PurchaseDetailScreenState extends State<PurchaseDetailScreen> {
           PopupMenuButton<String>(
             icon: Icon(Icons.ios_share_rounded, color: kTextPrimary, size: 20),
             onSelected: (value) async {
-              if (value == 'share') {
-                await _invoiceService.shareInvoice(widget.purchaseId);
-              } else if (value == 'whatsapp') {
-                await _invoiceService.shareViaWhatsApp(widget.purchaseId);
+              try {
+                if (value == 'share') {
+                  await _invoiceService.shareInvoice(widget.purchaseId);
+                } else if (value == 'whatsapp') {
+                  await _invoiceService.shareViaWhatsApp(widget.purchaseId);
+                }
+              } catch (e) {
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(e.toString().replaceAll('Exception: ', '')),
+                    backgroundColor: Colors.red,
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                  ),
+                );
               }
             },
             itemBuilder: (context) => [

@@ -15,12 +15,13 @@ class PurchaseInvoiceService {
     final dir = await getApplicationDocumentsDirectory();
     final filePath = "${dir.path}/purchase-$purchaseId.pdf";
 
-    await _dio.download(
+    final response = await _dio.download(
       "${Api.baseUrl}/api/purchases/invoice/$purchaseId",
       filePath,
       options: Options(
         headers: {"Authorization": "Bearer $token"},
         responseType: ResponseType.bytes,
+        validateStatus: (status) => status == 200,
       ),
     );
 
@@ -28,30 +29,22 @@ class PurchaseInvoiceService {
   }
 
   Future<void> shareInvoice(int purchaseId) async {
-    final file = await downloadInvoice(purchaseId);
-
-    await Share.shareXFiles([XFile(file.path)],
-        text: "Purchase Receipt #$purchaseId");
+    try {
+      final file = await downloadInvoice(purchaseId);
+      await Share.shareXFiles([XFile(file.path)],
+          text: "Purchase Receipt #$purchaseId");
+    } catch (e) {
+      throw Exception("Failed to share invoice: $e");
+    }
   }
 
   Future<void> shareViaWhatsApp(int purchaseId) async {
     try {
       final file = await downloadInvoice(purchaseId);
-      final whatsappUrl = Uri.parse("whatsapp://send");
-      final canLaunchWhatsApp = await canLaunchUrl(whatsappUrl);
-
-      if (canLaunchWhatsApp) {
-        await Share.shareXFiles(
-          [XFile(file.path)],
-          text: "Purchase Receipt PR-${purchaseId.toString().padLeft(6, '0')}",
-          sharePositionOrigin: null,
-        );
-      } else {
-        await Share.shareXFiles(
-          [XFile(file.path)],
-          text: "Purchase Receipt PR-${purchaseId.toString().padLeft(6, '0')}",
-        );
-      }
+      await Share.shareXFiles(
+        [XFile(file.path)],
+        text: "Purchase Receipt PR-${purchaseId.toString().padLeft(6, '0')}",
+      );
     } catch (e) {
       throw Exception("Failed to share via WhatsApp: $e");
     }
