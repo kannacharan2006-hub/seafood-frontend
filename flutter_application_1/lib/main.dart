@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -8,7 +9,17 @@ import 'services/localization_service.dart';
 import 'services/connectivity_service.dart';
 import 'core/widgets/error_boundary.dart';
 
+class _DevHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
+
 void main() async {
+  HttpOverrides.global = _DevHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
 
   AppErrorHandler.setup();
