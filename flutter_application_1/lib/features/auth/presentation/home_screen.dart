@@ -555,7 +555,7 @@ class _HomeScreenState extends State<HomeScreen> {
               /// HEADER
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.only(top: 52, left: 20, bottom: 20),
+                padding: const EdgeInsets.fromLTRB(20, 52, 16, 20),
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [Color(0xFF2563EB), Color(0xFF1E40AF)],
@@ -713,7 +713,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// DRAWER SECTION
   Widget _drawerSection(String title) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 6),
+      padding: const EdgeInsets.fromLTRB(20, 16, 16, 6),
       child: Text(
         title.toUpperCase(),
         style: const TextStyle(
@@ -729,7 +729,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// DRAWER ITEM
   Widget _drawerItem(IconData icon, String title, VoidCallback onTap) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 1.5),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 1.5),
       decoration: BoxDecoration(
         color: Colors.grey.withAlpha((0.05 * 255).round()),
         borderRadius: BorderRadius.circular(10),
