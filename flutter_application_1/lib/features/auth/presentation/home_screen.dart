@@ -555,7 +555,7 @@ class _HomeScreenState extends State<HomeScreen> {
               /// HEADER
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.fromLTRB(20, 48, 20, 16),
+                padding: const EdgeInsets.only(top: 52, left: 20, bottom: 20),
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [Color(0xFF2563EB), Color(0xFF1E40AF)],
@@ -564,168 +564,90 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Icon(Icons.business_center,
-                          color: Colors.white, size: 22),
-                    ),
+                    const Icon(Icons.business_center,
+                        color: Colors.white, size: 28),
                     const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            "OceanSync",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 17,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 0.3,
-                            ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text(
+                          "OceanSync",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
-                          if (_userName.isNotEmpty)
-                            Text(
-                              _userName,
-                              style: TextStyle(
-                                color: Colors.white.withValues(alpha: 0.7),
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                        ],
-                      ),
+                        ),
+                        if (_userName.isNotEmpty)
+                          Text(
+                            _userName,
+                            style: const TextStyle(
+                                color: Colors.white70, fontSize: 12),
+                          ),
+                      ],
                     ),
                   ],
                 ),
               ),
-
-              /// MENU
               Expanded(
                 child: ListView(
-                  padding: const EdgeInsets.only(top: 8, bottom: 8),
+                  padding: const EdgeInsets.only(top: 4, bottom: 4),
                   children: [
                     if (widget.userRole == 'OWNER') ...[
                       _drawerSection("Customers"),
                       _drawerItem(
-                        Icons.account_balance_wallet,
-                        "Customer Balance",
-                        () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const CustomerBalanceScreen())),
-                      ),
-                      _drawerItem(
-                        Icons.payments,
-                        "Customer Payment",
-                        () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const CustomerPaymentScreen())),
-                      ),
-                      _drawerDivider(),
+                          Icons.account_balance_wallet,
+                          "Customer Balance",
+                          _navTo(const CustomerBalanceScreen())),
+                      _drawerItem(Icons.payments, "Customer Payment",
+                          _navTo(const CustomerPaymentScreen())),
+                      const SizedBox(height: 8),
                       _drawerSection("Vendors"),
-                      _drawerItem(
-                        Icons.store,
-                        "Vendor Balance",
-                        () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const VendorBalanceScreen())),
-                      ),
-                      _drawerItem(
-                        Icons.payment,
-                        "Vendor Payment",
-                        () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const VendorPaymentScreen())),
-                      ),
-                      _drawerDivider(),
+                      _drawerItem(Icons.store, "Vendor Balance",
+                          _navTo(const VendorBalanceScreen())),
+                      _drawerItem(Icons.payment, "Vendor Payment",
+                          _navTo(const VendorPaymentScreen())),
+                      const SizedBox(height: 8),
                       _drawerSection("Company"),
-                      _drawerItem(
-                        Icons.people,
-                        "Manage Employees",
-                        () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const ManageEmployeesScreen())),
-                      ),
-                      _drawerItem(
-                        Icons.storage,
-                        "Manage Data",
-                        () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const ManageDataScreen())),
-                      ),
-                      _drawerItem(
-                        Icons.subscriptions,
-                        "Subscription",
-                        () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) =>
-                                    const SubscriptionStatusScreen())),
-                      ),
+                      _drawerItem(Icons.people, "Manage Employees",
+                          _navTo(const ManageEmployeesScreen())),
+                      _drawerItem(Icons.storage, "Manage Data",
+                          _navTo(const ManageDataScreen())),
+                      _drawerItem(Icons.subscriptions, "Subscription",
+                          _navTo(const SubscriptionStatusScreen())),
                     ],
-                    _drawerDivider(),
+                    const SizedBox(height: 8),
                     _drawerSection("Stock"),
-                    _drawerItem(
-                      Icons.inventory_2,
-                      "Stock Overview",
-                      () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const StockScreen())),
-                    ),
-                    _drawerDivider(),
-                    _drawerSection("Settings"),
-                    _drawerItem(
-                      Icons.settings,
-                      "Language",
-                      () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const LanguageSettingsScreen())),
-                    ),
-                    _drawerItem(
-                      Icons.info_outline,
-                      "About App",
-                      _showAboutApp,
-                    ),
+                    _drawerItem(Icons.inventory_2, "Stock Overview",
+                        _navTo(const StockScreen())),
+                    const SizedBox(height: 8),
+                    _drawerSection("About"),
+                    _drawerItem(Icons.settings, "Language",
+                        _navTo(const LanguageSettingsScreen())),
+                    _drawerItem(Icons.info_outline, "About App", _showAboutApp),
                   ],
                 ),
               ),
 
               /// LOGOUT
-              Container(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                decoration: BoxDecoration(
-                  border: Border(
-                    top: BorderSide(color: Colors.grey.withValues(alpha: 0.12)),
-                  ),
-                ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
                 child: SizedBox(
                   width: double.infinity,
-                  child: OutlinedButton.icon(
+                  child: ElevatedButton.icon(
                     onPressed: _showLogoutDialog,
-                    icon: const Icon(Icons.logout, size: 18),
-                    label: const Text("Logout"),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(0xFF8E8E93),
-                      side: BorderSide(
-                        color: Colors.grey.withValues(alpha: 0.2),
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
+                    icon:
+                        const Icon(Icons.logout, size: 18, color: Colors.white),
+                    label: const Text("Logout",
+                        style: TextStyle(color: Colors.white, fontSize: 14)),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red[400],
+                      minimumSize: const Size(double.infinity, 42),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
+                      elevation: 0,
                     ),
                   ),
                 ),
@@ -783,21 +705,15 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _drawerDivider() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Divider(
-        height: 1,
-        thickness: 1,
-        color: Colors.grey.withValues(alpha: 0.08),
-      ),
-    );
+  VoidCallback _navTo(Widget screen) {
+    return () =>
+        Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
   }
 
   /// DRAWER SECTION
   Widget _drawerSection(String title) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 6),
+      padding: const EdgeInsets.fromLTRB(20, 16, 20, 6),
       child: Text(
         title.toUpperCase(),
         style: const TextStyle(
@@ -815,13 +731,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 1.5),
       decoration: BoxDecoration(
-        color: Colors.grey.withValues(alpha: 0.04),
+        color: Colors.grey.withAlpha((0.05 * 255).round()),
         borderRadius: BorderRadius.circular(10),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 14),
         minLeadingWidth: 28,
-        leading: Icon(icon, size: 20, color: const Color(0xFF3C3C43)),
+        leading: Icon(icon, size: 22, color: const Color(0xFF3C3C43)),
         title: Text(
           title,
           style: const TextStyle(
@@ -833,7 +749,6 @@ class _HomeScreenState extends State<HomeScreen> {
         trailing:
             const Icon(Icons.chevron_right, size: 18, color: Color(0xFFC7C7CC)),
         dense: true,
-        visualDensity: VisualDensity.compact,
         onTap: onTap,
       ),
     );
