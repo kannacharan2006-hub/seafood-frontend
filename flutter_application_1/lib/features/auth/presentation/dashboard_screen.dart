@@ -152,7 +152,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               "$greeting, ${widget.userName ?? ""}",
               style: GoogleFonts.plusJakartaSans(
                 fontWeight: FontWeight.w800,
-                fontSize: 18,
+                fontSize: 16,
                 color: Colors.white,
               ),
             ),
