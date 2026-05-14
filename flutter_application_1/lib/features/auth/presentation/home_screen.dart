@@ -444,11 +444,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   // ignore: used_by_scoped_code
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   Future<void> _showLogoutDialog() async {
     return showDialog<void>(
       context: context,
