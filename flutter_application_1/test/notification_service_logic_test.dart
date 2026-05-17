@@ -8,15 +8,15 @@ void main() {
   group('NotificationService - Logic Tests', () {
     group('Time-Based Selection', () {
       test('morning notifications selected for early hours', () {
-        final hour = 8; // 8 AM
-        final isMorning = hour < 14;
+        const hour = 8; // 8 AM
+        const isMorning = hour < 14;
 
         expect(isMorning, isTrue);
       });
 
       test('evening notifications selected for late hours', () {
-        final hour = 18; // 6 PM
-        final isMorning = hour < 14;
+        const hour = 18; // 6 PM
+        const isMorning = hour < 14;
 
         expect(isMorning, isFalse);
       });
@@ -106,7 +106,7 @@ void main() {
       });
 
       test('notifications are in Telugu script', () {
-        final teluguNotification = "నిన్నటి లెక్కలు క్లియర్";
+        const teluguNotification = "నిన్నటి లెక్కలు క్లియర్";
 
         expect(teluguNotification, isNotEmpty);
         expect(teluguNotification.length, greaterThan(0));
@@ -121,6 +121,7 @@ void main() {
         // Without controlling seed, shuffles may differ
         // This test shows the concept
         expect(random1.length, equals(3));
+        expect(random2.length, equals(3));
       });
 
       test('single message taken from shuffled list', () {
@@ -162,12 +163,7 @@ void main() {
 
     group('BuildContext Checks', () {
       test('context mounted check prevents crash', () {
-        bool contextMounted = false;
-
-        if (contextMounted) {
-          // Would show snackbar
-        }
-
+        const contextMounted = false;
         expect(contextMounted, isFalse);
       });
 

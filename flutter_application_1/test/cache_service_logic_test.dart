@@ -1,6 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_application_1/services/cache_service.dart';
-import 'package:mockito/mockito.dart';
 
 void main() {
   setUpAll(() {
@@ -14,7 +12,6 @@ void main() {
     test('cache key generation works correctly', () {
       // Test the private _generateKey logic through public methods
       const endpoint = '/api/users';
-      const queryParams = {'filter': 'active', 'page': '1'};
 
       // The key should be deterministic
       final key1 = endpoint.replaceAll('/', '_').replaceAll('-', '_');
@@ -24,9 +21,8 @@ void main() {
     });
 
     test('cache key includes sorted query parameters', () {
-      const endpoint = '/api/items';
-      final params1 = {'z': '1', 'a': '2', 'm': '3'};
-      final params2 = {'a': '2', 'm': '3', 'z': '1'}; // Different order
+      const params1 = {'z': '1', 'a': '2', 'm': '3'};
+      const params2 = {'a': '2', 'm': '3', 'z': '1'}; // Different order
 
       // Sorted parameters should produce same key
       final sorted1 = params1.entries.toList()..sort((a, b) => a.key.compareTo(b.key));
@@ -56,8 +52,8 @@ void main() {
 
     test('endpoint path normalization is consistent', () {
       // Test path normalization for cache key generation
-      final path1 = '/api/users/list';
-      final path2 = '/api-users-list';
+      const path1 = '/api/users/list';
+      const path2 = '/api-users-list';
 
       final normalized1 = path1.replaceAll('/', '_').replaceAll('-', '_');
       final normalized2 = path2.replaceAll('/', '_').replaceAll('-', '_');

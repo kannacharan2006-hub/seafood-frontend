@@ -110,7 +110,7 @@ void main() {
 
     group('Token Refresh Logic', () {
       test('refresh token required for session restore', () {
-        final refreshToken = 'test_refresh_token';
+        const refreshToken = 'test_refresh_token';
         expect(refreshToken, isNotEmpty);
       });
 
@@ -125,7 +125,8 @@ void main() {
         refreshingToken = Future.value('new_token');
 
         // Second request checks if already refreshing
-        expect(isRefreshing && refreshingToken != null, isTrue);
+        expect(isRefreshing, isTrue);
+        expect(refreshingToken, isNotNull);
 
         // Should wait for existing token instead of starting new refresh
       });
@@ -134,30 +135,29 @@ void main() {
     group('Cache Invalidation', () {
       test('cache invalidation triggered on POST', () {
         const method = 'POST';
-        const endpoint = '/api/items';
 
-        final shouldInvalidate = method == 'POST' || method == 'PUT' || method == 'DELETE';
+        const shouldInvalidate = method == 'POST' || method == 'PUT' || method == 'DELETE';
         expect(shouldInvalidate, isTrue);
       });
 
       test('cache invalidation triggered on PUT', () {
         const method = 'PUT';
 
-        final shouldInvalidate = method == 'POST' || method == 'PUT' || method == 'DELETE';
+        const shouldInvalidate = method == 'POST' || method == 'PUT' || method == 'DELETE';
         expect(shouldInvalidate, isTrue);
       });
 
       test('cache invalidation triggered on DELETE', () {
         const method = 'DELETE';
 
-        final shouldInvalidate = method == 'POST' || method == 'PUT' || method == 'DELETE';
+        const shouldInvalidate = method == 'POST' || method == 'PUT' || method == 'DELETE';
         expect(shouldInvalidate, isTrue);
       });
 
       test('cache NOT invalidated on GET', () {
         const method = 'GET';
 
-        final shouldInvalidate = method == 'POST' || method == 'PUT' || method == 'DELETE';
+        const shouldInvalidate = method == 'POST' || method == 'PUT' || method == 'DELETE';
         expect(shouldInvalidate, isFalse);
       });
     });
@@ -178,14 +178,14 @@ void main() {
 
     group('Response Parsing', () {
       test('parses valid JSON response', () {
-        final body = '{"status": "ok", "data": {"id": 1}}';
+        const body = '{"status": "ok", "data": {"id": 1}}';
         final parsed = _tryParseJson(body);
 
         expect(parsed is Map, isTrue);
       });
 
       test('handles invalid JSON gracefully', () {
-        final body = 'not valid json';
+        const body = 'not valid json';
         final parsed = _tryParseJson(body);
 
         expect(parsed is Map, isTrue);
@@ -193,18 +193,18 @@ void main() {
       });
 
       test('extracts error message from response', () {
-        final response = {'message': 'User not found'};
+        const response = {'message': 'User not found'};
         final message = _extractErrorMessage(response);
 
         expect(message, equals('User not found'));
       });
 
       test('uses alternative error field names', () {
-        final response1 = {'Message': 'Capital M error'}; // Capital M variant
+        const response1 = {'Message': 'Capital M error'}; // Capital M variant
         final message1 = _extractErrorMessage(response1);
         expect(message1, equals('Capital M error'));
 
-        final response2 = {'error': 'Direct error field'};
+        const response2 = {'error': 'Direct error field'};
         final message2 = _extractErrorMessage(response2);
         expect(message2, equals('Direct error field'));
       });
@@ -212,14 +212,14 @@ void main() {
 
     group('Authorization Header', () {
       test('constructs Bearer token correctly', () {
-        final token = 'test_token_xyz';
-        final authHeader = 'Bearer $token';
+        const token = 'test_token_xyz';
+        const authHeader = 'Bearer $token';
 
         expect(authHeader, equals('Bearer test_token_xyz'));
       });
 
       test('header format is HTTP standard', () {
-        final authHeader = 'Bearer test_token';
+        const authHeader = 'Bearer test_token';
         expect(authHeader, startsWith('Bearer '));
       });
     });
