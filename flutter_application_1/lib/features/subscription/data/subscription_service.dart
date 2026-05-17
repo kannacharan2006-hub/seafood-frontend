@@ -58,6 +58,29 @@ class SubscriptionService {
     }
   }
 
+  static Future<void> cancelSubscription() async {
+    try {
+      final response = await Api.post('/api/subscriptions/cancel', {});
+      if (response['success'] != true) {
+        throw Exception(response['message'] ?? 'Failed to cancel subscription');
+      }
+    } catch (e) {
+      throw Exception('Failed to cancel subscription: $e');
+    }
+  }
+
+  static Future<Map<String, dynamic>> getReferralInfo() async {
+    try {
+      final response = await Api.get('/api/subscriptions/referral-info');
+      if (response['success'] == true) {
+        return response['data'] ?? {};
+      }
+      throw Exception(response['message'] ?? 'Failed to get referral info');
+    } catch (e) {
+      throw Exception('Failed to get referral info: $e');
+    }
+  }
+
   static Future<Map<String, dynamic>> verifyPayment(
     String paymentId,
     String orderId,

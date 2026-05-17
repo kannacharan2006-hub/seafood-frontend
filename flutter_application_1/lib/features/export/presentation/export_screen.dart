@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:dropdown_search/dropdown_search.dart';
 import 'export_history_screen.dart';
@@ -308,10 +309,10 @@ class _ExportScreenState extends State<ExportScreen>
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black.withAlpha((0.03 * 255).round()),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                  ),
+                  color: Colors.black.withAlpha((0.03 * 255).round()),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
               ],
             ),
             child: Column(
@@ -373,7 +374,8 @@ class _ExportScreenState extends State<ExportScreen>
                       vertical: 16,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.blueGrey.shade50.withAlpha((0.5 * 255).round()),
+                      color: Colors.blueGrey.shade50
+                          .withAlpha((0.5 * 255).round()),
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(color: Colors.blueGrey.shade100),
                     ),
@@ -493,7 +495,12 @@ class _ExportScreenState extends State<ExportScreen>
             width: double.infinity,
             height: 60,
             child: ElevatedButton(
-              onPressed: isSaving ? null : saveExport,
+              onPressed: isSaving
+                  ? null
+                  : () {
+                      HapticFeedback.mediumImpact();
+                      saveExport();
+                    },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF0F172A), // Deep Slate/Black
                 foregroundColor: Colors.white,
@@ -547,8 +554,8 @@ class _ExportScreenState extends State<ExportScreen>
           // Item Header
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.blueGrey.shade50.withAlpha((0.5 * 255).round()),
+            decoration: BoxDecoration(
+              color: Colors.blueGrey.shade50.withAlpha((0.5 * 255).round()),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(24),
                 topRight: Radius.circular(24),

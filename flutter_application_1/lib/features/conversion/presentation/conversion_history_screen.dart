@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../conversion/data/conversion_service.dart';
 import 'conversion_details_screen.dart';
 import 'package:intl/intl.dart';
@@ -209,7 +210,10 @@ class _ConversionHistoryScreenState extends State<ConversionHistoryScreen> {
                           trailing: IconButton(
                             icon: const Icon(Icons.delete_outline,
                                 color: Colors.redAccent),
-                            onPressed: () => _confirmDelete(conv['id']),
+                            onPressed: () {
+                              HapticFeedback.mediumImpact();
+                              _confirmDelete(conv['id']);
+                            },
                           ),
                         ),
                       );

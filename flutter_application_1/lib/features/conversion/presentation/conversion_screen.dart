@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+
 import '../../conversion/data/conversion_service.dart';
 import '../../purchase/data/purchase_service.dart';
 import '../presentation/conversion_history_screen.dart';
@@ -135,7 +137,12 @@ class _ConversionScreenState extends State<ConversionScreen> {
                           borderRadius: BorderRadius.circular(15),
                         ),
                       ),
-                      onPressed: isSaving ? null : _handleSave,
+                      onPressed: isSaving
+                          ? null
+                          : () {
+                              HapticFeedback.mediumImpact();
+                              _handleSave();
+                            },
                       child: isSaving
                           ? const CircularProgressIndicator(color: Colors.white)
                           : const Text(
@@ -171,7 +178,8 @@ class _ConversionScreenState extends State<ConversionScreen> {
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withAlpha((0.05 * 255).round()), blurRadius: 10),
+              color: Colors.black.withAlpha((0.05 * 255).round()),
+              blurRadius: 10),
         ],
       ),
       child: Column(
@@ -255,7 +263,10 @@ class _ConversionScreenState extends State<ConversionScreen> {
             );
           }),
           TextButton.icon(
-            onPressed: () => setState(() => items.add(ConversionItem())),
+            onPressed: () {
+              HapticFeedback.lightImpact();
+              setState(() => items.add(ConversionItem()));
+            },
             icon: const Icon(Icons.add),
             label: Text(buttonText),
           ),

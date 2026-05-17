@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'export_details_screen.dart';
 import '../data/export_history_service.dart';
 import '../../../core/widgets/skeleton_loader.dart';
@@ -251,7 +252,10 @@ class _ExportHistoryScreenState extends State<ExportHistoryScreen> {
                       ),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(20),
-                        onTap: () => _navigateToDetails(exp),
+                        onTap: () {
+                          HapticFeedback.lightImpact();
+                          _navigateToDetails(exp);
+                        },
                         child: Padding(
                           padding: const EdgeInsets.all(16),
                           child: Row(
@@ -329,6 +333,7 @@ class _ExportHistoryScreenState extends State<ExportHistoryScreen> {
                                         _navigateToDetails(exp);
                                       }
                                       if ('delete' == value) {
+                                        HapticFeedback.mediumImpact();
                                         deleteExport(exp['id']);
                                       }
                                     },

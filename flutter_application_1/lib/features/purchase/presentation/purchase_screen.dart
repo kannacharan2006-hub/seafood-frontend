@@ -1,5 +1,6 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
 import 'package:flutter_application_1/features/purchase/presentation/purchase_history_screen.dart';
@@ -297,7 +298,10 @@ class _PurchaseScreenState extends State<PurchaseScreen>
                 const SizedBox(height: 8),
                 Center(
                   child: TextButton.icon(
-                    onPressed: () => setState(() => items.add(PurchaseItem())),
+                    onPressed: () {
+                      HapticFeedback.lightImpact();
+                      setState(() => items.add(PurchaseItem()));
+                    },
                     icon: Icon(Icons.add_rounded, size: 20, color: kAccent),
                     label: Text(
                       "Add another line",
@@ -356,7 +360,8 @@ class _PurchaseScreenState extends State<PurchaseScreen>
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.grey.withAlpha((0.1 * 255).round())),
+                  border: Border.all(
+                      color: Colors.grey.withAlpha((0.1 * 255).round())),
                 ),
                 child: DropdownSearch<String>(
                   selectedItem: selectedVendor,
@@ -396,6 +401,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
             IconButton(
               icon: const Icon(Icons.add_circle, color: Colors.green, size: 30),
               onPressed: () {
+                HapticFeedback.selectionClick();
                 showAddVendorDialog();
               },
             ),
@@ -509,7 +515,10 @@ class _PurchaseScreenState extends State<PurchaseScreen>
               ),
               if (items.length > 1)
                 IconButton(
-                  onPressed: () => setState(() => items.removeAt(index)),
+                  onPressed: () {
+                    HapticFeedback.lightImpact();
+                    setState(() => items.removeAt(index));
+                  },
                   icon: const Icon(
                     Icons.close_rounded,
                     size: 22,
@@ -627,8 +636,8 @@ class _PurchaseScreenState extends State<PurchaseScreen>
       dropdownDecoratorProps: DropDownDecoratorProps(
         dropdownSearchDecoration: InputDecoration(
           hintText: hint,
-            hintStyle:
-              TextStyle(color: kSubtle.withAlpha((0.6 * 255).round()), fontSize: 14),
+          hintStyle: TextStyle(
+              color: kSubtle.withAlpha((0.6 * 255).round()), fontSize: 14),
           filled: true,
           fillColor: Colors.white,
           contentPadding: const EdgeInsets.symmetric(
@@ -637,7 +646,8 @@ class _PurchaseScreenState extends State<PurchaseScreen>
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.grey.withAlpha((0.2 * 255).round())),
+            borderSide:
+                BorderSide(color: Colors.grey.withAlpha((0.2 * 255).round())),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
@@ -665,7 +675,8 @@ class _PurchaseScreenState extends State<PurchaseScreen>
         isDense: true,
         contentPadding: const EdgeInsets.symmetric(vertical: 8),
         enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.grey.withAlpha((0.3 * 255).round())),
+          borderSide:
+              BorderSide(color: Colors.grey.withAlpha((0.3 * 255).round())),
         ),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(color: kPrimary, width: 2),
@@ -685,7 +696,8 @@ class _PurchaseScreenState extends State<PurchaseScreen>
           topRight: Radius.circular(32),
         ),
         border: Border(
-          top: BorderSide(color: Colors.white.withAlpha((0.1 * 255).round()), width: 1),
+          top: BorderSide(
+              color: Colors.white.withAlpha((0.1 * 255).round()), width: 1),
         ),
         boxShadow: [
           BoxShadow(
@@ -727,7 +739,12 @@ class _PurchaseScreenState extends State<PurchaseScreen>
               height: 58,
               width: 150,
               child: ElevatedButton(
-                onPressed: isSaving ? null : savePurchase,
+                onPressed: isSaving
+                    ? null
+                    : () {
+                        HapticFeedback.mediumImpact();
+                        savePurchase();
+                      },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: kAccent,
                   foregroundColor: Colors.white,

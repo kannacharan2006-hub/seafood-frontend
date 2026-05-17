@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:ui';
 import '/features/purchase/data/purchase_history_service.dart';
 import '/features/purchase/presentation/purchase_detail_screen.dart';
@@ -152,7 +153,10 @@ class _PurchaseHistoryScreenState extends State<PurchaseHistoryScreen> {
     }
 
     return RefreshIndicator(
-      onRefresh: () => loadHistory(isRefresh: true),
+      onRefresh: () async {
+        HapticFeedback.lightImpact();
+        await loadHistory(isRefresh: true);
+      },
       color: kTextPrimary,
       edgeOffset: 20,
       child: ListView.builder(

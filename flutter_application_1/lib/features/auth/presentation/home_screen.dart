@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -441,8 +440,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     // WebSocket disabled for simpler app
     // Real-time features work with manual refresh only
   }
-
-  // ignore: used_by_scoped_code
 
   Future<void> _showLogoutDialog() async {
     return showDialog<void>(
