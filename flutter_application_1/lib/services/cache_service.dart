@@ -118,8 +118,7 @@ class CacheService {
 
   static Future<void> invalidatePrefix(String endpointPrefix) async {
     final all = await _storage.readAll();
-    final prefix =
-        '$_cachePrefix${endpointPrefix.replaceAll('/', '_').replaceAll('-', '_')}';
+    final prefix = '$_cachePrefix$endpointPrefix';
     for (final key in all.keys) {
       if (key.startsWith(prefix)) {
         await _storage.delete(key: key);
