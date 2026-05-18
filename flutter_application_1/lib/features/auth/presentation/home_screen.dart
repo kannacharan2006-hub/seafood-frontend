@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutter_application_1/services/secure_storage.dart';
 import 'package:flutter_application_1/services/notification_service.dart';
+import 'package:flutter_application_1/services/websocket_provider.dart';
 
 import 'package:flutter_application_1/features/auth/presentation/login_screen.dart';
 import 'package:flutter_application_1/features/auth/presentation/dashboard_screen.dart';
@@ -386,6 +387,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   int _selectedIndex = 0;
   String _userName = "";
+  late WebSocketProvider _wsProvider;
 
   List<String> get _titles => [
         AppLocalizations.dashboard,
@@ -406,6 +408,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    _wsProvider.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -437,8 +440,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   void _initWebSocket() {
-    // WebSocket disabled for simpler app
-    // Real-time features work with manual refresh only
+    _wsProvider = WebSocketProvider();
+    if (widget.companyId != null) {
+      _wsProvider.connect(widget.companyId!);
+    }
   }
 
   Future<void> _showLogoutDialog() async {
