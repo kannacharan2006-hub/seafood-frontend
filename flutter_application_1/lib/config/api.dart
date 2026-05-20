@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import '../services/secure_storage.dart';
 import '../services/cache_service.dart';
 import '../services/connectivity_service.dart';
+import '../services/sentry_service.dart';
 import 'app_config.dart';
 
 class Api {
@@ -97,6 +98,8 @@ class Api {
       } catch (_) {}
     }
     await SecureStorage.clearAll();
+    // Clear Sentry user context
+    await SentryService.clearUser();
   }
 
   static Future<dynamic> _request(

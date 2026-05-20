@@ -197,6 +197,7 @@ final groupedData = _groupByCategory(stock);
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
         centerTitle: true,
         title: const Text(
           "Inventory Stock",

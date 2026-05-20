@@ -1,8 +1,13 @@
 import '/config/api.dart';
+import '/services/secure_storage.dart';
 
 class VendorBalanceService {
   Future<List<dynamic>> fetchVendors() async {
-    final data = await Api.get("/api/vendors/vendors",
+    final companyId = await SecureStorage.getData("company_id");
+    final endpoint = companyId != null
+        ? "/api/vendors/vendors?company_id=$companyId"
+        : "/api/vendors/vendors";
+    final data = await Api.get(endpoint,
         cacheTtl: const Duration(minutes: 30));
     return List<dynamic>.from(data["data"]);
   }
@@ -20,10 +25,15 @@ class VendorBalanceService {
 
   Future<void> updateVendor(
       int vendorId, String name, String phone, String address) async {
-    await Api.put("/api/vendors/vendors/$vendorId", {
+    final companyId = await SecureStorage.getData("company_id");
+    final Map<String, dynamic> body = {
       "name": name,
       "phone": phone,
       "address": address,
-    });
+    };
+    if (companyId != null) {
+      body["company_id"] = int.tryParse(companyId);
+    }
+    await Api.put("/api/vendors/vendors/$vendorId", body);
   }
 }

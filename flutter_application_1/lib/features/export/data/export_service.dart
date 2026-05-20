@@ -1,4 +1,5 @@
 import '/config/api.dart';
+import '/services/secure_storage.dart';
 
 class ExportService {
   Future<dynamic> createExport({
@@ -21,8 +22,12 @@ class ExportService {
   }
 
   Future<List<dynamic>> getCustomers() async {
-    final data =
-        await Api.get("/api/customers", cacheTtl: const Duration(minutes: 30));
+    final companyId = await SecureStorage.getData("company_id");
+    final endpoint = companyId != null
+        ? "/api/customers?company_id=$companyId"
+        : "/api/customers";
+    final data = await Api.get(endpoint,
+        cacheTtl: const Duration(minutes: 30));
     return List<dynamic>.from(data["data"]);
   }
 
@@ -49,7 +54,15 @@ class ExportService {
     String? phone,
     String? address,
   }) async {
-    final body = {"name": name, "phone": phone, "address": address};
+    final companyId = await SecureStorage.getData("company_id");
+    final Map<String, dynamic> body = {
+      "name": name,
+      "phone": phone,
+      "address": address,
+    };
+    if (companyId != null) {
+      body["company_id"] = int.tryParse(companyId);
+    }
     final data = await Api.post("/api/customers", body);
     return data;
   }

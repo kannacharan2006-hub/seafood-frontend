@@ -95,6 +95,7 @@ class _VendorBalanceScreenState extends State<VendorBalanceScreen>
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
         centerTitle: true,
         title: const Text(
           "Vendor Accounts",

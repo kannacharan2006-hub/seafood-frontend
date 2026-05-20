@@ -1,8 +1,13 @@
 import '/config/api.dart';
+import '/services/secure_storage.dart';
 
 class PurchaseService {
   Future<List<Map<String, dynamic>>> fetchVendors() async {
-    final data = await Api.get("/api/vendors/vendors",
+    final companyId = await SecureStorage.getData("company_id");
+    final endpoint = companyId != null
+        ? "/api/vendors/vendors?company_id=$companyId"
+        : "/api/vendors/vendors";
+    final data = await Api.get(endpoint,
         cacheTtl: const Duration(minutes: 30));
     return List<Map<String, dynamic>>.from(data["data"]);
   }
@@ -50,15 +55,25 @@ class PurchaseService {
   }
 
   Future<void> addVendor(Map<String, dynamic> body) async {
-    await Api.post("/api/vendors/vendors", body);
+    final companyId = await SecureStorage.getData("company_id");
+    final requestBody = Map<String, dynamic>.from(body);
+    if (companyId != null) {
+      requestBody["company_id"] = int.tryParse(companyId);
+    }
+    await Api.post("/api/vendors/vendors", requestBody);
   }
 
   Future<void> updateVendor(
       int vendorId, String name, String phone, String address) async {
-    await Api.put("/api/vendors/vendors/$vendorId", {
+    final companyId = await SecureStorage.getData("company_id");
+    final Map<String, dynamic> body = {
       "name": name,
       "phone": phone,
       "address": address,
-    });
+    };
+    if (companyId != null) {
+      body["company_id"] = int.tryParse(companyId);
+    }
+    await Api.put("/api/vendors/vendors/$vendorId", body);
   }
 }

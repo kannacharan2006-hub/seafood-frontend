@@ -364,6 +364,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
                       color: Colors.grey.withAlpha((0.1 * 255).round())),
                 ),
                 child: DropdownSearch<String>(
+                  key: const ValueKey('purchase_vendor'),
                   selectedItem: selectedVendor,
                   items:
                       vendors.map<String>((v) => v['id'].toString()).toList(),
@@ -511,6 +512,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
                   itemLabel: (id) => categories.firstWhere(
                     (c) => c['id'].toString() == id,
                   )['name'],
+                  dropdownKey: ValueKey('p_cat_${item.hashCode}'),
                 ),
               ),
               if (items.length > 1)
@@ -548,6 +550,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
                     },
                     itemLabel: (id) => (itemsMap[item.categoryId] ?? [])
                         .firstWhere((i) => i['id'].toString() == id)['name'],
+                    dropdownKey: ValueKey('p_item_${item.hashCode}'),
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -563,6 +566,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
                         (variantsMap[item.itemId] ?? []).firstWhere(
                       (v) => v['id'].toString() == id,
                     )['variant_name'],
+                    dropdownKey: ValueKey('p_var_${item.hashCode}'),
                   ),
                 ),
               ],
@@ -617,8 +621,10 @@ class _PurchaseScreenState extends State<PurchaseScreen>
     required List<String> items,
     required Function(String?) onChanged,
     required String Function(String) itemLabel,
+    Key? dropdownKey,
   }) {
     return DropdownSearch<String>(
+      key: dropdownKey,
       selectedItem: value,
       items: items,
       onChanged: onChanged,

@@ -96,6 +96,7 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
         backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
         elevation: 0,
         title: Text(
           "Employees",

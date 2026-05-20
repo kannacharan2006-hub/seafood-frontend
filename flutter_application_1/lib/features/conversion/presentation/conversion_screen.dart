@@ -218,6 +218,7 @@ class _ConversionScreenState extends State<ConversionScreen> {
                   Expanded(
                     flex: 2,
                     child: DropdownSearch<String>(
+                      key: ValueKey('conv_${title}_${item.hashCode}'),
                       items: variants
                           .map<String>((v) => v['id'].toString())
                           .toList(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../features/auth/presentation/splash_screen.dart';
 import '../config/api.dart';
+import '../services/sentry_service.dart';
 
 class AppError {
   final String message;
@@ -87,6 +88,14 @@ class ErrorHandler {
   static void showError(BuildContext context, dynamic error,
       {VoidCallback? onRetry}) {
     final appError = error is AppError ? error : AppError.fromException(error);
+
+    // Report to Sentry (silently skipped if not configured)
+    SentryService.captureException(error,
+        extras: {
+          'error_type': appError.type.name,
+          'status_code': appError.statusCode,
+          'message': appError.message,
+        });
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

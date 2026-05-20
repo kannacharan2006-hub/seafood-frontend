@@ -1,5 +1,6 @@
 import '/config/api.dart';
 import '/services/secure_storage.dart';
+import '/services/sentry_service.dart';
 
 class AuthService {
   static Future<Map<String, dynamic>> login(
@@ -25,8 +26,20 @@ class AuthService {
     }
 
     if (data["user"] != null) {
+      final user = data["user"];
       await SecureStorage.saveData(
-          "user_role", data["user"]["role"] ?? "EMPLOYEE");
+          "user_role", user["role"] ?? "EMPLOYEE");
+      if (user["company_id"] != null) {
+        await SecureStorage.saveData(
+            "company_id", user["company_id"].toString());
+      }
+
+      // Set user context for Sentry crash reporting
+      await SentryService.setUser(
+        id: user["id"]?.toString(),
+        email: user["email"],
+        username: user["name"] ?? user["owner_name"],
+      );
     }
 
     return data;

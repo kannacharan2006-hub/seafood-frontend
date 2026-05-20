@@ -321,6 +321,7 @@ class _ExportScreenState extends State<ExportScreen>
                   children: [
                     Expanded(
                       child: DropdownSearch<String>(
+                        key: const ValueKey('customer_dropdown'),
                         selectedItem: selectedCustomer,
                         items: customers
                             .map<String>((c) => c['id'].toString())
@@ -607,6 +608,7 @@ class _ExportScreenState extends State<ExportScreen>
               children: [
                 // Category Selector
                 DropdownSearch<String>(
+                  key: ValueKey('cat_${item.hashCode}'),
                   selectedItem: item.categoryId,
                   items: categories.map((c) => c['id'].toString()).toList(),
                   popupProps: PopupProps.menu(
@@ -639,6 +641,7 @@ class _ExportScreenState extends State<ExportScreen>
                 // Item & Variant Logic
                 if (item.categoryId != null) ...[
                   DropdownSearch<String>(
+                    key: ValueKey('item_${item.hashCode}'),
                     selectedItem: item.itemId,
                     items: (itemsMap[item.categoryId] ?? [])
                         .map<String>((i) => i['id'].toString())
@@ -665,6 +668,7 @@ class _ExportScreenState extends State<ExportScreen>
 
                 if (item.itemId != null)
                   DropdownSearch<String>(
+                    key: ValueKey('var_${item.hashCode}'),
                     selectedItem: item.variantId,
                     items: (variantsMap[item.itemId] ?? [])
                         .map<String>((v) => v['id'].toString())
