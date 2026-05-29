@@ -274,50 +274,55 @@ class _SubscriptionStatusScreenState extends State<SubscriptionStatusScreen>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Current Plan',
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
+                const Expanded(
+                  flex: 2,
+                  child: Text(
+                    'Current Plan',
+                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                  ),
                 ),
-                AnimatedBuilder(
-                  animation: _pulseAnimation,
-                  builder: (context, child) => Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: isActive
-                          ? Colors.white.withValues(alpha: 0.9)
-                          : Colors.white.withValues(alpha: 0.7),
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: isActive
-                          ? [
-                              BoxShadow(
-                                color: Colors.white.withValues(
-                                    alpha: 0.3 * _pulseAnimation.value),
-                                blurRadius: 12,
-                                spreadRadius: 1,
-                              ),
-                            ]
-                          : null,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(statusIcon,
-                            size: 18,
-                            color: statusColor,
-                            grade: isActive ? 200 : 0),
-                        const SizedBox(width: 4),
-                        Text(
-                          statusLabel,
-                          style: TextStyle(
-                            color: statusColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
+                Expanded(
+                  flex: 3,
+                  child: AnimatedBuilder(
+                    animation: _pulseAnimation,
+                    builder: (context, child) => Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: isActive
+                            ? Colors.white.withValues(alpha: 0.9)
+                            : Colors.white.withValues(alpha: 0.7),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: isActive
+                            ? [
+                                BoxShadow(
+                                  color: Colors.white.withValues(
+                                      alpha: 0.3 * _pulseAnimation.value),
+                                  blurRadius: 12,
+                                  spreadRadius: 1,
+                                ),
+                              ]
+                            : null,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(statusIcon,
+                              size: 18,
+                              color: statusColor,
+                              grade: isActive ? 200 : 0),
+                          const SizedBox(width: 4),
+                          Text(
+                            statusLabel,
+                            style: TextStyle(
+                              color: statusColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -343,13 +348,16 @@ class _SubscriptionStatusScreenState extends State<SubscriptionStatusScreen>
                   ),
                 ),
                 const SizedBox(width: 12),
-                Text(
-                  planId.toUpperCase(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.2,
+                Expanded(
+                  child: Text(
+                    planId.toUpperCase(),
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
+                    ),
                   ),
                 ),
               ],
@@ -389,14 +397,18 @@ class _SubscriptionStatusScreenState extends State<SubscriptionStatusScreen>
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Billing Cycle Progress',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
+                const Flexible(
+                  child: Text(
+                    'Billing Cycle Progress',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black87,
+                    ),
                   ),
                 ),
+                const SizedBox(width: 8),
                 Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -463,18 +475,24 @@ class _SubscriptionStatusScreenState extends State<SubscriptionStatusScreen>
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Started ${_formatDate(_subscription?['current_period_start'])}',
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 12,
+                Expanded(
+                  child: Text(
+                    'Started ${_formatDate(_subscription?['current_period_start'])}',
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 12,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                Text(
-                  'Ends ${_formatDate(_subscription?['current_period_end'])}',
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 12,
+                Expanded(
+                  child: Text(
+                    'Ends ${_formatDate(_subscription?['current_period_end'])}',
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 12,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],

@@ -35,6 +35,7 @@ class _VendorBalanceScreenState extends State<VendorBalanceScreen>
   }
 
   Future<void> _loadData() async {
+    if (!mounted) return;
     setState(() => isLoading = true);
 
     try {
@@ -45,6 +46,7 @@ class _VendorBalanceScreenState extends State<VendorBalanceScreen>
       double pendingSum = 0;
 
       for (var v in vendors) {
+        if (!mounted) return;
         final detail = await _service.fetchVendorBalance(
           v['id'].toString(),
         );
@@ -66,6 +68,7 @@ class _VendorBalanceScreenState extends State<VendorBalanceScreen>
           completed.add(fullData);
         }
       }
+      if (!mounted) return;
       setState(() {
         pendingVendors = pending;
         completedVendors = completed;

@@ -83,13 +83,13 @@ class SubscriptionService {
 
   static Future<Map<String, dynamic>> verifyPayment(
     String paymentId,
-    String orderId,
+    String subscriptionId,
     String signature,
   ) async {
     try {
       final response = await Api.post('/api/subscriptions/verify', {
         'payment_id': paymentId,
-        'order_id': orderId,
+        'subscription_id': subscriptionId,
         'signature': signature,
       });
       return response;

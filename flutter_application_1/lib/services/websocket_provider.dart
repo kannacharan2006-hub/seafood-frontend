@@ -6,6 +6,9 @@ class WebSocketProvider extends ChangeNotifier {
   final WebSocketService _wsService = WebSocketService();
   StreamSubscription<WebSocketMessage>? _subscription;
 
+  // Listeners for external classes
+  final List<VoidCallback> _listeners = [];
+
   bool _isConnected = false;
   String? _lastMessage;
   Map<String, dynamic>? _lastData;
@@ -46,6 +49,22 @@ class WebSocketProvider extends ChangeNotifier {
         break;
     }
     notifyListeners();
+    // Notify external listeners
+    for (final listener in _listeners) {
+      listener();
+    }
+  }
+
+  /// Add a listener to be notified when websocket messages arrive
+  @override
+  void addListener(VoidCallback callback) {
+    _listeners.add(callback);
+  }
+
+  /// Remove a previously added listener
+  @override
+  void removeListener(VoidCallback callback) {
+    _listeners.removeWhere((cb) => cb == callback);
   }
 
   Future<void> connect(int companyId) async {

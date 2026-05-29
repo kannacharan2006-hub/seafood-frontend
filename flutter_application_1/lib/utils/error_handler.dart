@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../features/auth/presentation/splash_screen.dart';
 import '../config/api.dart';
 import '../services/sentry_service.dart';
+import '../features/subscription/models/subscription_exception.dart';
+import '../features/subscription/presentation/subscription_expired_overlay.dart';
 
 class AppError {
   final String message;
@@ -24,7 +26,11 @@ class AppError {
 
     final errorString = e.toString();
 
-    if (errorString.contains('Session expired') ||
+    if (e is SubscriptionExpiredException) {
+      message = e.message;
+      type = ErrorType.subscription;
+      statusCode = 403;
+    } else if (errorString.contains('Session expired') ||
         errorString.contains('Unauthorized') ||
         errorString.contains('401')) {
       message = 'Your session has expired. Please login again.';
@@ -79,6 +85,7 @@ enum ErrorType {
   server,
   notFound,
   permission,
+  subscription,
   rateLimit,
   validation,
   unknown,
@@ -89,13 +96,23 @@ class ErrorHandler {
       {VoidCallback? onRetry}) {
     final appError = error is AppError ? error : AppError.fromException(error);
 
+    if (appError.type == ErrorType.subscription) {
+      final exception = error is SubscriptionExpiredException
+          ? error
+          : SubscriptionExpiredException(
+              message: appError.message,
+              plans: [],
+            );
+      SubscriptionExpiredOverlay.show(context, error: exception);
+      return;
+    }
+
     // Report to Sentry (silently skipped if not configured)
-    SentryService.captureException(error,
-        extras: {
-          'error_type': appError.type.name,
-          'status_code': appError.statusCode,
-          'message': appError.message,
-        });
+    SentryService.captureException(error, extras: {
+      'error_type': appError.type.name,
+      'status_code': appError.statusCode,
+      'message': appError.message,
+    });
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -165,6 +182,8 @@ class ErrorHandler {
         return Colors.grey.shade700;
       case ErrorType.permission:
         return Colors.purple;
+      case ErrorType.subscription:
+        return Colors.deepOrange;
       case ErrorType.rateLimit:
         return Colors.amber.shade800;
       case ErrorType.validation:
@@ -186,6 +205,8 @@ class ErrorHandler {
         return Icons.search_off;
       case ErrorType.permission:
         return Icons.block;
+      case ErrorType.subscription:
+        return Icons.subscriptions_rounded;
       case ErrorType.rateLimit:
         return Icons.speed;
       case ErrorType.validation:

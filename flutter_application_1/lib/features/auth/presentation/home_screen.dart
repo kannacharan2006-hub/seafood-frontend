@@ -157,8 +157,7 @@ class AboutAppScreen extends StatelessWidget {
                         width: 50,
                         height: 50,
                         decoration: BoxDecoration(
-                            color:
-                                Colors.white.withAlpha((0.2 * 255).round()),
+                            color: Colors.white.withAlpha((0.2 * 255).round()),
                             borderRadius: BorderRadius.circular(12)),
                         child: const Icon(Icons.person,
                             color: Colors.white, size: 28),
@@ -179,8 +178,8 @@ class AboutAppScreen extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 2),
                             decoration: BoxDecoration(
-                                color: Colors.white
-                                    .withAlpha((0.2 * 255).round()),
+                                color:
+                                    Colors.white.withAlpha((0.2 * 255).round()),
                                 borderRadius: BorderRadius.circular(10)),
                             child: const Text("Full Stack Developer",
                                 style: TextStyle(
@@ -327,9 +326,7 @@ class AboutAppScreen extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: isDark
-                          ? AppColors.primaryTextDark
-                          : null)),
+                      color: isDark ? AppColors.primaryTextDark : null)),
               Text(subtitle,
                   style: TextStyle(
                       fontSize: 12,
@@ -496,9 +493,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    color: isDark
-                        ? AppColors.primaryTextDark
-                        : null),
+                    color: isDark ? AppColors.primaryTextDark : null),
               ),
             ],
           ),
@@ -533,8 +528,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: Text("Cancel",
-                  style: TextStyle(color: Colors.grey[500])),
+              child: Text("Cancel", style: TextStyle(color: Colors.grey[500])),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -693,7 +687,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   Text(
                     label,
                     style: TextStyle(
-                      fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                      fontWeight:
+                          isSelected ? FontWeight.w700 : FontWeight.w500,
                       color: isSelected
                           ? Theme.of(context).colorScheme.primary
                           : null,
@@ -836,8 +831,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         _navTo(const StockScreen()), isDark),
                     const SizedBox(height: 8),
                     _drawerSection(isDark, title: "Appearance"),
-                    _drawerItem(
-                        Icons.palette_outlined, "Theme", _showThemeDialog, isDark),
+                    _drawerItem(Icons.palette_outlined, "Theme",
+                        _showThemeDialog, isDark),
                     _drawerItem(Icons.settings, "Language",
                         _navTo(const LanguageSettingsScreen()), isDark),
                     _drawerItem(
@@ -853,7 +848,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     onPressed: _showLogoutDialog,
-                    icon: const Icon(Icons.logout, size: 18, color: Colors.white),
+                    icon:
+                        const Icon(Icons.logout, size: 18, color: Colors.white),
                     label: const Text("Logout",
                         style: TextStyle(color: Colors.white, fontSize: 14)),
                     style: ElevatedButton.styleFrom(
@@ -876,7 +872,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-          DashboardScreen(userName: widget.userName),
+          DashboardScreen(userName: _userName),
           const PurchaseScreen(),
           const ConversionScreen(),
           const ExportScreen(),
@@ -895,9 +891,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         },
         type: BottomNavigationBarType.fixed,
         selectedItemColor: isDark ? AppColors.accentDark : Colors.blue,
-        unselectedItemColor: isDark
-            ? AppColors.secondaryTextDark
-            : Colors.grey[600],
+        unselectedItemColor:
+            isDark ? AppColors.secondaryTextDark : Colors.grey[600],
         backgroundColor: colorScheme.surface,
         items: const [
           BottomNavigationBarItem(
@@ -947,7 +942,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   /// DRAWER ITEM
-  Widget _drawerItem(IconData icon, String title, VoidCallback onTap, bool isDark) {
+  Widget _drawerItem(
+      IconData icon, String title, VoidCallback onTap, bool isDark) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 1.5),
       decoration: BoxDecoration(

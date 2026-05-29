@@ -6,6 +6,7 @@ import '../services/cache_service.dart';
 import '../services/connectivity_service.dart';
 import '../services/sentry_service.dart';
 import 'app_config.dart';
+import '../features/subscription/models/subscription_exception.dart';
 
 class Api {
   static String get baseUrl => AppConfig.baseUrl;
@@ -217,6 +218,17 @@ class Api {
 
     if (response.statusCode == 401) {
       throw Exception("Session expired. Please login again.");
+    }
+
+    if (response.statusCode == 403 &&
+        data is Map &&
+        data["code"] == "SUBSCRIPTION_EXPIRED") {
+      throw SubscriptionExpiredException(
+        message: data["message"] ?? "Subscription expired",
+        planName: data["planName"]?.toString(),
+        endedAt: data["endedAt"]?.toString(),
+        plans: List<dynamic>.from(data["plans"] ?? []),
+      );
     }
 
     String? message;

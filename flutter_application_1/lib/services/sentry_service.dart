@@ -25,7 +25,9 @@ class SentryService {
   static Future<void> init() async {
     final dsn = _dsn;
     if (dsn == null) {
-      debugPrint('[Sentry] No DSN configured. Skipping initialization.');
+      if (!kReleaseMode) {
+        debugPrint('[Sentry] No DSN configured. Skipping initialization.');
+      }
       return;
     }
 
@@ -33,9 +35,14 @@ class SentryService {
       await SentryFlutter.init(
         (options) {
           options.dsn = dsn;
-          options.tracesSampleRate = 0.2; // 20% performance tracing
+          // Send 10% of error events to Sentry to reduce spam
+          options.sampleRate = 0.1;
+          // Send 5% of transactions for performance tracing
+          options.tracesSampleRate = 0.05;
           options.environment = AppConfig.environment.label;
           options.reportPackages = false;
+          // Disable debug logs in non-release mode
+          options.debug = kReleaseMode;
           // Breadcrumbs are enabled by default in sentry_flutter
           options.attachScreenshot = false; // Privacy: don't send screenshots
         },
@@ -44,9 +51,13 @@ class SentryService {
         },
       );
       _initialized = true;
-      debugPrint('[Sentry] Initialized successfully.');
+      if (!kReleaseMode) {
+        debugPrint('[Sentry] Initialized successfully.');
+      }
     } catch (e) {
-      debugPrint('[Sentry] Failed to initialize: $e');
+      if (!kReleaseMode) {
+        debugPrint('[Sentry] Failed to initialize: $e');
+      }
       // Never crash the app due to Sentry failure
     }
   }
@@ -61,6 +72,19 @@ class SentryService {
     Map<String, dynamic>? extras,
   }) async {
     if (!_initialized) return;
+
+    // Filter out common spam/nuisance errors
+    final errorString = exception.toString().toLowerCase();
+    if (errorString.contains('socketexception') &&
+        (errorString.contains('failed host lookup') ||
+            errorString.contains('network is unreachable') ||
+            errorString.contains('connection refused'))) {
+      // Don't send network errors to Sentry - they're expected in mobile
+      if (!kReleaseMode) {
+        debugPrint('[Sentry] Filtered network error: $exception');
+      }
+      return;
+    }
 
     try {
       await Sentry.captureException(

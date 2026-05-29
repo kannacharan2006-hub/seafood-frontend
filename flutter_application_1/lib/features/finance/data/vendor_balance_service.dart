@@ -5,10 +5,9 @@ class VendorBalanceService {
   Future<List<dynamic>> fetchVendors() async {
     final companyId = await SecureStorage.getData("company_id");
     final endpoint = companyId != null
-        ? "/api/vendors/vendors?company_id=$companyId"
-        : "/api/vendors/vendors";
-    final data = await Api.get(endpoint,
-        cacheTtl: const Duration(minutes: 30));
+        ? "/api/vendors?company_id=$companyId"
+        : "/api/vendors";
+    final data = await Api.get(endpoint, cacheTtl: const Duration(minutes: 30));
     return List<dynamic>.from(data["data"]);
   }
 
@@ -34,6 +33,6 @@ class VendorBalanceService {
     if (companyId != null) {
       body["company_id"] = int.tryParse(companyId);
     }
-    await Api.put("/api/vendors/vendors/$vendorId", body);
+    await Api.put("/api/vendors/$vendorId", body);
   }
 }

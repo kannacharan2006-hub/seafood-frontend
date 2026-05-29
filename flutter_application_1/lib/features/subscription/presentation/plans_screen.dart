@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../data/subscription_service.dart';
+import 'subscription_status_screen.dart';
 
 class PlansScreen extends StatefulWidget {
-  const PlansScreen({super.key});
+  final String? initialPlanId;
+
+  const PlansScreen({super.key, this.initialPlanId});
 
   @override
   State<PlansScreen> createState() => _PlansScreenState();
@@ -14,23 +17,12 @@ class _PlansScreenState extends State<PlansScreen> {
   bool _isLoading = true;
   String? _errorMessage;
   String? _appliedCoupon;
-  late final Razorpay _razorpay;
   int? _selectedPlanIndex;
 
   @override
   void initState() {
     super.initState();
     _loadPlans();
-    _razorpay = Razorpay();
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
-  }
-
-  @override
-  void dispose() {
-    _razorpay.clear();
-    super.dispose();
   }
 
   Future<void> _loadPlans() async {
@@ -41,8 +33,14 @@ class _PlansScreenState extends State<PlansScreen> {
       });
       final plans = await SubscriptionService.getPlans();
       setState(() {
-        _plans = plans;
+        _plans = plans.where((p) => (p['price'] as num?) != 0).toList();
         _isLoading = false;
+        if (widget.initialPlanId != null) {
+          _selectedPlanIndex = _plans.indexWhere(
+            (p) => p['id'] == widget.initialPlanId,
+          );
+          if (_selectedPlanIndex == -1) _selectedPlanIndex = null;
+        }
       });
     } catch (e) {
       setState(() {
@@ -134,16 +132,22 @@ class _PlansScreenState extends State<PlansScreen> {
   }
 
   Widget _buildErrorView() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.error_outline, size: 64, color: Colors.red),
-          const SizedBox(height: 16),
-          Text(_errorMessage!, textAlign: TextAlign.center),
-          const SizedBox(height: 16),
-          ElevatedButton(onPressed: _loadPlans, child: const Text('Retry')),
-        ],
+    return SingleChildScrollView(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 40),
+              const Icon(Icons.error_outline, size: 64, color: Colors.red),
+              const SizedBox(height: 16),
+              Text(_errorMessage!, textAlign: TextAlign.center),
+              const SizedBox(height: 16),
+              ElevatedButton(onPressed: _loadPlans, child: const Text('Retry')),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -204,36 +208,42 @@ class _PlansScreenState extends State<PlansScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: color.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(12),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: color.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Icon(
+                            plan['id'] == 'premium'
+                                ? Icons.stars_rounded
+                                : plan['id'] == 'basic'
+                                    ? Icons.rocket_launch_rounded
+                                    : Icons.person_rounded,
+                            color: color,
+                            size: 28,
+                          ),
                         ),
-                        child: Icon(
-                          plan['id'] == 'premium'
-                              ? Icons.stars_rounded
-                              : plan['id'] == 'basic'
-                                  ? Icons.rocket_launch_rounded
-                                  : Icons.person_rounded,
-                          color: color,
-                          size: 28,
+                        const SizedBox(width: 12),
+                        Flexible(
+                          child: Text(
+                            plan['name'],
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: color,
+                            ),
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        plan['name'],
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: color,
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       if (plan['id'] == 'premium')
                         Container(
@@ -368,6 +378,12 @@ class _PlansScreenState extends State<PlansScreen> {
   Future<void> _handleSubscribe(dynamic plan) async {
     if (plan['price'] == 0) {
       _showSnackBar('Free plan activated!');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const SubscriptionStatusScreen(),
+        ),
+      );
       return;
     }
 
@@ -385,16 +401,23 @@ class _PlansScreenState extends State<PlansScreen> {
 
       if (result['free'] == true) {
         _showSnackBar('Subscribed successfully!');
+        Navigator.pushReplacement(
+          // ignore: use_build_context_synchronously
+          context,
+          MaterialPageRoute(
+            builder: (_) => const SubscriptionStatusScreen(),
+          ),
+        );
         return;
       }
 
       if (result['payment_link'] != null) {
-        _openRazorpayCheckout(result);
+        await _openRazorpayCheckout(result);
       }
     } catch (e) {
       _showSnackBar('Failed: $e', isError: true);
     } finally {
-      setState(() => _isLoading = false);
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
@@ -436,34 +459,29 @@ class _PlansScreenState extends State<PlansScreen> {
     );
   }
 
-  void _openRazorpayCheckout(Map<String, dynamic> data) {
+  Future<void> _openRazorpayCheckout(Map<String, dynamic> data) async {
     final paymentLink = data['payment_link'];
     if (paymentLink == null) {
       _showSnackBar('Payment link not available', isError: true);
       return;
     }
 
-    var options = {
-      'external': {'url': paymentLink}
-    };
-    try {
-      _razorpay.open(options);
-    } catch (e) {
-      _showSnackBar('Error in opening Razorpay: $e', isError: true);
+    final uri = Uri.parse(paymentLink);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (!mounted) return;
+      _showSnackBar(
+        'Payment initiated. Complete payment in browser, then check subscription status.',
+      );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const SubscriptionStatusScreen(),
+        ),
+      );
+    } else {
+      _showSnackBar('Could not open payment link', isError: true);
     }
-  }
-
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    _showSnackBar('Payment successful: ${response.paymentId}');
-  }
-
-  void _handlePaymentError(PaymentFailureResponse response) {
-    _showSnackBar('Payment failed: ${response.code} - ${response.message}',
-        isError: true);
-  }
-
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    _showSnackBar('External wallet: ${response.walletName}');
   }
 
   void _showSnackBar(String message, {bool isError = false}) {

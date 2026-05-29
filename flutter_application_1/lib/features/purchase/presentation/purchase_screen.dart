@@ -228,10 +228,7 @@ class _PurchaseScreenState extends State<PurchaseScreen>
       );
     } catch (e) {
       if (!mounted) return;
-
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Error saving purchase")));
+      ErrorHandler.showError(context, e);
     }
 
     setState(() => isSaving = false);

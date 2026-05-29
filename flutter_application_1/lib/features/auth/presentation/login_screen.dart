@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/widgets/premium_button.dart';
+import '../../../services/secure_storage.dart';
 import '../data/auth_service.dart';
 import 'home_screen.dart';
 import 'forgot_password_screen.dart';
@@ -60,6 +61,8 @@ class _LoginScreenState extends State<LoginScreen>
 
       final userName = result["user"]?["name"] ?? "";
       final userRole = result["user"]?["role"] ?? "EMPLOYEE";
+
+      await SecureStorage.saveData("user_name", userName);
 
       if (!mounted) return;
 

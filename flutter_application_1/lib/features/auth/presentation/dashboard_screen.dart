@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../data/dashboard_service.dart';
 import '../../../utils/error_handler.dart';
+import '../../../services/websocket_provider.dart';
 
 class DashboardScreen extends StatefulWidget {
   final String? userName;
@@ -22,6 +23,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     symbol: '₹',
     decimalDigits: 0,
   );
+  late final WebSocketProvider _wsProvider;
 
   // Design Tokens
   static const Color kIndigo = Color(0xFF6366F1);
@@ -33,7 +35,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
+    _wsProvider = WebSocketProvider();
+    _wsProvider.addListener(_onWebSocketUpdate);
     loadDashboard();
+  }
+
+  void _onWebSocketUpdate() {
+    if (!mounted) return;
+    setState(() {
+      // Trigger a refresh when we receive relevant websocket events
+      loadDashboard();
+    });
   }
 
   Future<void> loadDashboard() async {
@@ -56,6 +68,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
       ErrorHandler.showError(context, e, onRetry: loadDashboard);
     }
+  }
+
+  @override
+  void dispose() {
+    _wsProvider.removeListener(_onWebSocketUpdate);
+    super.dispose();
   }
 
   @override
