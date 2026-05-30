@@ -237,8 +237,9 @@ class _ConversionScreenState extends State<ConversionScreen> {
             int idx = entry.key;
             ConversionItem item = entry.value;
             final double? availQty = stockMap != null && item.variantId != null
-                ? (stockMap[item.variantId]?['available_qty'] as num?)
-                    ?.toDouble()
+                ? double.tryParse(
+                    (stockMap[item.variantId]?['available_qty'] ?? '')
+                        .toString())
                 : null;
             final double? enteredQty = double.tryParse(item.qtyController.text);
             final bool exceedsStock =
