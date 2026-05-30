@@ -24,6 +24,7 @@ class _ConversionScreenState extends State<ConversionScreen> {
   final PurchaseService _purchaseService = PurchaseService();
 
   List variants = [];
+  Map<String, dynamic> _rawStockMap = {};
   List<ConversionItem> rawItems = [ConversionItem()];
   List<ConversionItem> finalItems = [ConversionItem()];
   TextEditingController notesController = TextEditingController();
@@ -35,6 +36,17 @@ class _ConversionScreenState extends State<ConversionScreen> {
   void initState() {
     super.initState();
     loadVariants();
+    _loadRawStock();
+  }
+
+  Future<void> _loadRawStock() async {
+    try {
+      final stock = await _service.fetchRawStock();
+      if (!mounted) return;
+      setState(() {
+        _rawStockMap = {for (var s in stock) s['variant_id'].toString(): s};
+      });
+    } catch (_) {}
   }
 
   Future<void> loadVariants() async {
@@ -87,6 +99,7 @@ class _ConversionScreenState extends State<ConversionScreen> {
                     icon: Icons.remove_circle,
                     iconColor: Colors.red,
                     items: rawItems,
+                    stockMap: _rawStockMap,
                     buttonText: "+ Add More Old Items",
                     trailing: IconButton(
                       icon: const Icon(Icons.inventory_2_rounded,
@@ -176,6 +189,7 @@ class _ConversionScreenState extends State<ConversionScreen> {
     required List<ConversionItem> items,
     required String buttonText,
     Widget? trailing,
+    Map<String, dynamic>? stockMap,
   }) {
     return Container(
       width: double.infinity,
@@ -222,53 +236,85 @@ class _ConversionScreenState extends State<ConversionScreen> {
           ...items.asMap().entries.map((entry) {
             int idx = entry.key;
             ConversionItem item = entry.value;
+            final double? availQty = stockMap != null && item.variantId != null
+                ? (stockMap[item.variantId]?['available_qty'] as num?)
+                    ?.toDouble()
+                : null;
+            final double? enteredQty = double.tryParse(item.qtyController.text);
+            final bool exceedsStock =
+                availQty != null && enteredQty != null && enteredQty > availQty;
             return Padding(
               padding: const EdgeInsets.only(bottom: 12),
-              child: Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    flex: 2,
-                    child: DropdownSearch<String>(
-                      key: ValueKey('conv_${title}_${item.hashCode}'),
-                      items: variants
-                          .map<String>((v) => v['id'].toString())
-                          .toList(),
-                      dropdownDecoratorProps: DropDownDecoratorProps(
-                        dropdownSearchDecoration: InputDecoration(
-                          hintText: "Select Item",
-                          contentPadding: const EdgeInsets.all(12),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                  Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: DropdownSearch<String>(
+                          key: ValueKey('conv_${title}_${item.hashCode}'),
+                          items: variants
+                              .map<String>((v) => v['id'].toString())
+                              .toList(),
+                          dropdownDecoratorProps: DropDownDecoratorProps(
+                            dropdownSearchDecoration: InputDecoration(
+                              hintText: "Select Item",
+                              contentPadding: const EdgeInsets.all(12),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                          itemAsString: (id) {
+                            final v = variants.firstWhere(
+                              (v) => v['id'].toString() == id,
+                            );
+                            return "${v['item_name']} (${v['grade']})";
+                          },
+                          onChanged: (val) =>
+                              setState(() => item.variantId = val),
+                          popupProps:
+                              const PopupProps.menu(showSearchBox: true),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: TextField(
+                          controller: item.qtyController,
+                          keyboardType: TextInputType.number,
+                          onChanged: (_) => setState(() {}),
+                          decoration: InputDecoration(
+                            labelText:
+                                availQty != null ? "Kg / $availQty" : "Kg",
+                            errorText: exceedsStock
+                                ? "Only $availQty kg available"
+                                : null,
+                            errorStyle: const TextStyle(
+                                fontSize: 11, color: Colors.red),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                           ),
                         ),
                       ),
-                      itemAsString: (id) {
-                        final v = variants.firstWhere(
-                          (v) => v['id'].toString() == id,
-                        );
-                        return "${v['item_name']} (${v['grade']})";
-                      },
-                      onChanged: (val) => setState(() => item.variantId = val),
-                      popupProps: const PopupProps.menu(showSearchBox: true),
-                    ),
+                      if (items.length > 1)
+                        IconButton(
+                          icon: const Icon(Icons.cancel, color: Colors.red),
+                          onPressed: () => setState(() => items.removeAt(idx)),
+                        ),
+                    ],
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: TextField(
-                      controller: item.qtyController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: "Kg",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
+                  if (availQty != null && item.variantId != null)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 4, top: 4),
+                      child: Text(
+                        "Available: $availQty kg",
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: Colors.grey[500],
                         ),
                       ),
-                    ),
-                  ),
-                  if (items.length > 1)
-                    IconButton(
-                      icon: const Icon(Icons.cancel, color: Colors.red),
-                      onPressed: () => setState(() => items.removeAt(idx)),
                     ),
                 ],
               ),
