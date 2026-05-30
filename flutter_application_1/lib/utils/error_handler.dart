@@ -136,6 +136,7 @@ class ErrorHandler {
                 textColor: Colors.white,
                 onPressed: () {
                   Api.logout();
+                  if (!context.mounted) return;
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                         builder: (context) => const SplashScreen()),
