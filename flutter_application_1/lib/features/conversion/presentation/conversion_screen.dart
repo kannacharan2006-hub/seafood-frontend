@@ -88,6 +88,12 @@ class _ConversionScreenState extends State<ConversionScreen> {
                     iconColor: Colors.red,
                     items: rawItems,
                     buttonText: "+ Add More Old Items",
+                    trailing: IconButton(
+                      icon: const Icon(Icons.inventory_2_rounded,
+                          size: 20, color: Colors.teal),
+                      tooltip: "View available stock",
+                      onPressed: _showStockPopup,
+                    ),
                   ),
 
                   const Padding(
@@ -169,6 +175,7 @@ class _ConversionScreenState extends State<ConversionScreen> {
     required Color iconColor,
     required List<ConversionItem> items,
     required String buttonText,
+    Widget? trailing,
   }) {
     return Container(
       width: double.infinity,
@@ -189,22 +196,26 @@ class _ConversionScreenState extends State<ConversionScreen> {
             children: [
               Icon(icon, color: iconColor, size: 28),
               const SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
-                  Text(
-                    subtitle,
-                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-                  ),
-                ],
+                    Text(
+                      subtitle,
+                      style:
+                          TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                    ),
+                  ],
+                ),
               ),
+              if (trailing != null) trailing,
             ],
           ),
           const Divider(height: 20),
@@ -276,6 +287,16 @@ class _ConversionScreenState extends State<ConversionScreen> {
     );
   }
 
+  void _showStockPopup() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) => _StockViewer(service: _service),
+    );
+  }
+
   void _handleSave() async {
     if (rawItems.any((e) => e.variantId == null) ||
         finalItems.any((e) => e.variantId == null)) {
@@ -329,5 +350,141 @@ class _ConversionScreenState extends State<ConversionScreen> {
     } finally {
       setState(() => isSaving = false);
     }
+  }
+}
+
+class _StockViewer extends StatefulWidget {
+  final ConversionService service;
+  const _StockViewer({required this.service});
+
+  @override
+  State<_StockViewer> createState() => _StockViewerState();
+}
+
+class _StockViewerState extends State<_StockViewer> {
+  List? _stock;
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    try {
+      final data = await widget.service.fetchRawStock();
+      if (!mounted) return;
+      setState(() {
+        _stock = data;
+        _loading = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _loading = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DraggableScrollableSheet(
+      initialChildSize: 0.5,
+      minChildSize: 0.3,
+      maxChildSize: 0.8,
+      expand: false,
+      builder: (context, scrollController) {
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+          child: Column(
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  const Icon(Icons.inventory_2_rounded,
+                      color: Colors.teal, size: 22),
+                  const SizedBox(width: 8),
+                  const Text(
+                    "Available Raw Stock",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const Spacer(),
+                  if (_stock != null)
+                    Text(
+                      "${_stock!.length} items",
+                      style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                    ),
+                ],
+              ),
+              const Divider(height: 20),
+              Expanded(
+                child: _loading
+                    ? const Center(child: CircularProgressIndicator())
+                    : _stock == null || _stock!.isEmpty
+                        ? Center(
+                            child: Text(
+                              "No stock available",
+                              style: TextStyle(
+                                  color: Colors.grey[500], fontSize: 15),
+                            ),
+                          )
+                        : ListView.separated(
+                            controller: scrollController,
+                            itemCount: _stock!.length,
+                            separatorBuilder: (_, __) =>
+                                const Divider(height: 1),
+                            itemBuilder: (_, i) {
+                              final s = _stock![i];
+                              return ListTile(
+                                dense: true,
+                                leading: CircleAvatar(
+                                  radius: 16,
+                                  backgroundColor: Colors.teal.withAlpha(25),
+                                  child: const Icon(Icons.inventory,
+                                      size: 16, color: Colors.teal),
+                                ),
+                                title: Text(
+                                  "${s['item_name']} (${s['variant_name']})",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14),
+                                ),
+                                subtitle: Text(
+                                  s['category_name'] ?? '',
+                                  style: TextStyle(
+                                      fontSize: 11, color: Colors.grey[500]),
+                                ),
+                                trailing: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.teal.withAlpha(20),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    "${s['available_qty']} kg",
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13,
+                                      color: Colors.teal,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

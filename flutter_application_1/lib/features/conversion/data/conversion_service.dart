@@ -1,6 +1,11 @@
 import '/config/api.dart';
 
 class ConversionService {
+  Future<List> fetchRawStock() async {
+    final data = await Api.get("/api/stocks/raw-stock");
+    return data["data"] ?? [];
+  }
+
   Future<void> createConversion(
     List rawItems,
     List finalItems,
