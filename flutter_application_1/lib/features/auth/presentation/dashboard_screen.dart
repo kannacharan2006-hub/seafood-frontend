@@ -2,14 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
+import '../../stock/presentation/stock_screen.dart';
 import '../data/dashboard_service.dart';
 import '../../../utils/error_handler.dart';
 import '../../../services/websocket_provider.dart';
 
 class DashboardScreen extends StatefulWidget {
   final String? userName;
+  final String? userRole;
+  final void Function(int tabIndex)? onNavigateTab;
 
-  const DashboardScreen({super.key, this.userName});
+  const DashboardScreen({
+    super.key,
+    this.userName,
+    this.userRole,
+    this.onNavigateTab,
+  });
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -24,6 +32,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     decimalDigits: 0,
   );
   late final WebSocketProvider _wsProvider;
+  bool get _isEmployee => widget.userRole != null && widget.userRole != 'OWNER';
 
   // Design Tokens
   static const Color kIndigo = Color(0xFF6366F1);
@@ -101,25 +110,45 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 padding: const EdgeInsets.fromLTRB(20, 24, 20, 140),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _sectionHeader("Quick Stats", "Your performance today"),
-                    const SizedBox(height: 16),
-                    _buildQuickStats(),
-                    const SizedBox(height: 24),
-                    _buildProfitAnalytics(),
-                    const SizedBox(height: 32),
-                    _sectionHeader("Business Health", "Cash and Stock status"),
-                    const SizedBox(height: 16),
-                    _buildBusinessHealth(),
-                    const SizedBox(height: 32),
-                    _sectionHeader("Recent Activity", "Latest 5 entries"),
-                    const SizedBox(height: 16),
-                    _buildRecentActivity(),
-                    const SizedBox(height: 32),
-                    _sectionHeader("Top Suppliers", "Best performing vendors"),
-                    const SizedBox(height: 16),
-                    _buildTopSuppliers(),
-                  ],
+                  children: _isEmployee
+                      ? [
+                          _buildQuickActions(),
+                          const SizedBox(height: 28),
+                          _sectionHeader("Today's Summary", "At a glance"),
+                          const SizedBox(height: 16),
+                          _buildQuickStats(),
+                          const SizedBox(height: 28),
+                          _sectionHeader("Recent Activity", "Latest entries"),
+                          const SizedBox(height: 16),
+                          _buildRecentActivity(),
+                          const SizedBox(height: 28),
+                          _sectionHeader(
+                              "Top Suppliers", "Best performing vendors"),
+                          const SizedBox(height: 16),
+                          _buildTopSuppliers(),
+                        ]
+                      : [
+                          _sectionHeader(
+                              "Quick Stats", "Your performance today"),
+                          const SizedBox(height: 16),
+                          _buildQuickStats(),
+                          const SizedBox(height: 24),
+                          _buildProfitAnalytics(),
+                          const SizedBox(height: 32),
+                          _sectionHeader(
+                              "Business Health", "Cash and Stock status"),
+                          const SizedBox(height: 16),
+                          _buildBusinessHealth(),
+                          const SizedBox(height: 32),
+                          _sectionHeader("Recent Activity", "Latest 5 entries"),
+                          const SizedBox(height: 16),
+                          _buildRecentActivity(),
+                          const SizedBox(height: 32),
+                          _sectionHeader(
+                              "Top Suppliers", "Best performing vendors"),
+                          const SizedBox(height: 16),
+                          _buildTopSuppliers(),
+                        ],
                 ),
               ),
             ),
@@ -188,6 +217,129 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  Widget _buildQuickActions() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 14),
+          child: Text(
+            "Quick Actions",
+            style: GoogleFonts.plusJakartaSans(
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+              color: kSlateDark,
+              letterSpacing: -0.5,
+            ),
+          ),
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: _actionCard(
+                icon: Icons.shopping_cart_rounded,
+                label: "New\nPurchase",
+                color: const Color(0xFFF97316),
+                onTap: () => widget.onNavigateTab?.call(1),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _actionCard(
+                icon: Icons.point_of_sale_rounded,
+                label: "New\nSale",
+                color: const Color(0xFF3B82F6),
+                onTap: () => widget.onNavigateTab?.call(3),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _actionCard(
+                icon: Icons.sync_alt_rounded,
+                label: "Re-grade\nStock",
+                color: const Color(0xFF8B5CF6),
+                onTap: () => widget.onNavigateTab?.call(2),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _actionCard(
+                icon: Icons.inventory_2_rounded,
+                label: "Check\nStock",
+                color: const Color(0xFF10B981),
+                onTap: _navigateToStock,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _actionCard({
+    required IconData icon,
+    required String label,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            gradient: LinearGradient(
+              colors: [
+                color.withValues(alpha: 0.12),
+                color.withValues(alpha: 0.04)
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            border: Border.all(color: color.withValues(alpha: 0.2)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(icon, color: color, size: 26),
+              ),
+              const SizedBox(height: 14),
+              Text(
+                label,
+                style: GoogleFonts.plusJakartaSans(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  color: color,
+                  height: 1.3,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _navigateToStock() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const StockScreen()),
+    );
+  }
+
   Widget _sectionHeader(String title, String sub) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -240,18 +392,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Icons.show_chart_rounded,
           Colors.blue,
         ),
-        _statCard(
-          "Today Profit",
-          dashboardData?['today_profit'] ?? 0,
-          Icons.account_balance_wallet_outlined,
-          kEmerald,
-        ),
-        _statCard(
-          "Month Profit",
-          dashboardData?['month_profit'] ?? 0,
-          Icons.savings_outlined,
-          Colors.purple,
-        ),
+        if (_isEmployee) ...[
+          _statCard(
+            "Raw Stock",
+            "${dashboardData?['raw_stock'] ?? 0} kg",
+            Icons.inventory_2_outlined,
+            Colors.teal,
+          ),
+          _statCard(
+            "Final Stock",
+            "${dashboardData?['final_stock'] ?? 0} kg",
+            Icons.checklist_rtl_rounded,
+            Colors.indigo,
+          ),
+        ] else ...[
+          _statCard(
+            "Today Profit",
+            dashboardData?['today_profit'] ?? 0,
+            Icons.account_balance_wallet_outlined,
+            kEmerald,
+          ),
+          _statCard(
+            "Month Profit",
+            dashboardData?['month_profit'] ?? 0,
+            Icons.savings_outlined,
+            Colors.purple,
+          ),
+        ],
       ],
     );
   }
@@ -299,7 +466,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           const SizedBox(height: 4),
           FittedBox(
             child: Text(
-              currencyFormat.format(num.tryParse(val.toString()) ?? 0),
+              val is num || (val is String && double.tryParse(val) != null)
+                  ? currencyFormat.format(num.tryParse(val.toString()) ?? 0)
+                  : val.toString(),
               style: GoogleFonts.plusJakartaSans(
                 fontSize: 18,
                 fontWeight: FontWeight.w800,
@@ -404,33 +573,37 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Colors.redAccent,
               true,
             ),
-            const SizedBox(width: 12),
-            _healthBarCard(
-              "Customer Receivable",
-              dashboardData?['customer_receivable'] ?? 0,
-              kEmerald,
-              true,
-            ),
+            if (!_isEmployee) ...[
+              const SizedBox(width: 12),
+              _healthBarCard(
+                "Customer Receivable",
+                dashboardData?['customer_receivable'] ?? 0,
+                kEmerald,
+                true,
+              ),
+            ],
           ],
         ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            _healthBarCard(
-              "Raw Stock",
-              "${dashboardData?['raw_stock'] ?? 0} kg",
-              Colors.teal,
-              false,
-            ),
-            const SizedBox(width: 12),
-            _healthBarCard(
-              "Final Stock",
-              "${dashboardData?['final_stock'] ?? 0} kg",
-              Colors.indigo,
-              false,
-            ),
-          ],
-        ),
+        if (!_isEmployee) ...[
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              _healthBarCard(
+                "Raw Stock",
+                "${dashboardData?['raw_stock'] ?? 0} kg",
+                Colors.teal,
+                false,
+              ),
+              const SizedBox(width: 12),
+              _healthBarCard(
+                "Final Stock",
+                "${dashboardData?['final_stock'] ?? 0} kg",
+                Colors.indigo,
+                false,
+              ),
+            ],
+          ),
+        ],
       ],
     );
   }

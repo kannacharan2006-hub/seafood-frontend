@@ -418,13 +418,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   String _userName = "";
   late WebSocketProvider _wsProvider;
 
-  List<String> get _titles => [
-        AppLocalizations.dashboard,
-        AppLocalizations.purchase,
-        AppLocalizations.reGrading,
-        AppLocalizations.sales,
-        AppLocalizations.reports,
-      ];
+  List<String> get _titles {
+    final base = [
+      AppLocalizations.dashboard,
+      AppLocalizations.purchase,
+      AppLocalizations.reGrading,
+      AppLocalizations.sales,
+    ];
+    if (widget.userRole != 'OWNER') return base;
+    return [...base, AppLocalizations.reports];
+  }
 
   @override
   void initState() {
@@ -810,21 +813,24 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           isDark),
                       _drawerItem(Icons.payments, "Customer Payment",
                           _navTo(const CustomerPaymentScreen()), isDark),
-                      const SizedBox(height: 8),
-                      _drawerSection(isDark, title: "Vendors"),
-                      _drawerItem(Icons.store, "Vendor Balance",
-                          _navTo(const VendorBalanceScreen()), isDark),
-                      _drawerItem(Icons.payment, "Vendor Payment",
-                          _navTo(const VendorPaymentScreen()), isDark),
-                      const SizedBox(height: 8),
-                      _drawerSection(isDark, title: "Company"),
                       _drawerItem(Icons.people, "Manage Employees",
                           _navTo(const ManageEmployeesScreen()), isDark),
-                      _drawerItem(Icons.storage, "Manage Data",
-                          _navTo(const ManageDataScreen()), isDark),
                       _drawerItem(Icons.subscriptions, "Subscription",
                           _navTo(const SubscriptionStatusScreen()), isDark),
+                      const SizedBox(height: 8),
                     ],
+                    _drawerSection(isDark, title: "Vendors"),
+                    _drawerItem(Icons.store, "Vendor Balance",
+                        _navTo(const VendorBalanceScreen()), isDark),
+                    _drawerItem(Icons.payment, "Vendor Payment",
+                        _navTo(const VendorPaymentScreen()), isDark),
+                    const SizedBox(height: 8),
+                    _drawerSection(isDark,
+                        title: widget.userRole == 'OWNER'
+                            ? "Company"
+                            : "Settings"),
+                    _drawerItem(Icons.storage, "Manage Data",
+                        _navTo(const ManageDataScreen()), isDark),
                     const SizedBox(height: 8),
                     _drawerSection(isDark, title: "Stock"),
                     _drawerItem(Icons.inventory_2, "Stock Overview",
@@ -872,11 +878,19 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-          DashboardScreen(userName: _userName),
+          DashboardScreen(
+            userName: _userName,
+            userRole: widget.userRole,
+            onNavigateTab: (index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+          ),
           const PurchaseScreen(),
           const ConversionScreen(),
           const ExportScreen(),
-          const ReportsDashboard(),
+          if (widget.userRole == 'OWNER') const ReportsDashboard(),
         ],
       ),
 
@@ -894,30 +908,37 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         unselectedItemColor:
             isDark ? AppColors.secondaryTextDark : Colors.grey[600],
         backgroundColor: colorScheme.surface,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
-            label: "Dashboard",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: "Purchase",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.factory),
-            label: "Re-grading",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.point_of_sale),
-            label: "Sales",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: "Reports",
-          ),
-        ],
+        items: _buildNavItems(),
       ),
     );
+  }
+
+  List<BottomNavigationBarItem> _buildNavItems() {
+    final items = [
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.dashboard),
+        label: "Dashboard",
+      ),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.shopping_cart),
+        label: "Purchase",
+      ),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.factory),
+        label: "Re-grading",
+      ),
+      const BottomNavigationBarItem(
+        icon: Icon(Icons.point_of_sale),
+        label: "Sales",
+      ),
+    ];
+    if (widget.userRole == 'OWNER') {
+      items.add(const BottomNavigationBarItem(
+        icon: Icon(Icons.bar_chart),
+        label: "Reports",
+      ));
+    }
+    return items;
   }
 
   VoidCallback _navTo(Widget screen) {
