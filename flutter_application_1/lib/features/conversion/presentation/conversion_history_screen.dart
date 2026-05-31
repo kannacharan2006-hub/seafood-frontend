@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../conversion/data/conversion_service.dart';
 import 'conversion_details_screen.dart';
-import 'package:intl/intl.dart';
 import '../../../utils/error_handler.dart';
+import '../../../core/utils/date_format_util.dart';
 
 class ConversionHistoryScreen extends StatefulWidget {
   const ConversionHistoryScreen({super.key});
@@ -139,14 +139,10 @@ class _ConversionHistoryScreenState extends State<ConversionHistoryScreen> {
                         );
                       }
                       final conv = conversions[index];
-                      String formattedDate = "Unknown Date";
-                      final dateStr = conv['created_at'] ?? conv['date'];
-                      if (dateStr != null) {
-                        DateTime parsedDate =
-                            DateTime.parse(dateStr.toString());
-                        formattedDate =
-                            DateFormat('dd MMMM yyyy HH:mm').format(parsedDate);
-                      }
+                      final formattedDate =
+                          DateFormatUtil.formatDateDdMMMyyyyhhhmma(
+                              (conv['created_at'] ?? conv['date'] ?? '')
+                                  .toString());
 
                       return Container(
                         margin: const EdgeInsets.symmetric(

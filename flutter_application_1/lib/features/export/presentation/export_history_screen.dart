@@ -4,6 +4,7 @@ import 'export_details_screen.dart';
 import '../data/export_history_service.dart';
 import '../../../core/widgets/skeleton_loader.dart';
 import '../../../utils/error_handler.dart';
+import '../../../core/utils/date_format_util.dart';
 
 class ExportHistoryScreen extends StatefulWidget {
   const ExportHistoryScreen({super.key});
@@ -211,30 +212,10 @@ class _ExportHistoryScreenState extends State<ExportHistoryScreen> {
                     }
 
                     final exp = exports[index];
-                    final dateStr =
-                        (exp['created_at'] ?? exp['date'] ?? '').toString();
-                    String displayDate = dateStr;
-                    if (dateStr.contains('T')) {
-                      final dt = DateTime.tryParse(dateStr);
-                      if (dt != null) {
-                        final months = [
-                          'Jan',
-                          'Feb',
-                          'Mar',
-                          'Apr',
-                          'May',
-                          'Jun',
-                          'Jul',
-                          'Aug',
-                          'Sep',
-                          'Oct',
-                          'Nov',
-                          'Dec'
-                        ];
-                        displayDate =
-                            '${dt.day} ${months[dt.month - 1]} ${dt.year} ${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}';
-                      }
-                    }
+                    final displayDate =
+                        DateFormatUtil.formatDateTimeMMMddyyyyHHmm(
+                            (exp['created_at'] ?? exp['date'] ?? '')
+                                .toString());
                     final theme = Theme.of(context);
 
                     return Container(

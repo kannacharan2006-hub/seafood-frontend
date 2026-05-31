@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../data/invoice_service.dart';
+import '../../../core/utils/date_format_util.dart';
 
 class ExportDetailsScreen extends StatelessWidget {
   final Map exportData;
@@ -24,11 +25,8 @@ class ExportDetailsScreen extends StatelessWidget {
       grandTotal += double.tryParse(item['total'].toString()) ?? 0;
     }
 
-    String formattedDate = "N/A";
-    if (exportData['date'] != null) {
-      DateTime parsedDate = DateTime.parse(exportData['date']).toLocal();
-      formattedDate = DateFormat('MMMM dd, yyyy').format(parsedDate);
-    }
+    final formattedDate =
+        DateFormatUtil.formatDateMMMddyyyy(exportData['date']?.toString());
 
     return Scaffold(
       backgroundColor: kPageBg,
