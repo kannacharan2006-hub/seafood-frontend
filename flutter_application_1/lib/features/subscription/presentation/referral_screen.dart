@@ -524,7 +524,7 @@ class _ReferralScreenState extends State<ReferralScreen>
             const Icon(Icons.flag_rounded, size: 14, color: Colors.amber),
             const SizedBox(width: 4),
             Text(
-              '$remaining credits until 1 month free!',
+              '$remaining credits until 3 months free!',
               style: const TextStyle(
                 color: Colors.amber,
                 fontSize: 12,

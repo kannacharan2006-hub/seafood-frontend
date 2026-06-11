@@ -153,7 +153,8 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
                                 borderRadius: BorderRadius.circular(14),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withAlpha((0.05 * 255).round()),
+                                    color: Colors.black
+                                        .withAlpha((0.05 * 255).round()),
                                     blurRadius: 8,
                                   )
                                 ],
@@ -231,6 +232,12 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
                                   /// ACTIONS
                                   Row(
                                     children: [
+                                      IconButton(
+                                        icon: const Icon(Icons.lock_outline,
+                                            size: 20, color: Color(0xFF10B981)),
+                                        onPressed: () =>
+                                            _showResetPasswordDialog(emp),
+                                      ),
                                       IconButton(
                                         icon: const Icon(Icons.edit,
                                             size: 20, color: Color(0xFF2563EB)),
@@ -364,6 +371,71 @@ class _ManageEmployeesScreenState extends State<ManageEmployeesScreen> {
               loadEmployees();
             },
             child: const Text("Update"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// RESET PASSWORD
+  void _showResetPasswordDialog(Map emp) {
+    final passwordController = TextEditingController();
+    final confirmController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text("Reset Password\n${emp['name']}"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: passwordController,
+              decoration: const InputDecoration(labelText: "New Password"),
+              obscureText: true,
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: confirmController,
+              decoration: const InputDecoration(labelText: "Confirm Password"),
+              obscureText: true,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Cancel"),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (passwordController.text.length < 8) {
+                ErrorHandler.showError(
+                    context, "Password must be at least 8 characters");
+                return;
+              }
+              if (passwordController.text != confirmController.text) {
+                ErrorHandler.showError(context, "Passwords do not match");
+                return;
+              }
+              try {
+                await ManageEmployeesService.resetPassword(
+                  id: emp['id'],
+                  password: passwordController.text,
+                );
+                if (!mounted) return;
+                Navigator.pop(context);
+                ErrorHandler.showSuccess(
+                    context, "Password updated successfully");
+              } catch (e) {
+                if (!mounted) return;
+                ErrorHandler.showError(context, e);
+              }
+            },
+            style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF10B981)),
+            child: const Text("Update", style: TextStyle(color: Colors.white)),
           ),
         ],
       ),

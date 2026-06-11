@@ -38,4 +38,13 @@ class ManageEmployeesService {
       "phone": phone,
     });
   }
+
+  static Future resetPassword({
+    required int id,
+    required String password,
+  }) async {
+    await Api.put("/api/users/$id/password", {
+      "password": password,
+    });
+  }
 }
