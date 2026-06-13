@@ -166,7 +166,7 @@ class AboutAppScreen extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text("Developer",
+                          const Text("Founder",
                               style: TextStyle(
                                   fontSize: 12, color: Colors.white70)),
                           const Text("Charan Kumar Kanna",
@@ -181,7 +181,7 @@ class AboutAppScreen extends StatelessWidget {
                                 color:
                                     Colors.white.withAlpha((0.2 * 255).round()),
                                 borderRadius: BorderRadius.circular(10)),
-                            child: const Text("Full Stack Developer",
+                            child: const Text("Founder",
                                 style: TextStyle(
                                     fontSize: 10, color: Colors.white)),
                           ),
