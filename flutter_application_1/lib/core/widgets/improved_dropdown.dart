@@ -93,6 +93,25 @@ class ImprovedDropdownSearch<T> extends StatelessWidget {
                   ),
                 ),
               ),
+              emptyBuilder: (context, searchEntry) => Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.search_off_rounded,
+                          size: 40, color: Colors.grey[400]),
+                      const SizedBox(height: 12),
+                      Text(
+                        searchEntry.isEmpty
+                            ? "No items available"
+                            : "No matching items found",
+                        style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               menuProps: MenuProps(
                 borderRadius: BorderRadius.circular(16),
                 elevation: 8,
@@ -196,9 +215,7 @@ class ImprovedDropdownButton<T> extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: errorText != null
-                  ? Colors.red
-                  : const Color(0xFFE8E8E8),
+              color: errorText != null ? Colors.red : const Color(0xFFE8E8E8),
             ),
             boxShadow: [
               BoxShadow(
