@@ -813,6 +813,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                           isDark),
                       _drawerItem(Icons.payments, "Customer Payment",
                           _navTo(const CustomerPaymentScreen()), isDark),
+                      const SizedBox(height: 8),
+                      _drawerSection(isDark, title: "Administration"),
                       _drawerItem(Icons.people, "Manage Employees",
                           _navTo(const ManageEmployeesScreen()), isDark),
                       _drawerItem(Icons.subscriptions, "Subscription",
